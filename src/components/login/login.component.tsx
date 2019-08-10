@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, Container, FormGroup, Label } from 'reactstrap';
-import logo from '../../assets/logo-color.png'
+import logo from '../../assets/logo-color.png';
 import { RouteComponentProps } from 'react-router';
 import { IAuthState, IState } from '../../reducers';
 import { login } from '../../actions/auth.actions';
