@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, Container, FormGroup, Label } from 'reactstrap';
-import logo from '../../assets/logo-color.png';
+// import logo from '../../assets/logo-color.png';
 import { RouteComponentProps } from 'react-router';
 import { IAuthState, IState } from '../../reducers';
 import { login } from '../../actions/auth.actions';
@@ -52,7 +52,7 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
                 <Container className="mt-5 pt-5">
                     <Form className="form-signin" onSubmit={this.submit}>
                         <FormGroup className="mb-4">
-                            <img src={logo} />
+                            {/* <img src={logo} /> */}
                         </FormGroup>
                         <FormGroup className="form-label-group">
                             <Input id="inputUsername"
