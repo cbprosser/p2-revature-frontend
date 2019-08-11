@@ -30,19 +30,19 @@ export class LandingPageComponenet extends React.Component<{}, ILandState> {
         this.getRandomCards();
         this.getManaTypes();
     }
-    
 
-  toggle() {
-    this.setState(state => ({ collapse: !state.collapse }));
-  }
+
+    toggle() {
+        this.setState(state => ({ collapse: !state.collapse }));
+    }
 
     getRandomCards = async () => {
-        const resp = await fetch("https://api.scryfall.com/cards?page=4", {
+        const resp = await fetch("https://api.scryfall.com/cards?lang=en?page=15", {
         });
         const cardList = await resp.json();
         const cl = this.state.cards;
         console.log(cardList)
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 40; i++) {
             cl.push(cardList.data[i]);
 
         }
@@ -77,9 +77,8 @@ export class LandingPageComponenet extends React.Component<{}, ILandState> {
         const cards = this.state.cards;
         return (
             <CardColumns>
-                {cards.map(MTGcard =>
-
-                    <Card key={MTGcard.id}>
+                {cards.map(MTGcard => MTGcard.lang === "en"
+                    ? <><Card key={MTGcard.id}>
                         <CardImg top width="100%" src={MTGcard.image_uris.normal} alt="Card image cap" />
                         <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Toggle</Button>
                         <Collapse isOpen={this.state.collapse}>
@@ -90,9 +89,9 @@ export class LandingPageComponenet extends React.Component<{}, ILandState> {
 
                             </Card>
                         </Collapse>
-                    </Card>
-                )
-                }
+                    </Card></>
+                    : <></>
+                )}
             </CardColumns>
         )
     }
