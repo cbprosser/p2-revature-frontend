@@ -156,7 +156,6 @@ body {
     box-shadow:none !important;
 }
 
-.popover.show {
-  background-color: transparent;
-  border: none;
+.card-img-normal, .card-img-small {
+  max-width: 100%;
 }

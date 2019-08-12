@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
-import { Button, Popover, PopoverHeader, PopoverBody, UncontrolledPopover } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Button, PopoverBody, PopoverHeader, UncontrolledPopover, ModalHeader, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 interface ICardHoverState {
-    card: any,
-    popoverIsOpen: boolean
+    popoverIsOpen: boolean,
+    modalIsOpen: boolean
 }
 
 interface ICardHoverProps {
-    cardName: string,
-    id: number
+    card: any,
+    id: any
 }
 
 export default class CardHover extends Component<ICardHoverProps, ICardHoverState> {
@@ -17,75 +16,87 @@ export default class CardHover extends Component<ICardHoverProps, ICardHoverStat
         super(props);
 
         this.state = {
-            card: null,
-            popoverIsOpen: false
+            popoverIsOpen: false,
+            modalIsOpen: false
         }
     }
 
-    toggle = () => {
+    togglePopover = () => {
         this.setState({
             popoverIsOpen: !this.state.popoverIsOpen
         });
     }
 
-    getCard = async () => {
-        const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${this.props.cardName}`);
-        const card = await resp.json();
-        if(card.object === 'error'){
-            console.log(card)
-            return;
-        }
+    toggleModal = () => {
         this.setState({
-            card
+            modalIsOpen: !this.state.modalIsOpen
         })
     }
 
-    getImage = () => {
-        if(!this.state.card){
+    // getCard = async () => {
+    //     const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${this.props.cardName}`);
+    //     const card = await resp.json();
+    //     if(card.object === 'error'){
+    //         return;
+    //     }
+    //     this.setState({
+    //         card
+    //     })
+    // }
+
+    getImage = (type: string) => {
+        if (!this.props.card) {
             return []
         }
-
-        console.log(this.state.card)
-
-        const card = this.state.card;
-
+        const card = this.props.card;
         let cardImages = [];
-        
         let cardImageUri;
 
-        
-
-        if(card.card_faces){
+        if (card.card_faces) {
             card.card_faces.forEach((face: any) => {
-                cardImageUri = face.image_uris.small;
-                cardImages.push(<img key={`card-url-${cardImageUri}`} src={cardImageUri} alt={`${this.props.cardName} Image`}/>);
+                cardImageUri = (type === 'small') ? face.image_uris.small : face.image_uris.normal;
+                cardImages.push(<img className={`card-img-${type}`} key={`card-url-${cardImageUri}`} src={cardImageUri} alt={`${this.props.card.name} Image`} />);
             })
         } else {
-            cardImageUri = card.image_uris.small;
-            cardImages.push(<img key={`card-url-${cardImageUri}`} src={cardImageUri} alt={`${this.props.cardName} Image`}/>);
+            cardImageUri = (type === 'small') ? card.image_uris.small : card.image_uris.normal;
+            cardImages.push(<img className={`card-img-${type}`} key={`card-url-${cardImageUri}`} src={cardImageUri} alt={`${this.props.card.name} Image`} />);
         }
-        
+
         return cardImages;
     }
 
-    noClick = (event: any) => {
+    noClickPopover = (event: any) => {
         event.preventDefault();
     }
 
-    componentWillMount() {
-        this.getCard();
+    noClickModal = (event: any) => {
+        event.preventDefault();
+        this.togglePopover();
+        this.toggleModal();
     }
 
+    // componentWillMount() {
+    //     this.getCard();
+    // }
+
     render() {
+        const cardFront = this.props.card.name.split(' // ')[0];
         return (
             <>
-                <a className="text-light" href="#" id={'Popover-' + this.props.id} onClick={this.noClick}>
-                    {this.props.cardName}
+                <a className="text-light" href="#" id={`Popover-${this.props.id}`} onClick={this.noClickPopover}>
+                    {cardFront}
                 </a>
-                <UncontrolledPopover trigger="legacy" placement="right" isOpen={this.state.popoverIsOpen} target={'Popover-' + this.props.id} toggle={this.toggle}>
-                    <PopoverHeader className="bg-dark">{this.props.cardName}</PopoverHeader>
-                    <PopoverBody className="p-1">{this.getImage()}</PopoverBody>
+                <UncontrolledPopover trigger="legacy" placement="right" isOpen={this.state.popoverIsOpen} target={'Popover-' + this.props.id} toggle={this.togglePopover}>
+                    <PopoverHeader className="bg-dark">{cardFront}</PopoverHeader>
+                    <PopoverBody className="p-1"><a href="#" id={`Popover-Modal-${this.props.id}`} onClick={this.noClickModal}>{this.getImage('small')}</a></PopoverBody>
                 </UncontrolledPopover>
+                <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
+                    <ModalHeader className="bg-dark" toggle={this.toggleModal}>{cardFront}</ModalHeader>
+                    <ModalBody>
+                        {this.getImage('normal')}
+                    </ModalBody>
+                    <ModalFooter className="bg-dark">Buy from: <a className="text-light" href={this.props.card.purchase_uris.tcgplayer} target="_blank">TCGPlayer</a>, <a className="text-light" href={this.props.card.purchase_uris.cardhoarder} target="_blank">CardHoarder</a>, <a className="text-light" href={this.props.card.purchase_uris.cardmarket} target="_blank">CardMarket</a> {`${this.props.card.prices.tix} tix, $${this.props.card.prices.usd} ($${this.props.card.prices.usd_foil} foil)`}</ModalFooter>
+                </Modal>
             </>
         )
     }
