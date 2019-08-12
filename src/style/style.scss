@@ -8,12 +8,13 @@
 #nav-button {
     align-self: flex-end
 }
+
 .navbar-brand {
     padding-top: .75rem;
     padding-bottom: .75rem;
     font-size: 1rem;
     background-color: rgba(0, 0, 0, .25);
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(65, 53, 53, 0.25);
   }
 
 #dropdownMenuNavButton {
@@ -45,6 +46,8 @@ body {
   background-color: #495057;
   color: black;
 }
+
+
 
 /******************
 * Color

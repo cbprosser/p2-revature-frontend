@@ -1,9 +1,10 @@
-import React from 'react';
-// import { Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Collapse, DropdownToggle, DropdownMenu, DropdownItem, ButtonDropdown, Card, Button, CardImg, CardTitle, CardText, CardColumns, CardSubtitle, CardBody } from 'reactstrap';
-// import logo from '../../assets/logo-bw.png';
-// import { Link } from 'react-router-dom';
-import { IState, IAuthState } from '../../reducers';
+import React, { Component } from 'react';
+// import { View } from 'react-native';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { IState, IAuthState } from '../../reducers';
+import { Navbar, NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
+// import logo from '../../assets/logo-bw.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
@@ -13,17 +14,26 @@ interface INavProps {
 
 interface INavState {
   isOpen: boolean,
-  dropdownIsOpen: boolean
+  dropdownIsOpen: boolean,
+  collapsed: boolean
 }
 
-export class NavComponent extends React.Component<INavProps, INavState> {
+export class NavComponent extends Component<INavProps, INavState> {
   constructor(props: any) {
     super(props);
-
+    this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       isOpen: false,
-      dropdownIsOpen: false
+      dropdownIsOpen: false,
+      collapsed: true
     };
+  }
+
+
+  toggleNavbar() {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
   }
 
   toggleNavButton = () => {
@@ -38,12 +48,28 @@ export class NavComponent extends React.Component<INavProps, INavState> {
     });
   }// end of toggleNaveDropdown
 
-  
+
 
   render() {
     return (
-      <>
-      </>
+      <Container fluid>
+        <Row>
+          <Col sm="2">
+            <NavbarBrand href="/" className="mr-auto">TempoDeck</NavbarBrand>
+            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!this.state.collapsed} navbar>
+              <Nav navbar >
+                <NavItem>
+                  <NavLink href="/Decks/">Decks</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/Collections/">Collections</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Col>
+        </Row>
+      </Container>
     );
   }// end of render()
 }

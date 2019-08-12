@@ -1,8 +1,9 @@
 import React from 'react';
+import { View } from 'react-native';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { IState, IAuthState } from '../../reducers';
-import { Button, Card, CardImg, CardTitle, CardText, CardColumns, CardSubtitle, CardBody, Collapse } from 'reactstrap';
+import { Button, Card, CardImg, CardTitle, CardText, CardColumns, CardSubtitle, CardBody, Collapse, Progress, Container } from 'reactstrap';
 
 // interface ILandProps {
 
@@ -37,7 +38,7 @@ export class LandingPageComponenet extends React.Component<{}, ILandState> {
     }
 
     getRandomCards = async () => {
-        const resp = await fetch("https://api.scryfall.com/cards?lang=en?page=15", {
+        const resp = await fetch("https://api.scryfall.com/cards?page=2", {
         });
         const cardList = await resp.json();
         const cl = this.state.cards;
@@ -76,28 +77,35 @@ export class LandingPageComponenet extends React.Component<{}, ILandState> {
     cardColumns = () => {
         const cards = this.state.cards;
         return (
-            <CardColumns>
-                {cards.map(MTGcard => MTGcard.lang === "en"
-                    ? <><Card key={MTGcard.id}>
-                        <CardImg top width="100%" src={MTGcard.image_uris.normal} alt="Card image cap" />
-                        <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Toggle</Button>
-                        <Collapse isOpen={this.state.collapse}>
-                            <Card body inverse color="primary">
-                                <CardTitle>{MTGcard.name}</CardTitle>
-                                <CardSubtitle>{MTGcard.mana_cost}</CardSubtitle>
-                                <CardText>{MTGcard.flavor_text}</CardText>
-
-                            </Card>
-                        </Collapse>
-                    </Card></>
-                    : <></>
-                )}
+            <CardColumns background="dark" >
+                
+                    {cards.map(MTGcard => MTGcard.lang === "en"
+                        ? <><Card style={{ backgroundColor: '#333', borderColor: '#333' }} key={MTGcard.id} >
+                            <CardImg color="dark" background="dark" onClick={this.toggle} style={{ marginBottom: '1rem' }} top width="100%" src={MTGcard.image_uris.art_crop} alt="Card image cap" />
+                            {/* <Button color="dark" background-color="light" }>Toggle</Button> */}
+                            <Collapse background-color="dark" isOpen={this.state.collapse}>
+                                <Progress multi> {/* Example of how we could linerally display deck color content */}
+                                    <Progress bar text-color="black" value="">White</Progress>
+                                    <Progress bar color="success" value="30">Green</Progress>
+                                    <Progress bar color="info" value="25">Blue</Progress>
+                                    <Progress bar color="dark" value="20">Black</Progress>
+                                    <Progress bar color="danger" value="10">Red</Progress>
+                                </Progress>
+                                <Card body inverse color="dark">
+                                    <CardTitle>{MTGcard.name}</CardTitle>
+                                    {MTGcard.mana_cost && <CardSubtitle>{MTGcard.mana_cost}</CardSubtitle>}
+                                    {MTGcard.flavor_text && <CardText>"{MTGcard.flavor_text}"</CardText>}
+                                </Card>
+                            </Collapse>
+                        </Card></>
+                        : <></>
+                    )}
             </CardColumns>
         )
     }
 
     render() {
-        const cards = this.state.cards;
+
 
         // this.getRandomCards();
         return (
