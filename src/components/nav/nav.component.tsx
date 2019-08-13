@@ -58,7 +58,7 @@ export class NavComponent extends Component<INavProps, INavState> {
             <Collapse isOpen={!this.state.collapsed} navbar>
               <Nav navbar >
                 <NavItem>
-                  <NavLink href="/Decks/">Decks</NavLink>
+                  <NavLink href="/deck">Decks</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink href="/Collections/">Collections</NavLink>
