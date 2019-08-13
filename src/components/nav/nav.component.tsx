@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-// import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { IState, IAuthState } from '../../reducers';
-import { Navbar, NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
+import { IState } from '../../reducers';
+import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
 // import logo from '../../assets/logo-bw.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.

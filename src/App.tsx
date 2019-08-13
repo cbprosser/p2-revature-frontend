@@ -16,9 +16,9 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Container className="App" style={{flex:12, justifyContent: 'space-between'}}>
+        <Container className="App container-fluid">
           <Row>
-            <Col sm="10" med="9" style={{flex:10}}>
+            <Col sm="10" med="9" style={{flex:10}} content="width=device-width">
               <Switch>
                 
                   <Route exact path="/" component={LandingPageComponenet} />
