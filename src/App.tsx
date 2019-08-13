@@ -6,8 +6,7 @@ import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
 import LoginComponent from './components/login/login.component';
-// import IndexComponent from './components/index/index.component';
-import ReimbursementsComponent from './components/reimbursements/reimbursements.component';
+import IndexComponent from './components/index/index.component';
 import { Container, Row, Col } from 'reactstrap';
 import { DecklistDisplay } from './components/decklist-display/decklist-display';
 
