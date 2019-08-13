@@ -9,6 +9,8 @@ import LoginComponent from './components/login/login.component';
 // import IndexComponent from './components/index/index.component';
 import ReimbursementsComponent from './components/reimbursements/reimbursements.component';
 import { Container, Row, Col } from 'reactstrap';
+import { DecklistDisplay } from './components/decklist-display/decklist-display';
+
 
 function App() {
 
@@ -23,7 +25,7 @@ function App() {
                 
                   <Route exact path="/" component={LandingPageComponenet} />
                   <Route path="/login" component={LoginComponent} />
-                  <Route path="/reimbursements" component={ReimbursementsComponent} />
+                  <Route path="/deck" component={DecklistDisplay}/>
                   <Route component={NotFound} />
                 
               </Switch>

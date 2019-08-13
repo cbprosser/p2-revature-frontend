@@ -35,7 +35,8 @@ body {
 
 #main-row {
   padding-top: 3.2rem;
-  min-height:100vh 
+  min-height:100vh;
+  text-align: unset !important;
  }
  
 /******************
@@ -159,4 +160,15 @@ body {
   }
 
   
-  
+  /******************
+  * Button Outline Fix
+  ******************/
+
+  .listbutton, .listbutton:focus, .listbutton:active:focus, .listbutton.active:focus{
+    outline:none !important;
+    box-shadow:none !important;
+}
+
+.card-img-normal, .card-img-small {
+  max-width: 100%;
+}
