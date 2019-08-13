@@ -2,16 +2,16 @@ import User from "./user.model";
 
 export default class Collection {
     constructor(
-        id: number,
-        author: User,
-        collectionName: string,
-        collectionDescription: string,
-        isPrivate: boolean,
-        isPrototype: boolean,
-        cards: string[],
-        featuredCard: string,
-        collectionCreated?: number,
-        collectionUpdated?: number,
-        featuredCardURI?: string
+        public id: number,
+        public author: User,
+        public collectionName: string,
+        public collectionDescription: string,
+        public isPrivate: boolean,
+        public isPrototype: boolean,
+        public cards: string[],
+        public featuredCard: string,
+        public collectionCreated?: number,
+        public collectionUpdated?: number,
+        public featuredCardURI?: string
     ){}
 }
