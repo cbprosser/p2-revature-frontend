@@ -6,7 +6,6 @@ import NotFound from './components/not-found/not-found.component';
 import NavComponent from './components/nav/nav.component';
 import LoginComponent from './components/login/login.component';
 import IndexComponent from './components/index/index.component';
-import ReimbursementsComponent from './components/reimbursements/reimbursements.component';
 import { DecklistDisplay } from './components/decklist-display/decklist-display';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
         <Switch>
           <Route exact path="/" component={IndexComponent}/>
           <Route path="/login" component={LoginComponent}/>
-          <Route path="/reimbursements" component={ReimbursementsComponent}/>
           <Route path="/deck" component={DecklistDisplay}/>
           <Route component={NotFound}/>
         </Switch>
