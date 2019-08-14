@@ -9,6 +9,7 @@ import LoginComponent from './components/login/login.component';
 import IndexComponent from './components/index/index.component';
 import { Container, Row, Col } from 'reactstrap';
 import { DecklistDisplay } from './components/decklist-display/decklist-display';
+import { DecklistSubmission } from './components/deck-submit/decklist.submit.component';
 
 
 function App() {
@@ -17,22 +18,22 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Container className="App container-fluid">
+      <NavComponent/>
+        <Container fluid>
           <Row>
-            <Col sm="10" med="9" style={{flex:10}} content="width=device-width">
+            <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
+            <Col id="main-row" className="bg-light text-center">
               <Switch>
-                
-                  <Route exact path="/" component={LandingPageComponenet} />
-                  <Route path="/login" component={LoginComponent} />
-                  <Route path="/deck" component={DecklistDisplay}/>
-                  <Route component={NotFound} />
-                
+
+                <Route exact path="/" component={LandingPageComponenet} />
+                <Route path="/login" component={LoginComponent} />
+                <Route path="/deck/submit" component={DecklistSubmission} />
+                <Route path="/deck" component={DecklistDisplay} />
+                <Route component={NotFound} />
+
               </Switch>
             </Col>
-
-            <Col sm="2" med="3" style={{flex:2}}>
-              <NavComponent />
-            </Col>
+            <Col className="col-2 d-none d-sm-none d-md-block"></Col>
           </Row>
         </Container>
       </BrowserRouter>

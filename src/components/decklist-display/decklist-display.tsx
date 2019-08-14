@@ -193,7 +193,7 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
             console.log(list)
             if (!(list.cardList.length === 0)) {
                 elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`${list.type} (${list.cardList.length})`}</ListGroupItemHeading>);
-                for(let i = 0; i < list.cardList.length; i++) {
+                for (let i = 0; i < list.cardList.length; i++) {
                     elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{list.cardList[i].number}x <CardHover id={`${list.type}-${i}`} card={list.cardList[i].card} /></ListGroupItem>);
                 }
             }
@@ -254,37 +254,29 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
             avgCmc = cmcSum / this.state.cmcs.length;
         }
         return (
-            <Container fluid>
-                <Row>
-                    <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
-                    <Col id="main-row" className="bg-light text-center">
-                        <Card className="bg-light">
-                            <CardHeader>
-                                Simic Ascendancy Standard
+            <Card className="bg-light">
+                <CardHeader>
+                    Simic Ascendancy Standard
                             </CardHeader>
 
-                            <CardBody>
-                                <Row>
-                                    <Col xs="12" sm="6">
-                                        <ListGroup className="bg-transparent">
-                                            {list}
-                                        </ListGroup>
-                                    </Col>
-                                    <Col xs="6">
-                                        <ListGroup className="bg-transparent">
-                                            {sideboardList}
-                                        </ListGroup>
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                            <CardFooter>
-                                Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}
-                            </CardFooter>
-                        </Card>
-                    </Col>
-                    <Col className="col-2 d-none d-sm-none d-md-block"></Col>
-                </Row>
-            </Container>
+                <CardBody>
+                    <Row>
+                        <Col xs="12" sm="6">
+                            <ListGroup className="bg-transparent">
+                                {list}
+                            </ListGroup>
+                        </Col>
+                        <Col xs="6">
+                            <ListGroup className="bg-transparent">
+                                {sideboardList}
+                            </ListGroup>
+                        </Col>
+                    </Row>
+                </CardBody>
+                <CardFooter>
+                    Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}
+                </CardFooter>
+            </Card>
         )
     }
 }
