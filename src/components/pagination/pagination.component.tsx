@@ -33,7 +33,7 @@ export default class PaginationComponent extends Component<IPaginationProps, IPa
             l;
 
         for (let i = 1; i <= finalPage; i++) {
-            if (i === 1 || i === finalPage || i >= left && i < right) {
+            if ((i === 1 || i === finalPage || i >= left) && i < right) {
                 range.push(i);
             }
         }

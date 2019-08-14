@@ -3,7 +3,7 @@ const dev = {
 }
 
 const prod = {
-    context: 'http://ers-api-react.s3-website-us-east-1.amazonaws.com'
+    context: 'http://localhost:8012'
 }
 
 export let environment = dev;

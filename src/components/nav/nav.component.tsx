@@ -1,9 +1,8 @@
-import React from 'react';
-import { Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Collapse, DropdownToggle, DropdownMenu, DropdownItem, ButtonDropdown, } from 'reactstrap';
-import logo from '../../assets/logo-bw.png';
-import { Link } from 'react-router-dom';
-import { IState, IAuthState } from '../../reducers';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { IState } from '../../reducers';
+import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
+// import logo from '../../assets/logo-bw.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
@@ -13,82 +12,64 @@ interface INavProps {
 
 interface INavState {
   isOpen: boolean,
-  dropdownIsOpen: boolean
+  dropdownIsOpen: boolean,
+  collapsed: boolean
 }
 
-export class NavComponent extends React.Component<INavProps, INavState> {
+export class NavComponent extends Component<INavProps, INavState> {
   constructor(props: any) {
     super(props);
-
+    this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       isOpen: false,
-      dropdownIsOpen: false
+      dropdownIsOpen: false,
+      collapsed: true
     };
+  }
+
+
+  toggleNavbar() {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
   }
 
   toggleNavButton = () => {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  }
+  }// end of toggleNavButton
 
   toggleNavDropdown = () => {
     this.setState({
       dropdownIsOpen: !this.state.dropdownIsOpen
     });
-  }
+  }// end of toggleNaveDropdown
+
+
 
   render() {
-    const user = this.props.user && this.props.user.user;
     return (
-      <Navbar className="shadow bg-dark p-0" color="dark" dark fixed="top" expand="sm">
-        <NavbarBrand className="col-sm-3 col-md-2 mr-0 text-center py-2">
-          <Link to="/"><img src={logo} width="auto" height="25px" alt="Revature Logo" /></Link>
-          <NavbarToggler onClick={this.toggleNavButton} className="float-right py-0" />
-        </NavbarBrand>
-        <Collapse className="px-3" isOpen={this.state.isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem>
-              {(() => {
-                if (!user) {
-                  return <Link className="nav-link" to="/login">Login</Link>
-                } else {
-                  return (
-                    <>
-                      <ButtonDropdown isOpen={this.state.dropdownIsOpen} toggle={this.toggleNavDropdown}>
-                        <DropdownToggle id="dropdownMenuNavButton" className="nav-link" caret>
-                          {user.username}
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dark">
-                          <DropdownItem header>User Options</DropdownItem>
-                          <DropdownItem className="bg-dark"><Link className="nav-link p-0" to="/account">Account</Link></DropdownItem>
-                          {(() => {
-                            if (user.role && user.role.roleId < 3) { // not null assertion operator
-                              return (
-                                <>
-                                  <DropdownItem divider></DropdownItem>
-                                  <DropdownItem header>Finance Options</DropdownItem>
-                                  <DropdownItem className="bg-dark"><Link className="nav-link p-0" to="/users">Users</Link></DropdownItem>
-                                  <DropdownItem className="bg-dark"><Link className="nav-link p-0" to="/reimbursements">Reimbursements</Link></DropdownItem>
-                                </>
-                              )
-                            }
-                          })()}
-                          <DropdownItem divider></DropdownItem>
-                          <DropdownItem className="bg-dark"><Link className="nav-link p-0" to="/logout">Log Out</Link></DropdownItem>
-                        </DropdownMenu>
-                      </ButtonDropdown>
-                    </>
-                  )
-                }
-              })()}
-
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
+      <Container fluid>
+        <Row>
+          <Col sm="2">
+            <NavbarBrand href="/" className="mr-auto">TempoDeck</NavbarBrand>
+            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!this.state.collapsed} navbar>
+              <Nav navbar >
+                <NavItem>
+                  <NavLink href="/deck">Decks</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/Collections/">Collections</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Col>
+        </Row>
+      </Container>
     );
-  }
+  }// end of render()
 }
 
 const mapStateToProps = (state: IState) => ({

@@ -1,4 +1,4 @@
-import { ersClient } from "../axios/ers-client";
+import { tdClient } from "../axios/td-client";
 
 
 export const authTypes = {
@@ -8,7 +8,7 @@ export const authTypes = {
 
 export const login = (credentials: any, history: any) => async (dispatch: any) => {
     try {
-        const resp = await ersClient.post('/login', credentials);
+        const resp = await tdClient.post('/login', credentials);
         // localStorage.setItem('tk', resp.data.token);
         const token = resp.data.token;
         const user = JSON.parse(atob(token.split('.')[1])).user;

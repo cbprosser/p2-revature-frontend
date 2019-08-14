@@ -15,6 +15,7 @@ interface IDecklistState {
     deckList: string[],
     decklistCards: any[],
     deckListPopover: number[]
+    cardTypes: string[]
 }
 
 export class DecklistDisplay extends Component<{}, IDecklistState> {
@@ -63,7 +64,16 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
                 "2x Unbreakable Formation"
             ],
             decklistCards: [],
-            sideboardCards: []
+            sideboardCards: [],
+            cardTypes: [
+                "Land",
+                "Creature",
+                "Artifact",
+                "Enchantment",
+                "Planeswalker",
+                "Instant",
+                "Sorcery"
+            ]
         }
     }
 
@@ -75,18 +85,13 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
         let deckColors: string[] = [], cmcs: number[] = [];
         for (let i = 0; i < cards.length; i++) {
             const cardNum = +cards[i].split('x')[0];
-            const  cardName = cards[i].substring(cards[i].indexOf('x ') + 2);
+            const cardName = cards[i].substring(cards[i].indexOf('x ') + 2);
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
-
             const typeColorObj = this.setTypesAndDeckColors(card);
-
             const { supertypes, subtypes } = typeColorObj;
-
             deckColors = deckColors.concat(typeColorObj.deckColors)
-
             cmcs = cmcs.concat(this.setCMCs(supertypes, cardNum, card));
-
             cardObj.push({
                 number: +cardNum,
                 supertypes,
@@ -101,9 +106,7 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
             const typeColorObj = this.setTypesAndDeckColors(card);
-
             const { supertypes, subtypes } = typeColorObj;
-
             sideboardObj.push({
                 number: +cardNum,
                 supertypes,
@@ -183,23 +186,49 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
         return colors;
     }
 
-    generateList = () => {
+    generateList = (lists: any[]) => {
+        // console.log(lists)
         let elements: any[] = [];
-        let cards = this.state.decklistCards;
-        for (let i = 0; i < cards.length; i++) {
-
-            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={i} card={cards[i].card} /></ListGroupItem>)
-        }
+        lists.forEach((list) => {
+            console.log(list)
+            if (!(list.cardList.length === 0)) {
+                elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`${list.type} (${list.cardList.length})`}</ListGroupItemHeading>);
+                for(let i = 0; i < list.cardList.length; i++) {
+                    elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{list.cardList[i].number}x <CardHover id={`${list.type}-${i}`} card={list.cardList[i].card} /></ListGroupItem>);
+                }
+            }
+        })
         return elements;
     }
 
     generateSideboardList = () => {
         let elements: any[] = [];
         let cards = this.state.sideboardCards;
+        elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Sideboard (${cards.length})`}</ListGroupItemHeading>);
         for (let i = 0; i < cards.length; i++) {
             elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`sb-${i}`} card={cards[i].card} /></ListGroupItem>)
         }
         return elements;
+    }
+
+    generateTypedLists = () => {
+        let cardLists: any[] = [];
+        let cards = this.state.decklistCards;
+        const cardTypes = this.state.cardTypes;
+        cardTypes.forEach((type: string) => {
+            let cardList: any[] = [];
+            for (let i = 0; i < cards.length; i++) {
+                if (cards[i].supertypes.includes(type)) {
+                    cardList.push(cards.splice(i, 1)[0]);
+                    i--;
+                }
+            }
+            cardLists.push({
+                type,
+                cardList
+            })
+        })
+        return cardLists;
     }
 
     componentDidMount() {
@@ -207,12 +236,13 @@ export class DecklistDisplay extends Component<{}, IDecklistState> {
     }
 
     render() {
-        let list, sideboardList;
+        let list, sideboardList, lists;
         if (this.state.isLoading) {
             list = <Spinner />
             sideboardList = <Spinner />
         } else {
-            list = this.generateList();
+            lists = this.generateTypedLists();
+            list = this.generateList(lists);
             sideboardList = this.generateSideboardList();
         }
 
