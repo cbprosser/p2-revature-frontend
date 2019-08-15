@@ -138,7 +138,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
 
     setTypesAndDeckColors = (card: any) => {
         let types, supertypes, subtypes, deckColors: string[] = [];
-        if (card.card_faces) {
+        if (card.layout === "transform") {
             types = card.card_faces[0].type_line.split('—');
             supertypes = types[0].split(' ');
             if (types.length === 2) {
@@ -249,7 +249,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             for (let i = 0; i < cards.length; i++) {
                 let cardColorComboArr: string[];
                 let cardColorCombo: string;
-                if(cards[i].card.card_faces) {
+                if(cards[i].card.layout === "transform") {
                     cardColorComboArr = this.setColors(cards[i].card.card_faces[0].colors)
                 } else {
                     cardColorComboArr = this.setColors(cards[i].card.colors)
