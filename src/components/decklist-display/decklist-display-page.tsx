@@ -42,7 +42,8 @@ export default class DecklistDisplayPageComponent extends Component<{}, IDecklis
                     "3x Simic Ascendancy",
                     "4x Sunpetal Grove",
                     "4x Temple Garden",
-                    "3x Wildgrowth Walker"
+                    "3x Wildgrowth Walker",
+                    "2x Spring"
                 ],
                 [
                     "3x Kraul Harpooner",
