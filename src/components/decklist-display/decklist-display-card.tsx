@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardFooter, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Card, CardBody, CardFooter, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, ButtonToolbar } from 'reactstrap';
 import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
+import { RouteComponentProps } from 'react-router';
 
 interface IDecklistDisplayCardComponentState {
     isLoading: boolean,
@@ -17,7 +18,7 @@ interface IDecklistDisplayCardComponentState {
     sortBy: string
 }
 
-interface IDecklistDisplayCardComponentProps {
+interface IDecklistDisplayCardComponentProps extends RouteComponentProps {
     deck: Deck
     mainboardCards: any[],
     sideboardCards: any[]
@@ -249,7 +250,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             for (let i = 0; i < cards.length; i++) {
                 let cardColorComboArr: string[];
                 let cardColorCombo: string;
-                if(cards[i].card.layout === "transform") {
+                if (cards[i].card.layout === "transform") {
                     cardColorComboArr = this.setColors(cards[i].card.card_faces[0].colors)
                 } else {
                     cardColorComboArr = this.setColors(cards[i].card.colors)
@@ -416,19 +417,25 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                     {this.props.deck.deckName}
                 </CardHeader>
                 <CardBody>
-                    <Dropdown size="sm" isOpen={this.state.sortByDropdownIsOpen} toggle={this.toggleSortByDropdown}>
-                        <DropdownToggle className="bg-dark" caret>
-                            {`Sort by${(this.state.sortBy === '') ? `?` : ` ${this.state.sortBy}`}`}
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dark">
-                            <DropdownItem className="bg-dark" header>Sort by</DropdownItem>
-                            <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Name</DropdownItem>
-                            <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Type</DropdownItem>
-                            <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>CMC</DropdownItem>
-                            <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Rarity</DropdownItem>
-                            <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
+                    <ButtonToolbar className="d-flex justify-content-between">
+                        <Dropdown size="sm" isOpen={this.state.sortByDropdownIsOpen} toggle={this.toggleSortByDropdown}>
+                            <DropdownToggle className="bg-dark" caret>
+                                {`Sort by${(this.state.sortBy === '') ? `?` : ` ${this.state.sortBy}`}`}
+                            </DropdownToggle>
+                            <DropdownMenu className="bg-dark">
+                                <DropdownItem className="bg-dark" header>Sort by</DropdownItem>
+                                <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Name</DropdownItem>
+                                <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Type</DropdownItem>
+                                <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>CMC</DropdownItem>
+                                <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Rarity</DropdownItem>
+                                <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push('deck/update', this.props.deck)}>
+                            Update deck
+                        </Button>
+                    </ButtonToolbar>
+
                     <Row>
                         <Col xs="12" sm="6">
                             <ListGroup className="bg-transparent">

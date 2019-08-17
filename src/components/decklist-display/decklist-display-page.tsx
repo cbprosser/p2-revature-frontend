@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DecklistDisplayCardComponent from './decklist-display-card';
+import { RouteComponentProps } from 'react-router';
 
 interface IDecklistDisplayPageComponentState {
     deck: Deck,
@@ -9,7 +10,11 @@ interface IDecklistDisplayPageComponentState {
     sideboardCards: any[]
 }
 
-export default class DecklistDisplayPageComponent extends Component<{}, IDecklistDisplayPageComponentState> {
+interface IDecklistDisplayPageComponentProps extends RouteComponentProps {
+    //
+}
+
+export default class DecklistDisplayPageComponent extends Component<IDecklistDisplayPageComponentProps, IDecklistDisplayPageComponentState> {
     constructor(props: any) {
         super(props);
 
@@ -17,43 +22,38 @@ export default class DecklistDisplayPageComponent extends Component<{}, IDecklis
             deck: new Deck(
                 0,
                 new User(0, 'cbprosser'),
-                'Simic Ascendancy Standard',
-                'Trying to make Simic Ascendancy work in standard',
+                'Modern Cloudfin Raptor',
+                'Another awful deck for Modern',
+                true,
                 false,
-                false,
-                'Standard',
+                'Modern',
                 [
-                    "1x Arch of Orazca",
+                    "4x Avatar of the Resolute",
+                    "4x Botanical Sanctum",
                     "4x Breeding Pool",
-                    "1x Field of Ruin",
-                    "2x Forest",
-                    "4x Galloping Lizrog",
-                    "4x Growth-Chamber Guardian",
-                    "4x Hadana's Climb",
-                    "1x Hallowed Fountain",
-                    "4x Hinterland Harbor",
-                    "4x Hydroid Krasis",
-                    "4x Incubation Druid",
-                    "1x Island",
-                    "4x Jadelight Ranger",
-                    "3x Knight of Autumn",
-                    "4x Merfolk Branchwalker",
-                    "1x Plains",
-                    "3x Simic Ascendancy",
-                    "4x Sunpetal Grove",
-                    "4x Temple Garden",
-                    "3x Wildgrowth Walker",
-                    "2x Spring"
+                    "4x Chart a Course",
+                    "4x Cloudfin Raptor",
+                    "4x Experiment One",
+                    "4x Forest",
+                    "2x Hinterland Harbor",
+                    "2x Island",
+                    "4x Pelt Collector",
+                    "2x Pongify",
+                    "4x Rapid Hybridization",
+                    "4x Simic Charm",
+                    "4x Strangleroot Geist",
+                    "2x Unsubstantiate",
+                    "4x Yavimaya Coast",
+                    "4x Young Wolf",
                 ],
                 [
-                    "3x Kraul Harpooner",
-                    "2x Lyra Dawnbringer",
+                    "3x Mizzium Skin",
                     "3x Negate",
-                    "3x Settle the Wreckage",
-                    "2x Shalai, Voice of Plenty",
-                    "2x Unbreakable Formation",
+                    "3x Tormod's Crypt",
+                    "2x Unsubstantiate",
+                    "4x Vapor Snag",
                 ],
-                'Simic Ascendancy'
+                'Modern Cloudfin'
             ),
             mainboardCards: [],
             sideboardCards: []
@@ -100,9 +100,12 @@ export default class DecklistDisplayPageComponent extends Component<{}, IDecklis
     render() {
         return (
             <DecklistDisplayCardComponent
-            deck={this.state.deck}
-            mainboardCards={this.state.mainboardCards}
-            sideboardCards={this.state.sideboardCards} />
+                history={this.props.history}
+                location={this.props.location}
+                match={this.props.match}
+                deck={this.state.deck}
+                mainboardCards={this.state.mainboardCards}
+                sideboardCards={this.state.sideboardCards} />
         )
     }
 }

@@ -6,6 +6,7 @@ import User from '../../models/user.model';
 import { IState } from '../../reducers';
 import CardHover from '../card-hover/card.hover.component';
 import DeckUpdateFormComponent from './deck.update.form';
+import { RouteComponentProps } from 'react-router';
 
 interface IDecklistUpdatePageState {
     deck: Deck
@@ -21,7 +22,11 @@ interface IDecklistUpdatePageState {
     featuredErrorFlag: boolean
 }
 
-export class DecklistUpdatePageComponent extends Component<{}, IDecklistUpdatePageState> {
+interface IDecklistUpdatePageProps extends RouteComponentProps {
+    //
+}
+
+export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePageProps, IDecklistUpdatePageState> {
     constructor(props: any) {
         super(props);
 
@@ -162,47 +167,7 @@ export class DecklistUpdatePageComponent extends Component<{}, IDecklistUpdatePa
         // const resp = await fetch(`api call`);
         // const deck = await resp.json();
         this.setState({
-            deck: new Deck(
-                0,
-                new User(0, 'cbprosser'),
-                'Simic Ascendancy Standard',
-                'Trying to make Simic Ascendancy work in standard',
-                true,
-                true,
-                'Standard',
-                [
-                    "1x Arch of Orazca",
-                    "4x Breeding Pool",
-                    "1x Field of Ruin",
-                    "2x Forest",
-                    "4x Galloping Lizrog",
-                    "4x Growth-Chamber Guardian",
-                    "4x Hadana's Climb",
-                    "1x Hallowed Fountain",
-                    "4x Hinterland Harbor",
-                    "4x Hydroid Krasis",
-                    "4x Incubation Druid",
-                    "1x Island",
-                    "4x Jadelight Ranger",
-                    "3x Knight of Autumn",
-                    "4x Merfolk Branchwalker",
-                    "1x Plains",
-                    "3x Simic Ascendancy",
-                    "4x Sunpetal Grove",
-                    "4x Temple Garden",
-                    "3x Wildgrowth Walker",
-                    "2x Spring"
-                ],
-                [
-                    "3x Kraul Harpooner",
-                    "2x Lyra Dawnbringer",
-                    "3x Negate",
-                    "3x Settle the Wreckage",
-                    "2x Shalai, Voice of Plenty",
-                    "2x Unbreakable Formation",
-                ],
-                'Simic Ascendancy'
-            ),
+            deck: this.props.history.location.state,
             renderFlag: true
         })
     }
