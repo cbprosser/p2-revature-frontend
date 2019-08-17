@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
+import { DecklistSubmitPageComponent } from './components/deck-submit/decklist.submit.component';
 import DecklistDisplayPageComponent from './components/decklist-display/decklist-display-page';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
 import LoginComponent from './components/login/login.component';
@@ -26,7 +27,8 @@ function App() {
               <Switch>
                 <Route exact path="/" component={LandingPageComponenet} />
                 <Route path="/login" component={LoginComponent} />
-                <Route path="/deck" component={DecklistDisplayPageComponent} />
+                <Route exact path="/deck" component={DecklistDisplayPageComponent} />
+                <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
                 <Route component={NotFound} />
               </Switch>
             </BrowserRouter>
