@@ -29,7 +29,7 @@ export default class DeckDisplay extends Component<IDeckDisplayProps, IDeckDispl
     render() {
         const deck = this.props.deck;
         return (
-            <>
+            
                 <Card key={`deck-` + deck.id} style={{ backgroundColor: '#333', borderColor: '#333' }}  >
                     <CardImg src={deck.featuredCardImage} onClick={this.toggleDropDown} style={{ marginBottom: '1rem' }} top width="20%" alt="Card image cap" />
                     <Collapse background-color="dark" isOpen={this.state.collapse}>
@@ -49,7 +49,7 @@ export default class DeckDisplay extends Component<IDeckDisplayProps, IDeckDispl
                         </Card>
                     </Collapse>
                 </Card>
-            </>
+            
         )
     }
 }

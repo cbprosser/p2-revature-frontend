@@ -1,10 +1,9 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Col, CardColumns, Card, CardImg, CardTitle, CardText, CardSubtitle, Collapse, Progress, Spinner, Container, Row, Button } from 'reactstrap';
 import { IState } from '../../reducers';
 import DeckDisplay from '../deck-display/deck.display.component';
-// import { Card, CardImg, CardTitle, CardText, CardColumns, CardSubtitle, Collapse, Progress, Spinner } from 'reactstrap';
-import { Col, Row } from 'reactstrap';
 interface ILandingProps {
 
 }
@@ -27,7 +26,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
             // manaTypes: [],
             isLoading: true,
             collapse: false,
-            decks: []            
+            decks: []
         }
     }
 
@@ -63,14 +62,14 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
     }
 
     getRandomCards = async (i: number) => {
-        
+
         const resp = await fetch("https://api.scryfall.com/cards?page=" + i, {
         });
         const listOfCards = await resp.json();
         // console.log(cardList)
         let dl = this.state.decks;
         for (let i = 0; i < 20; i++) {
-            dl.push( {
+            dl.push({
                 format: listOfCards.data[i].set_type,
                 author: listOfCards.data[i].artist,
                 description: listOfCards.data[i].oracle_text,
@@ -78,14 +77,14 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 featuredCardImage: listOfCards.data[i].image_uris.art_crop
             });
         }
-        
+
         this.setState({
             ...this.state,
             decks: dl
-            
+
         });
-    } 
-    
+    }
+
 
     getCardArt = async (cardName: string) => {
         const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
@@ -98,7 +97,12 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let elements: any[] = [];
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
-            elements.push(<Col className="bg-transparent border-0 p-0 justify-content-start align-items-start">{decks[i].number} <DeckDisplay deck={decks[i]} /></Col>)
+            elements.push(
+
+
+                <DeckDisplay deck={decks[i]} />
+
+            )
         }
         return elements;
     }
@@ -106,9 +110,15 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
     render() {
         const deck = this.generateDeck();
         return (
-            <Row className="h-25 w-25 flex-column flex-wrap align-content-start" >
-               {deck}
-            </Row>
+            <Container>
+                <Row>
+                    <h3>Holding the deck creation page</h3>
+                    <Button class="center">Make a Deck</Button>
+                </Row>
+                <CardColumns>
+                    {deck}
+                </CardColumns>
+            </Container>
         )
     };
 }
