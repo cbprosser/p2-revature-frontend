@@ -7,7 +7,8 @@ import { RouteComponentProps } from 'react-router';
 interface IDecklistDisplayPageComponentState {
     deck: Deck,
     mainboardCards: any[],
-    sideboardCards: any[]
+    sideboardCards: any[],
+    featuredCard: any
 }
 
 interface IDecklistDisplayPageComponentProps extends RouteComponentProps {
@@ -53,10 +54,11 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
                     "2x Unsubstantiate",
                     "4x Vapor Snag",
                 ],
-                'Modern Cloudfin'
+                'Cloudfin Raptor'
             ),
             mainboardCards: [],
-            sideboardCards: []
+            sideboardCards: [],
+            featuredCard: null
         }
     }
 
@@ -93,8 +95,23 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         })
     }
 
+    getFeaturedCard = async () => {
+        const featuredCard = this.state.deck.featuredCard;
+        if (featuredCard) {
+            const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
+            const card = await resp.json();
+            if(card.object !== "error"){
+                this.setState({
+                    featuredCard: card
+                })
+            }
+        }
+
+    }
+
     componentWillMount() {
         this.getCardObjects();
+        this.getFeaturedCard();
     }
 
     render() {
@@ -105,7 +122,8 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
                 match={this.props.match}
                 deck={this.state.deck}
                 mainboardCards={this.state.mainboardCards}
-                sideboardCards={this.state.sideboardCards} />
+                sideboardCards={this.state.sideboardCards}
+                featuredCard={this.state.featuredCard} />
         )
     }
 }

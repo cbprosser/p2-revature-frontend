@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardFooter, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, ButtonToolbar } from 'reactstrap';
+import { RouteComponentProps } from 'react-router';
+import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
 import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
-import { RouteComponentProps } from 'react-router';
 
 interface IDecklistDisplayCardComponentState {
     isLoading: boolean,
@@ -11,6 +11,7 @@ interface IDecklistDisplayCardComponentState {
     cmcs: number[],
     sideboardCards: any[],
     mainboardCards: any[],
+    featuredCard: any[],
     cardTypes: string[],
     cardRarities: string[],
     cardColorCombos: string[],
@@ -21,7 +22,8 @@ interface IDecklistDisplayCardComponentState {
 interface IDecklistDisplayCardComponentProps extends RouteComponentProps {
     deck: Deck
     mainboardCards: any[],
-    sideboardCards: any[]
+    sideboardCards: any[],
+    featuredCard: any
 }
 
 export default class DecklistDisplayCardComponent extends Component<IDecklistDisplayCardComponentProps, IDecklistDisplayCardComponentState> {
@@ -35,6 +37,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             cmcs: [],
             mainboardCards: [],
             sideboardCards: [],
+            featuredCard: [],
             cardTypes: [
                 "Land",
                 "Creature",
@@ -398,6 +401,23 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
         return list;
     }
 
+    mapFeaturedCard = () => {
+        let featuredCard: any[] = []
+        if (this.props.featuredCard) {
+            featuredCard.push(
+                <Col>
+                    <Card>
+                        <CardImg width="100%" src={this.props.featuredCard.image_uris.art_crop} alt="Card image cap" />
+                        <CardFooter className="bg-dark p-0 d-flex justify-content-end">
+                            <small className="text-muted">Artist: {this.props.featuredCard.artist}</small>
+                        </CardFooter>
+                    </Card>
+                </Col>
+            )
+        }
+        return featuredCard;
+    }
+
     componentDidUpdate(prevProps: any, prevState: any) {
         if (this.props != prevProps) {
             this.setCardObjects()
@@ -414,7 +434,19 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
         return (
             <Card className="bg-light">
                 <CardHeader>
-                    {this.props.deck.deckName}
+                    <Row>
+                        {this.mapFeaturedCard()}
+                        <Col>
+                            <Card className="bg-dark h-100">
+                                <CardBody className="d-flex flex-column justify-content-end">
+                                    <CardTitle>{this.props.deck.deckName}</CardTitle>
+                                    <CardText>
+                                    <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                    </CardText>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
                 </CardHeader>
                 <CardBody>
                     <ButtonToolbar className="d-flex justify-content-between">
@@ -449,9 +481,6 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                         </Col>
                     </Row>
                 </CardBody>
-                <CardFooter>
-                    Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}
-                </CardFooter>
             </Card>
         )
     }
