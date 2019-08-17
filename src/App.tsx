@@ -9,6 +9,7 @@ import LoginComponent from './components/login/login.component';
 import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
+import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/login" component={LoginComponent} />
                 <Route exact path="/deck" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
+                <Route path="/deck/update" component={DecklistUpdatePageComponent} />
                 <Route component={NotFound} />
               </Switch>
             </BrowserRouter>
