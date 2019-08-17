@@ -18,19 +18,6 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-<<<<<<< HEAD
-      <div className="App">
-        <NavComponent/>
-        <Switch>
-          <Route exact path="/" component={IndexComponent}/>
-          <Route path="/login" component={LoginComponent}/>
-          <Route path="/reimbursements" component={ReimbursementsComponent}/>
-          <Route path="/deck" component={DecklistDisplay}/>
-          <Route path="/collection" component={CollectionListDisplay}/>
-          <Route component={NotFound}/>
-        </Switch>
-      </div>
-=======
         <Container className="App container-fluid">
           <Row>
             <Col sm="10" med="9" style={{flex:10}} content="width=device-width">
@@ -39,6 +26,7 @@ function App() {
                   <Route exact path="/" component={LandingPageComponenet} />
                   <Route path="/login" component={LoginComponent} />
                   <Route path="/deck" component={DecklistDisplay}/>
+                  <Route path="/collection" component={CollectionListDisplay}/>
                   <Route component={NotFound} />
                 
               </Switch>
@@ -49,7 +37,6 @@ function App() {
             </Col>
           </Row>
         </Container>
->>>>>>> origin/dev
       </BrowserRouter>
     </Provider>
   );

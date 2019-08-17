@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { IState } from '../../reducers';
 import { Card, Container, Row, Col, CardHeader, CardBody, CardFooter, CardImgOverlay, CardImg, ListGroup, ListGroupItemHeading, ListGroupItem, Button, Spinner } from 'reactstrap';
 import CardHover from '../card-hover/card.hover.component';
+import NumberFormat from 'react-number-format';
+import { number } from 'prop-types';
 
 interface IDecklistState {
     keyIndex: number,
@@ -10,11 +12,14 @@ interface IDecklistState {
     colors: string[],
     costColors: string[],
     cmcs: number[],
+    value: number[],
+    foilValue: number[],
     sideboard: string[],
     sideboardCards: any[],
     collectionList: string[],
     collectionlistCards: any[],
     collectionListPopover: number[]
+    cardTypes: string[]
 }
 
 export class CollectionListDisplay extends Component<{}, IDecklistState> {
@@ -27,6 +32,8 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             colors: [],
             costColors: [],
             cmcs: [],
+            value: [],
+            foilValue: [],
             collectionListPopover: [],
             collectionList: [
                 "2x Act of Treason",
@@ -215,9 +222,19 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
                 "2x Unbreakable Formation"
             ],
             collectionlistCards: [],
-            sideboardCards: []
+            sideboardCards: [],
+            cardTypes: [
+                "Land",
+                "Creature",
+                "Artifact",
+                "Enchantment",
+                "Planeswalker",
+                "Instant",
+                "Sorcery"
+            ]
         }
     }
+
 
     getCardObjects = async () => {
         let cardObj: any[] = [];
@@ -225,19 +242,20 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
         let cards = this.state.collectionList;
         let sideboard = this.state.sideboard
         let deckColors: string[] = [], cmcs: number[] = [];
+        let value: number[] = [];
+        let foilValue: number[] = [];
         for (let i = 0; i < cards.length; i++) {
             const cardNum = +cards[i].split('x')[0];
             const cardName = cards[i].substring(cards[i].indexOf('x ') + 2);
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
-
             const typeColorObj = this.setTypesAndDeckColors(card);
-
             const { supertypes, subtypes } = typeColorObj;
-
             deckColors = deckColors.concat(typeColorObj.deckColors)
-
             cmcs = cmcs.concat(this.setCMCs(supertypes, cardNum, card));
+
+            value = value.concat(this.setUsdValue(cardNum, card));
+            foilValue = foilValue.concat(this.setFoilValue(cardNum, card));
 
             cardObj.push({
                 number: +cardNum,
@@ -253,9 +271,7 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
             const typeColorObj = this.setTypesAndDeckColors(card);
-
             const { supertypes, subtypes } = typeColorObj;
-
             sideboardObj.push({
                 number: +cardNum,
                 supertypes,
@@ -270,6 +286,8 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             colors,
             costColors: deckColors,
             cmcs,
+            value,
+            foilValue,
             isLoading: false,
             collectionlistCards: cardObj,
             sideboardCards: sideboardObj
@@ -305,6 +323,7 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
         }
     }
 
+
     setCMCs = (supertypes: string[], cardNum: number, card: any) => {
         let cmcs = [];
         if (!supertypes.includes('Land')) {
@@ -313,6 +332,35 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             }
         }
         return cmcs;
+    }
+
+
+    setUsdValue = (cardNum: number, card: any) => {
+        let val = [];
+
+            if(card.prices.usd !== null){
+                val.push(card.prices.usd * cardNum);
+            }
+            else{
+                val.push(0)
+            }
+            
+            
+        
+        return val;
+    }
+
+    setFoilValue = (cardNum: number, card: any) => {
+        let val = [];
+       
+            if(card.prices.usd_foil !== null){
+                val.push(card.prices.usd_foil );
+            }
+            else{
+                val.push(0)
+            }
+            
+        return val;
     }
 
     setColors = (deckColors: string[]) => {
@@ -335,23 +383,70 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
         return colors;
     }
 
-    generateList = () => {
+    generateList = (lists: any[]) => {
+        // console.log(lists)
         let elements: any[] = [];
-        let cards = this.state.collectionlistCards;
-        for (let i = 0; i < cards.length; i++) {
-
-            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={i} card={cards[i].card} /></ListGroupItem>)
-        }
+        lists.forEach((list) => {
+            console.log(list)
+            if (!(list.cardList.length === 0)) {
+                elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`${list.type} (${list.cardList.length})`}</ListGroupItemHeading>);
+                for (let i = 0; i < list.cardList.length; i++) {
+                    elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{list.cardList[i].number}x <CardHover id={`${list.type}-${i}`} card={list.cardList[i].card} /></ListGroupItem>);
+                }
+            }
+        })
         return elements;
     }
 
     generateSideboardList = () => {
         let elements: any[] = [];
         let cards = this.state.sideboardCards;
+        elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Sideboard (${cards.length})`}</ListGroupItemHeading>);
         for (let i = 0; i < cards.length; i++) {
             elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`sb-${i}`} card={cards[i].card} /></ListGroupItem>)
         }
         return elements;
+    }
+
+    generateTypedLists = () => {
+        let cardLists: any[] = [];
+        let cards = this.state.collectionlistCards;
+        const cardTypes = this.state.cardTypes;
+        cardTypes.forEach((type: string) => {
+            let cardList: any[] = [];
+            for (let i = 0; i < cards.length; i++) {
+                if (cards[i].supertypes.includes(type)) {
+                    cardList.push(cards.splice(i, 1)[0]);
+                    i--;
+                }
+            }
+            cardLists.push({
+                type,
+                cardList
+            })
+        })
+        return cardLists;
+    }
+
+
+    generateRarityLists = () => {
+        let cardLists: any[] = [];
+        let cards = this.state.collectionlistCards;
+        const cardRarity = this.state.cardTypes;
+        cardRarity.forEach((rarity: string) => {
+            let cardList: any[] = [];
+            for (let i = 0; i < cards.length; i++) {
+                if (cards[i].supertypes.includes(rarity)) {
+                    cardList.push(cards.splice(i, 1)[0]);
+                    i--;
+                }
+            }
+            cardLists.push({
+                rarity,
+                cardList
+            })
+        })
+        return cardLists;
     }
 
     componentDidMount() {
@@ -359,12 +454,13 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
     }
 
     render() {
-        let list, sideboardList;
+        let list, sideboardList, lists;
         if (this.state.isLoading) {
             list = <Spinner />
             sideboardList = <Spinner />
         } else {
-            list = this.generateList();
+            lists = this.generateTypedLists();
+            list = this.generateList(lists);
             sideboardList = this.generateSideboardList();
         }
 
@@ -375,6 +471,24 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             }
             avgCmc = cmcSum / this.state.cmcs.length;
         }
+
+        let usdSum = 0;
+        if (!(this.state.value.length === 0)) {
+            for (let i = 0; i < this.state.value.length; i++) {
+                usdSum += +this.state.value[i];
+            }
+        }
+
+        let foilSum = 0;
+        if (!(this.state.foilValue.length === 0)) {
+            for (let i = 0; i < this.state.foilValue.length; i++) {
+                
+                foilSum = foilSum +  +this.state.foilValue[i];
+          
+            }
+        }
+
+
         return (
             <Container fluid>
                 <Row>
@@ -387,7 +501,7 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
 
                             <CardBody>
                                 <Row>
-                                    <Col xs="2" sm="2">
+                                    <Col xs="2" sm="3">
                                         <p>Rarity</p>
                                         <p>Mythic</p>
                                         <p>Rare</p>
@@ -395,21 +509,23 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
                                         <p>Uncommon</p>
                                         <p>Total Value</p>
                                     </Col>
-                                    <Col xs="4" sm="2">
+                                    <Col xs="4" sm="3">
+                                        
+                                    
                                         <p>All</p>
                                         <p>6</p>
                                         <p>Qty</p>
                                         <p>Qty</p>
-                                        <p>Qty</p>
-                                        <p>Usd</p>
+                                        <p>qty</p>
+                                        <p><NumberFormat value={usdSum.toFixed(2)}  displayType={'text'}  prefix={'$'} /></p>
                                     </Col>
-                                    <Col xs="4" sm="2">
+                                    <Col xs="4" sm="3">
                                         <p>Foil</p>
                                         <p>Qty</p>
                                         <p>Qty</p>
                                         <p>Qty</p>
-                                        <p>Qty</p>
-                                        <p>Usd</p>
+                                        <p>Qty </p>
+                                        <p><NumberFormat value={foilSum.toFixed(2)}  displayType={'text'}  prefix={'$'} /></p>
                                     </Col>
                                 </Row>
                             </CardBody>
