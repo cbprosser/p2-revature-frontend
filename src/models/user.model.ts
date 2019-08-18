@@ -1,4 +1,4 @@
-import Role from './role.model';
+import Role from "./role.model";
 
 export default class User {
     constructor(
@@ -8,6 +8,6 @@ export default class User {
         public firstName = '',
         public lastName = '',
         public email = '',
-        public role?: Role
+        public role = Role
     ) { }
 }

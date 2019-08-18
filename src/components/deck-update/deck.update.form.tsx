@@ -69,6 +69,7 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
                 if (this.props.mainboardCount < 100) {
                     return;
                 }
+                break;
             default:
                 if (this.props.mainboardCount < 60) {
                     return;
@@ -130,6 +131,7 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
             case "Commander":
                 if (this.props.mainboardCount < 100)
                     togglePrototype = true;
+                    break;
             default:
                 if (this.props.mainboardCount < 60)
                     togglePrototype = true;

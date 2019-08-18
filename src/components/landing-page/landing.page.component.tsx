@@ -1,15 +1,15 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Col, CardColumns, Card, CardImg, CardTitle, CardText, CardSubtitle, Collapse, Progress, Spinner, Container, Row, Button } from 'reactstrap';
+import { CardColumns, Container, Row, Button, Media, Col } from 'reactstrap';
 import { IState } from '../../reducers';
 import DeckDisplay from '../deck-display/deck.display.component';
+import { Link } from 'react-router-dom';
+
 interface ILandingProps {
 
 }
 
 interface ILandingState {
-    // manaTypes: any[]
     isLoading: boolean,
     decks: any[],
     collapse: boolean
@@ -23,18 +23,15 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         this.toggle = this.toggle.bind(this);
 
         this.state = {
-            // manaTypes: [],
             isLoading: true,
             collapse: false,
             decks: []
         }
     }
 
-
-
     async componentDidMount() {
-        this.getRandomCards(1);
-        this.getRandomCards(2);
+        this.getRandomDecks(1);
+        this.getRandomDecks(2);
         // this.state.decks.forEach(async (deck) => {
         //     const image = await this.getCardArt(deck.featuredCard);
         //     this.updateDeckImage(deck.featuredCard, image);
@@ -61,8 +58,9 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         this.setState(state => ({ collapse: !state.collapse }));
     }
 
-    getRandomCards = async (i: number) => {
+    getRandomDecks = async (i: number) => {
 
+        // will be replaced with API call to get decks from the td_deck table that are public
         const resp = await fetch("https://api.scryfall.com/cards?page=" + i, {
         });
         const listOfCards = await resp.json();
@@ -70,6 +68,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let dl = this.state.decks;
         for (let i = 0; i < 20; i++) {
             dl.push({
+                // will be replaced with deck objects, that contain all this information 
                 format: listOfCards.data[i].set_type,
                 author: listOfCards.data[i].artist,
                 description: listOfCards.data[i].oracle_text,
@@ -85,7 +84,9 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         });
     }
 
-
+    /**
+     * Retrieves the link to the card image for the cover of the deck object to be displayed
+     */
     getCardArt = async (cardName: string) => {
         const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
         });
@@ -98,10 +99,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
             elements.push(
-
-
                 <DeckDisplay deck={decks[i]} />
-
             )
         }
         return elements;
@@ -112,8 +110,9 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         return (
             <Container>
                 <Row>
-                    <h3>Holding the deck creation page</h3>
-                    <Button class="center">Make a Deck</Button>
+                    <Col className="d-flex justify-content-center">
+                        <Button ><Link to="/deck/submit">Let's make some Magic!</Link></Button>
+                    </Col>
                 </Row>
                 <CardColumns>
                     {deck}

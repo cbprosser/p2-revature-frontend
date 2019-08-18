@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
-import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
+import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col, Navbar } from 'reactstrap';
+import DecklistDisplayPageComponent from '../decklist-display/decklist-display-page';
+import { Link } from 'react-router-dom';
+import { DecklistSubmitPageComponent } from '../deck-submit/decklist.submit.component';
 // import logo from '../../assets/logo-bw.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
@@ -38,36 +41,37 @@ export class NavComponent extends Component<INavProps, INavState> {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  }// end of toggleNavButton
+  }
+  // end of toggleNavButton
 
   toggleNavDropdown = () => {
     this.setState({
       dropdownIsOpen: !this.state.dropdownIsOpen
     });
-  }// end of toggleNaveDropdown
+  }
+  // end of toggleNaveDropdown
 
 
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col sm="2">
-            <NavbarBrand href="/" className="mr-auto">TempoDeck</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse isOpen={!this.state.collapsed} navbar>
-              <Nav navbar >
-                <NavItem>
-                  <NavLink href="/deck">Decks</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/Collections/">Collections</NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse>
-          </Col>
-        </Row>
-      </Container>
+      <div className="d-flex flex-column">
+        <Navbar color="faded" dark>
+          <NavbarBrand className="mr-auto text-danger"><Link to="/">TempoDeck</Link></NavbarBrand>
+          <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
+          <Collapse isOpen={!this.state.collapsed} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink><Link to="/deck/submit">Deck</Link></NavLink>
+              </NavItem>
+              <NavItem>
+              
+                <NavLink><Link to="/collection">Collections</Link></NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
     );
   }// end of render()
 }

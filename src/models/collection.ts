@@ -14,4 +14,4 @@ export default class Collection {
         public collectionUpdated?: number,
         public featuredCardURI?: string
     ){}
-}
+} 
