@@ -1,4 +1,5 @@
 import User from "./user.model";
+import Format from "./format";
 
 export default class Deck {
     constructor(
@@ -8,7 +9,7 @@ export default class Deck {
         public deckDescription: string,
         public isPrivate: boolean,
         public isPrototype: boolean,
-        public format: string,
+        public format: Format,
         public mainboard: string[],
         public sideboard: string[],
         public featuredCard: string,

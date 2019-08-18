@@ -38,7 +38,10 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
-                format: 'Casual',
+                format: {
+                    id: 1,
+                    format: 'Casual'
+                },
                 mainboard: [],
                 sideboard: [],
                 featuredCard: ''

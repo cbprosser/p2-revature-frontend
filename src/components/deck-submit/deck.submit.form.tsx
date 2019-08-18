@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Row, Col, InputGroup, Input, InputGroupAddon, InputGroupText, ButtonGroup, Button, CustomInput, ListGroupItem, Tooltip, ButtonToolbar, Collapse, Alert, ListGroupItemHeading, ListGroup } from 'reactstrap';
+import { Form, Row, Col, InputGroup, Input, ButtonGroup, Button, ListGroupItem, Alert, ListGroupItemHeading, ListGroup } from 'reactstrap';
 import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DeckInputTogglable from './deck.input.box.toggleable';
@@ -38,7 +38,10 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
-                format: 'Casual',
+                format: {
+                    id: 1,
+                    format: 'Casual'
+                },
                 mainboard: [],
                 sideboard: [],
                 featuredCard: ''
@@ -62,13 +65,14 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
     }
 
     liveTogglePrototype = () => {
-        switch (this.state.deck.format) {
+        switch (this.state.deck.format.format) {
             case "Casual":
                 break;
             case "Commander":
                 if (this.props.mainboardCount < 100) {
                     return;
                 }
+                break;
             default:
                 if (this.props.mainboardCount < 60) {
                     return;
@@ -124,12 +128,13 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
 
     liveUpdateCardInput = (event: any, sideboard?: boolean) => {
         let togglePrototype = this.state.deck.isPrototype
-        switch (this.state.deck.format) {
+        switch (this.state.deck.format.format) {
             case "Casual":
                 break;
             case "Commander":
                 if (this.props.mainboardCount < 100)
                     togglePrototype = true;
+                    break;
             default:
                 if (this.props.mainboardCount < 60)
                     togglePrototype = true;
@@ -257,7 +262,7 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
             errorEncountered = true;
             submitErrors.push(<ListGroupItem key="invalidCardsSideboard" className="bg-transparent border-0 p-0">Your sideboard contains invalid cards!</ListGroupItem>)
         }
-        if(this.props.featuredErrorFlag) {
+        if (this.props.featuredErrorFlag) {
             errorEncountered = true;
             submitErrors.push(<ListGroupItem key="invalidCardsSideboard" className="bg-transparent border-0 p-0">Your entered featured card doesn't exist!</ListGroupItem>)
         }
@@ -298,7 +303,7 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
                         <DeckInputGroup
                             isPrivate={this.state.deck.isPrivate}
                             isPrototype={this.state.deck.isPrototype}
-                            deckFormat={this.state.deck.format}
+                            deckFormat={this.state.deck.format.format}
                             liveTogglePrivate={this.liveTogglePrivate}
                             liveTogglePrototype={this.liveTogglePrototype}
                             liveSelectFormat={this.liveSelectFormat}

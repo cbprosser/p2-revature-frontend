@@ -1,16 +1,15 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import { IState } from '../../reducers';
 import DeckDisplay from '../deck-display/deck.display.component';
-// import { Card, CardImg, CardTitle, CardText, CardColumns, CardSubtitle, Collapse, Progress, Spinner } from 'reactstrap';
-import { Col, Row } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
 interface ILandingProps {
 
 }
 
 interface ILandingState {
-    // manaTypes: any[]
     isLoading: boolean,
     decks: any[],
     collapse: boolean
@@ -24,18 +23,15 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         this.toggle = this.toggle.bind(this);
 
         this.state = {
-            // manaTypes: [],
             isLoading: true,
             collapse: false,
-            decks: []            
+            decks: []
         }
     }
 
-
-
     async componentDidMount() {
-        this.getRandomCards(1);
-        this.getRandomCards(2);
+        this.getRandomDecks(1);
+        this.getRandomDecks(2);
         // this.state.decks.forEach(async (deck) => {
         //     const image = await this.getCardArt(deck.featuredCard);
         //     this.updateDeckImage(deck.featuredCard, image);
@@ -62,15 +58,17 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         this.setState(state => ({ collapse: !state.collapse }));
     }
 
-    getRandomCards = async (i: number) => {
-        
+    getRandomDecks = async (i: number) => {
+
+        // will be replaced with API call to get decks from the td_deck table that are public
         const resp = await fetch("https://api.scryfall.com/cards?page=" + i, {
         });
         const listOfCards = await resp.json();
         // console.log(cardList)
         let dl = this.state.decks;
         for (let i = 0; i < 20; i++) {
-            dl.push( {
+            dl.push({
+                // will be replaced with deck objects, that contain all this information 
                 format: listOfCards.data[i].set_type,
                 author: listOfCards.data[i].artist,
                 description: listOfCards.data[i].oracle_text,
@@ -78,15 +76,17 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 featuredCardImage: listOfCards.data[i].image_uris.art_crop
             });
         }
-        
+
         this.setState({
             ...this.state,
             decks: dl
-            
-        });
-    } 
-    
 
+        });
+    }
+
+    /**
+     * Retrieves the link to the card image for the cover of the deck object to be displayed
+     */
     getCardArt = async (cardName: string) => {
         const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
         });
@@ -98,7 +98,9 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let elements: any[] = [];
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
-            elements.push(<Col className="bg-transparent border-0 p-0 justify-content-start align-items-start">{decks[i].number} <DeckDisplay deck={decks[i]} /></Col>)
+            elements.push(
+                <DeckDisplay deck={decks[i]} />
+            )
         }
         return elements;
     }
@@ -106,9 +108,17 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
     render() {
         const deck = this.generateDeck();
         return (
-            <Row className="h-25 w-25 flex-column flex-wrap align-content-start" >
-               {deck}
-            </Row>
+            <Container>
+                <Row>
+                    <Col className="d-flex justify-content-around">
+                        <Link className="text-light" to="/deck/submit"><Button color="secondary " size="lg" style={{ height: 200 }}>Create a New Deck</Button></Link>
+                        <Link className="text-light" to="/deck"><Button color="secondary " size="lg" style={{ height: 200 }}>Checkout Your Decks</Button></Link>
+                    </Col>
+                </Row>
+                <CardColumns>
+                    {deck}
+                </CardColumns>
+            </Container>
         )
     };
 }

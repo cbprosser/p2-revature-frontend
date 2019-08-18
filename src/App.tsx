@@ -18,13 +18,13 @@ function App() {
   return (
 
     <Provider store={store}>
-      <NavComponent />
       <Container fluid>
 
-        <Row>
-          <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
-          <Col id="main-row" className="bg-light text-center">
-            <BrowserRouter>
+        <BrowserRouter>
+          <NavComponent />
+          <Row>
+            <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
+            <Col id="main-row" className="bg-light text-center">
               <Switch>
                 <Route exact path="/" component={LandingPageComponenet} />
                 <Route path="/login" component={LoginComponent} />
@@ -33,10 +33,10 @@ function App() {
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
                 <Route component={NotFound} />
               </Switch>
-            </BrowserRouter>
-          </Col>
-          <Col className="col-2 d-none d-sm-none d-md-block"></Col>
-        </Row>
+            </Col>
+            <Col className="col-2 d-none d-sm-none d-md-block"></Col>
+          </Row>
+        </BrowserRouter>
       </Container >
     </Provider >
 

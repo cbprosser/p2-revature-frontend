@@ -38,7 +38,10 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
-                format: 'Casual',
+                format: {
+                    id: 1,
+                    format: 'Casual'
+                },
                 mainboard: [],
                 sideboard: [],
                 featuredCard: ''
@@ -62,13 +65,14 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
     }
 
     liveTogglePrototype = () => {
-        switch (this.state.deck.format) {
+        switch (this.state.deck.format.format) {
             case "Casual":
                 break;
             case "Commander":
                 if (this.props.mainboardCount < 100) {
                     return;
                 }
+                break;
             default:
                 if (this.props.mainboardCount < 60) {
                     return;
@@ -124,12 +128,13 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
 
     liveUpdateCardInput = (event: any, sideboard?: boolean) => {
         let togglePrototype = this.state.deck.isPrototype
-        switch (this.state.deck.format) {
+        switch (this.state.deck.format.format) {
             case "Casual":
                 break;
             case "Commander":
                 if (this.props.mainboardCount < 100)
                     togglePrototype = true;
+                    break;
             default:
                 if (this.props.mainboardCount < 60)
                     togglePrototype = true;
