@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Col, CustomInput, Form, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, Row, ListGroupItem, ListGroupItemHeading, Container, Alert } from 'reactstrap';
+import { Card, CardBody, CardFooter, CardHeader, Col, ListGroup, Row, ListGroupItem, ListGroupItemHeading, Alert } from 'reactstrap';
 import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import { IState } from '../../reducers';
@@ -33,7 +33,10 @@ export class DecklistSubmitPageComponent extends Component<{}, IDecklistSubmitPa
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
-                format: 'Casual',
+                format: {
+                    id: 1,
+                    format: 'Casual'
+                },
                 mainboard: [],
                 sideboard: [],
                 featuredCard: ''
@@ -228,5 +231,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DecklistSubmitPageComponent
-)
+export default connect(mapStateToProps, mapDispatchToProps)(DecklistSubmitPageComponent)

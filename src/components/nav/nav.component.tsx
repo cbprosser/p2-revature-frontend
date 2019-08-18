@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
-import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col, Navbar } from 'reactstrap';
-import DecklistDisplayPageComponent from '../decklist-display/decklist-display-page';
+import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse,  Navbar, CardImg } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { DecklistSubmitPageComponent } from '../deck-submit/decklist.submit.component';
-// import logo from '../../assets/logo-bw.png';
+import logo from '../../assets/td.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
@@ -51,29 +49,30 @@ export class NavComponent extends Component<INavProps, INavState> {
   }
   // end of toggleNaveDropdown
 
-
-
   render() {
     return (
       <div className="d-flex flex-column">
         <Navbar color="faded" dark>
-          <NavbarBrand className="mr-auto text-danger"><Link to="/">TempoDeck</Link></NavbarBrand>
+          <NavbarBrand style={{background:"transparent"}} className="mr-auto text-danger" ><Link to="/"><CardImg src={logo} style={{width: 100, height: 75}}/></Link></NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink><Link to="/deck/submit">Deck</Link></NavLink>
+                <NavLink><Link className="text-light" to="/Login">Login</Link></NavLink>
               </NavItem>
               <NavItem>
-              
-                <NavLink><Link to="/collection">Collections</Link></NavLink>
+                <NavLink><Link className="text-light" to="/deck/submit">Deck</Link></NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink><Link className="text-light" to="/collection">Collections</Link></NavLink>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
       </div>
     );
-  }// end of render()
+  }
+  // end of render()
 }
 
 const mapStateToProps = (state: IState) => ({

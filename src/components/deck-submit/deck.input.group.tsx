@@ -39,7 +39,7 @@ export default class DeckInputGroup extends Component<IDeckInputGroupProps, IDec
     }
 
     componentDidUpdate(prevProps: any) {
-        if (this.props != prevProps) {
+        if (this.props !== prevProps) {
             this.setState({
                 isPrivate: this.props.isPrivate,
                 isPrototype: this.props.isPrototype,

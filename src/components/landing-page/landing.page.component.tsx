@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CardColumns, Container, Row, Button, Media, Col } from 'reactstrap';
+import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import { IState } from '../../reducers';
 import DeckDisplay from '../deck-display/deck.display.component';
 import { Link } from 'react-router-dom';
@@ -110,8 +110,9 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         return (
             <Container>
                 <Row>
-                    <Col className="d-flex justify-content-center">
-                        <Button ><Link to="/deck/submit">Let's make some Magic!</Link></Button>
+                    <Col className="d-flex justify-content-around">
+                        <Link className="text-light" to="/deck/submit"><Button color="secondary " size="lg" style={{ height: 200 }}>Create a New Deck</Button></Link>
+                        <Link className="text-light" to="/deck"><Button color="secondary " size="lg" style={{ height: 200 }}>Checkout Your Decks</Button></Link>
                     </Col>
                 </Row>
                 <CardColumns>

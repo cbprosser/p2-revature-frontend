@@ -33,16 +33,16 @@ export default class DeckUpdateGroup extends Component<IDeckUpdateGroupProps, ID
         this.setState({
             isPrivate: this.props.deck.isPrivate,
             isPrototype: this.props.deck.isPrototype,
-            deckFormat: this.props.deck.format
+            deckFormat: this.props.deck.format.format
         })
     }
 
     componentDidUpdate(prevProps: any) {
-        if (this.props != prevProps) {
+        if (this.props !== prevProps) {
             this.setState({
                 isPrivate: this.props.deck.isPrivate,
                 isPrototype: this.props.deck.isPrototype,
-                deckFormat: this.props.deck.format
+                deckFormat: this.props.deck.format.format
             })
         }
     }
@@ -89,7 +89,7 @@ export default class DeckUpdateGroup extends Component<IDeckUpdateGroupProps, ID
                         type="select"
                         id="formatSelectInput"
                         onChange={this.props.liveSelectFormat}
-                        defaultValue={this.props.deck.format}>
+                        defaultValue={this.props.deck.format.format}>
                         <option value="Casual">Casual</option>
                         <option value="Standard">Standard</option>
                         <option value="Commander">Commander</option>

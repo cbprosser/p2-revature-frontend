@@ -348,7 +348,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     }
 
     getSpinner = () => {
-        let list, sideboardList, lists;
+        let list, sideboardList;
         if (this.state.isLoading) {
             list = <Spinner />
             sideboardList = <Spinner />
@@ -399,7 +399,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {
-        if (this.props != prevProps) {
+        if (this.props !== prevProps) {
             this.setCardObjects()
         }
     }
