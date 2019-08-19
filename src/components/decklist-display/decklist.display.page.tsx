@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Deck from '../../models/deck';
 import User from '../../models/user.model';
-import DecklistDisplayCardComponent from './decklist-display-card';
+import DecklistDisplayCardComponent from './decklist.display.card';
 import { RouteComponentProps } from 'react-router';
 
 interface IDecklistDisplayPageComponentState {
