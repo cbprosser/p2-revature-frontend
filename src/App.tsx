@@ -28,9 +28,9 @@ function App() {
               <Switch>
                 <Route exact path="/" component={LandingPageComponenet} />
                 <Route path="/login" component={LoginComponent} />
-                <Route exact path="/deck" component={DecklistDisplayPageComponent} />
+                <Route exact path="/deck/:userId/:deckId" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
-                <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+                <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
                 <Route component={NotFound} />
               </Switch>
             </Col>
