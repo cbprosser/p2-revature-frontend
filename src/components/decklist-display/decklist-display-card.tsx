@@ -461,7 +461,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.author.userId}/${this.props.deck.id}/update`, this.props.deck)}>
+                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.author.id}/${this.props.deck.id}/update`, this.props.deck)}>
                             Update deck
                         </Button>
                     </ButtonToolbar>
