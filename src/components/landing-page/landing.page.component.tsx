@@ -112,7 +112,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 <Row>
                     <Col className="d-flex justify-content-around">
                         <Link className="text-light" to="/deck/submit"><Button color="secondary " size="lg" style={{ height: 200 }}>Create a New Deck</Button></Link>
-                        <Link className="text-light" to="/deck"><Button color="secondary " size="lg" style={{ height: 200 }}>Checkout Your Decks</Button></Link>
+                        <Link className="text-light" to="/deck/landing"><Button color="secondary " size="lg" style={{ height: 200 }}>Checkout Your Decks</Button></Link>
                     </Col>
                 </Row>
                 <CardColumns>

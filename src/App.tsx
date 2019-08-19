@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 import { DecklistSubmitPageComponent } from './components/deck-submit/decklist.submit.component';
-import DecklistDisplayPageComponent from './components/decklist-display/decklist-display-page';
+import DecklistDisplayPageComponent from './components/decklist-display/decklist.display.page';
+import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
 import LoginComponent from './components/login/login.component';
 import NavComponent from './components/nav/nav.component';
@@ -34,6 +35,8 @@ function App() {
                 <Route path="/collection" component={collectionDisplay}/>
                 <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
                 <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
+                <Route path="/deck/landing" component={DeckLandingComponenet} />
+
                 <Route component={NotFound} />
               </Switch>
             </Col>
