@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IState } from '../../reducers';
-import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Container, Row, Col } from 'reactstrap';
-// import logo from '../../assets/logo-bw.png';
+import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse,  Navbar, CardImg } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/td.png';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
@@ -38,38 +39,40 @@ export class NavComponent extends Component<INavProps, INavState> {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  }// end of toggleNavButton
+  }
+  // end of toggleNavButton
 
   toggleNavDropdown = () => {
     this.setState({
       dropdownIsOpen: !this.state.dropdownIsOpen
     });
-  }// end of toggleNaveDropdown
-
-
+  }
+  // end of toggleNaveDropdown
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col sm="2">
-            <NavbarBrand href="/" className="mr-auto">TempoDeck</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse isOpen={!this.state.collapsed} navbar>
-              <Nav navbar >
-                <NavItem>
-                  <NavLink href="/deck">Decks</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/Collections/">Collections</NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse>
-          </Col>
-        </Row>
-      </Container>
+      <div className="d-flex flex-column">
+        <Navbar color="faded" dark>
+          <NavbarBrand style={{background:"transparent"}} className="mr-auto text-danger" ><Link to="/"><CardImg src={logo} style={{width: 100, height: 75}}/></Link></NavbarBrand>
+          <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
+          <Collapse isOpen={!this.state.collapsed} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink><Link className="text-light" to="/Login">Login</Link></NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink><Link className="text-light" to="/deck/submit">Deck</Link></NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink><Link className="text-light" to="/collection">Collections</Link></NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
     );
-  }// end of render()
+  }
+  // end of render()
 }
 
 const mapStateToProps = (state: IState) => ({

@@ -1,44 +1,45 @@
 import React from 'react';
-import { store } from './store';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import NavComponent from './components/nav/nav.component';
-import NotFound from './components/not-found/not-found.component';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Col, Container, Row } from 'reactstrap';
+import { DecklistSubmitPageComponent } from './components/deck-submit/decklist.submit.component';
+import DecklistDisplayPageComponent from './components/decklist-display/decklist-display-page';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
 import LoginComponent from './components/login/login.component';
-import IndexComponent from './components/index/index.component';
-import { Container, Row, Col } from 'reactstrap';
-import { DecklistDisplay } from './components/decklist-display/decklist-display';
-import CollectionListDisplay from './components/collectionlist-display/collection-display';
+import NavComponent from './components/nav/nav.component';
+import NotFound from './components/not-found/not-found.component';
+import { store } from './store';
+import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
 
 
 function App() {
 
 
   return (
+
     <Provider store={store}>
-      <BrowserRouter>
-        <Container className="App container-fluid">
+      <Container fluid>
+
+        <BrowserRouter>
+          <NavComponent />
           <Row>
-            <Col sm="10" med="9" style={{flex:10}} content="width=device-width">
+            <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
+            <Col id="main-row" className="bg-light text-center">
               <Switch>
-                
-                  <Route exact path="/" component={LandingPageComponenet} />
-                  <Route path="/login" component={LoginComponent} />
-                  <Route path="/deck" component={DecklistDisplay}/>
-                  <Route path="/collection" component={CollectionListDisplay}/>
-                  <Route component={NotFound} />
-                
+                <Route exact path="/" component={LandingPageComponenet} />
+                <Route path="/login" component={LoginComponent} />
+                <Route exact path="/deck" component={DecklistDisplayPageComponent} />
+                <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
+                <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+                <Route component={NotFound} />
               </Switch>
             </Col>
-
-            <Col sm="2" med="3" style={{flex:2}}>
-              <NavComponent />
-            </Col>
+            <Col className="col-2 d-none d-sm-none d-md-block"></Col>
           </Row>
-        </Container>
-      </BrowserRouter>
-    </Provider>
+        </BrowserRouter>
+      </Container >
+    </Provider >
+
   );
 }
 
