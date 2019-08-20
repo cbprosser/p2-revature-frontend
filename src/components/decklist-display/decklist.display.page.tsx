@@ -12,7 +12,7 @@ interface IDecklistDisplayPageComponentState {
 }
 
 interface IDecklistDisplayPageComponentProps extends RouteComponentProps {
-    //
+    deck?: Deck
 }
 
 export default class DecklistDisplayPageComponent extends Component<IDecklistDisplayPageComponentProps, IDecklistDisplayPageComponentState> {

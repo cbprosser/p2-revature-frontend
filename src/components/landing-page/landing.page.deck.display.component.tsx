@@ -26,7 +26,6 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
 
     render() {
         const deck = this.props.deck;
-        console.log(deck);
         return (
             <Card key={`deck-` + deck.id} style={{ backgroundColor: '#333', borderColor: '#333' }}  >
                 <CardImg src={deck.featuredCardImage} onClick={this.toggleDropDown} style={{ marginBottom: '1rem' }} top width="100%" alt="Card image cap" />
