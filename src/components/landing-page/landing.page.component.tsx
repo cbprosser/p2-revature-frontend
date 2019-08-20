@@ -99,7 +99,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
             elements.push(
-                <LandingPageDeckDisplay deck={decks[i]} />
+                <LandingPageDeckDisplay key={`deckId-${decks[i].id}`}deck={decks[i]} />
             )
         }
         return elements;
