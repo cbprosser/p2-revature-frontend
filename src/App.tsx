@@ -14,8 +14,6 @@ import { DecklistUpdatePageComponent } from './components/deck-update/decklist.u
 
 
 function App() {
-
-
   return (
 
     <Provider store={store}>

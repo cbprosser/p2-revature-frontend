@@ -29,7 +29,8 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
                 false,
                 {
                     id: 68,
-                    format: 'Modern'},
+                    format: 'Modern'
+                },
                 [
                     "4x Avatar of the Resolute",
                     "4x Botanical Sanctum",

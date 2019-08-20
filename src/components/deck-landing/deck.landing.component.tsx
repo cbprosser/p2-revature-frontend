@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { IState } from '../../reducers';
 import User from '../../models/user.model';
 import Deck from '../../models/deck';
+import CardHover from '../card-hover/card.hover.component';
 
 interface IDeckLandingProps {
     loggedInUser?: User
 }
 
 interface IDeckLandingState {
-    decks: any[]
+    decks: Deck[]
 }
 
 export class DeckLandingComponenet extends React.Component<IDeckLandingProps, IDeckLandingState> {
@@ -60,7 +61,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                 new Deck(
                     0,
                     new User(0, 'mjarsenault'),
-                    'Modern Cloudfin Raptor',
+                    'Make Hurty Deck',
                     'Another awful deck for Standard',
                     true,
                     false,
@@ -100,24 +101,10 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
         }
     }
 
-    // async componentDidMount() {
-
-    //     if (this.props.loggedInUser) {
-    //         const userId = this.props.loggedInUser && this.props.loggedInUser.userId;
-    //         this.getUsersDecks(userId);
-    //     }
-
-    // }
-
-    getUsersDecks = async (userId: number | undefined) => {
-        // will be replaced with API call to get decks from the td_deck table that are public
-        const resp = await fetch("https://api.scryfall.com/cards?page=" + userId, {
-        });
-
-        const userDecks = await resp.json();
-
-        throw new Error("Method not implemented.");
+    componentWillMount() {
+        
     }
+    
 
 
     render() {
@@ -136,7 +123,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                     <tbody>
                         {
                             userDecks.map(deck =>
-                                <tr key={'deckId-' + deck.id}>
+                                <tr key={`deckId-${deck.id}`}>
                                     <td>{deck.deckName}</td>
                                     <td>{deck.format.format}</td>
                                     <td>{deck.featuredCard}</td>

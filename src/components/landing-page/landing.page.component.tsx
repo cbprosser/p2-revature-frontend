@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import { IState } from '../../reducers';
-import DeckDisplay from '../deck-display/deck.display.component';
+import LandingPageDeckDisplay from './landing.page.deck.display.component';
 import { Link } from 'react-router-dom';
 
 interface ILandingProps {
@@ -99,7 +99,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
             elements.push(
-                <DeckDisplay deck={decks[i]} />
+                <LandingPageDeckDisplay deck={decks[i]} />
             )
         }
         return elements;
