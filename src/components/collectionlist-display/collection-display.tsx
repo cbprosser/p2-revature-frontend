@@ -6,7 +6,7 @@ import CardHover from '../card-hover/card.hover.component';
 import NumberFormat from 'react-number-format';
 import { number } from 'prop-types';
 
-interface IDecklistState {
+interface ICollectionlistState {
     keyIndex: number,
     isLoading: boolean,
     colors: string[],
@@ -14,15 +14,13 @@ interface IDecklistState {
     cmcs: number[],
     value: number[],
     foilValue: number[],
-    sideboard: string[],
-    sideboardCards: any[],
     collectionList: string[],
     collectionlistCards: any[],
     collectionListPopover: number[]
     cardTypes: string[]
 }
 
-export class CollectionListDisplay extends Component<{}, IDecklistState> {
+export class CollectionListDisplay extends Component<{}, ICollectionlistState> {
     constructor(props: any) {
         super(props);
 
@@ -212,17 +210,9 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
                 "2x Desperate Lunge",
                 "2x Destructive Digger"
             ],
-            sideboard: [
-                // "Sideboard(15)",
-                "3x Kraul Harpooner",
-                "2x Lyra Dawnbringer",
-                "3x Negate",
-                "3x Settle the Wreckage",
-                "2x Shalai, Voice of Plenty",
-                "2x Unbreakable Formation"
-            ],
+
             collectionlistCards: [],
-            sideboardCards: [],
+            
             cardTypes: [
                 "Land",
                 "Creature",
@@ -238,9 +228,10 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
 
     getCardObjects = async () => {
         let cardObj: any[] = [];
-        let sideboardObj: any[] = [];
+        
         let cards = this.state.collectionList;
-        let sideboard = this.state.sideboard
+        console.log(this.state.collectionList);
+      
         let deckColors: string[] = [], cmcs: number[] = [];
         let value: number[] = [];
         let foilValue: number[] = [];
@@ -265,21 +256,6 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             });
         }
 
-        for (let i = 0; i < sideboard.length; i++) {
-            const cardNum = sideboard[i].split('x')[0];
-            const cardName = sideboard[i].substring(sideboard[i].indexOf('x ') + 2);
-            const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
-            const card = await resp.json();
-            const typeColorObj = this.setTypesAndDeckColors(card);
-            const { supertypes, subtypes } = typeColorObj;
-            sideboardObj.push({
-                number: +cardNum,
-                supertypes,
-                subtypes,
-                card
-            });
-        }
-
         let colors = this.setColors(deckColors);
 
         this.setState({
@@ -289,8 +265,7 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
             value,
             foilValue,
             isLoading: false,
-            collectionlistCards: cardObj,
-            sideboardCards: sideboardObj
+            collectionlistCards: cardObj
         })
     }
 
@@ -398,15 +373,7 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
         return elements;
     }
 
-    generateSideboardList = () => {
-        let elements: any[] = [];
-        let cards = this.state.sideboardCards;
-        elements.push(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Sideboard (${cards.length})`}</ListGroupItemHeading>);
-        for (let i = 0; i < cards.length; i++) {
-            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`sb-${i}`} card={cards[i].card} /></ListGroupItem>)
-        }
-        return elements;
-    }
+
 
     generateTypedLists = () => {
         let cardLists: any[] = [];
@@ -457,11 +424,10 @@ export class CollectionListDisplay extends Component<{}, IDecklistState> {
         let list, sideboardList, lists;
         if (this.state.isLoading) {
             list = <Spinner />
-            sideboardList = <Spinner />
         } else {
             lists = this.generateTypedLists();
             list = this.generateList(lists);
-            sideboardList = this.generateSideboardList();
+
         }
 
         let cmcSum = 0, avgCmc = 0;

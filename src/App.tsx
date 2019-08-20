@@ -10,7 +10,8 @@ import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
-
+import collectionDisplay from './components/collectionlist-display/collection-display';
+import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 
 function App() {
 
@@ -31,6 +32,8 @@ function App() {
                 <Route exact path="/deck" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+                <Route path="/collection" component={collectionDisplay}/>
+                <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
                 <Route component={NotFound} />
               </Switch>
             </Col>
