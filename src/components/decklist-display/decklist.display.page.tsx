@@ -4,11 +4,14 @@ import User from '../../models/user.model';
 import DecklistDisplayCardComponent from './decklist.display.card';
 import { RouteComponentProps } from 'react-router';
 
+import { tdClient } from '../../axios/td-client';
+
 interface IDecklistDisplayPageComponentState {
-    deck: Deck,
-    mainboardCards: any[],
-    sideboardCards: any[],
+    deck: Deck
+    mainboardCards: any[]
+    sideboardCards: any[]
     featuredCard: any
+    isLoading: boolean
 }
 
 interface IDecklistDisplayPageComponentProps extends RouteComponentProps {
@@ -22,46 +25,24 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         this.state = {
             deck: new Deck(
                 0,
-                new User(0, 'cbprosser'),
-                'Modern Cloudfin Raptor',
-                'Another awful deck for Modern',
-                true,
+
+                new User(0, ''),
+                '',
+                '',
                 false,
+                true,
                 {
-                    id: 68,
-                    format: 'Modern'
+                    id: 0,
+                    format: ''
                 },
-                [
-                    "4x Avatar of the Resolute",
-                    "4x Botanical Sanctum",
-                    "4x Breeding Pool",
-                    "4x Chart a Course",
-                    "4x Cloudfin Raptor",
-                    "4x Experiment One",
-                    "4x Forest",
-                    "2x Hinterland Harbor",
-                    "2x Island",
-                    "4x Pelt Collector",
-                    "2x Pongify",
-                    "4x Rapid Hybridization",
-                    "4x Simic Charm",
-                    "4x Strangleroot Geist",
-                    "2x Unsubstantiate",
-                    "4x Yavimaya Coast",
-                    "4x Young Wolf",
-                ],
-                [
-                    "3x Mizzium Skin",
-                    "3x Negate",
-                    "3x Tormod's Crypt",
-                    "2x Unsubstantiate",
-                    "4x Vapor Snag",
-                ],
-                'Cloudfin Raptor'
+                [],
+                [],
+                ''
             ),
             mainboardCards: [],
             sideboardCards: [],
-            featuredCard: null
+            featuredCard: null,
+            isLoading: true
         }
     }
 
@@ -103,18 +84,35 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         if (featuredCard) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
             const card = await resp.json();
-            if(card.object !== "error"){
+
+            if (card.object !== "error") {
                 this.setState({
                     featuredCard: card
                 })
             }
         }
+    }
 
+    getDeck = async () => {
+        const { userId, deckId }: any = this.props.match.params;
+        const resp = await tdClient.get(`/deck/card/${deckId}`);
+        const deck: Deck = resp.data;
+        console.log(deck)
+        this.setState({
+            deck,
+            isLoading: false
+        })
     }
 
     componentWillMount() {
-        this.getCardObjects();
-        this.getFeaturedCard();
+        this.getDeck();
+    }
+
+    componentDidUpdate(prevProps: any, prevState: IDecklistDisplayPageComponentState) {
+        if (prevState.isLoading != this.state.isLoading) {
+            this.getCardObjects();
+            this.getFeaturedCard();
+        }
     }
 
     render() {
