@@ -10,7 +10,8 @@ import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
-
+import collectionDisplay from './components/collectionlist-display/collection-display';
+import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 
 function App() {
 
@@ -18,7 +19,6 @@ function App() {
   return (
 
     <Provider store={store}>
-      <Container fluid>
 
         <BrowserRouter>
           <NavComponent />
@@ -30,6 +30,9 @@ function App() {
                 <Route path="/login" component={LoginComponent} />
                 <Route exact path="/deck/:userId/:deckId" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
+                <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+                <Route path="/collection" component={collectionDisplay}/>
+                <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
                 <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
                 <Route component={NotFound} />
               </Switch>
@@ -37,7 +40,7 @@ function App() {
             <Col className="col-2 d-none d-sm-none d-md-block"></Col>
           </Row>
         </BrowserRouter>
-      </Container >
+   
     </Provider >
 
   );
