@@ -30,9 +30,11 @@ function App() {
                 <Route exact path="/deck/:userId/:deckId" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+
                 <Route path="/collection" component={collectionDisplay}/>
                 <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
                 <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
+
                 <Route path="/deck/landing" component={DeckLandingComponenet} />
 
                 <Route component={NotFound} />

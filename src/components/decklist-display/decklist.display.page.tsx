@@ -3,6 +3,7 @@ import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DecklistDisplayCardComponent from './decklist.display.card';
 import { RouteComponentProps } from 'react-router';
+
 import { tdClient } from '../../axios/td-client';
 
 interface IDecklistDisplayPageComponentState {
@@ -24,6 +25,7 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         this.state = {
             deck: new Deck(
                 0,
+
                 new User(0, ''),
                 '',
                 '',
@@ -82,6 +84,7 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         if (featuredCard) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
             const card = await resp.json();
+
             if (card.object !== "error") {
                 this.setState({
                     featuredCard: card
