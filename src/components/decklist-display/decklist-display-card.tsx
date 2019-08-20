@@ -5,24 +5,24 @@ import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
 
 interface IDecklistDisplayCardComponentState {
-    isLoading: boolean,
-    colors: string[],
-    costColors: string[],
-    cmcs: number[],
-    sideboardCards: any[],
-    mainboardCards: any[],
-    featuredCard: any[],
-    cardTypes: string[],
-    cardRarities: string[],
-    cardColorCombos: string[],
-    sortByDropdownIsOpen: boolean,
+    isLoading: boolean
+    colors: string[]
+    costColors: string[]
+    cmcs: number[]
+    sideboardCards: any[]
+    mainboardCards: any[]
+    featuredCard: any[]
+    cardTypes: string[]
+    cardRarities: string[]
+    cardColorCombos: string[]
+    sortByDropdownIsOpen: boolean
     sortBy: string
 }
 
 interface IDecklistDisplayCardComponentProps extends RouteComponentProps {
     deck: Deck
-    mainboardCards: any[],
-    sideboardCards: any[],
+    mainboardCards: any[]
+    sideboardCards: any[]
     featuredCard: any
 }
 
@@ -356,7 +356,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             list = <Spinner />
             sideboardList = <Spinner />
         } else {
-            list = this.generateMainboardElements();
+            list = this.getList();
             sideboardList = this.generateSideboardElements();
         }
 
@@ -427,8 +427,6 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     render() {
         let { list, sideboardList } = this.getSpinner();
 
-        list = this.getList();
-
         const avgCmc = this.getAverageCMC();
 
         return (
@@ -463,7 +461,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push('deck/update', this.props.deck)}>
+                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.author.id}/${this.props.deck.id}/update`, this.props.deck)}>
                             Update deck
                         </Button>
                     </ButtonToolbar>

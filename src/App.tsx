@@ -19,7 +19,6 @@ function App() {
   return (
 
     <Provider store={store}>
-      <Container fluid>
 
         <BrowserRouter>
           <NavComponent />
@@ -29,11 +28,12 @@ function App() {
               <Switch>
                 <Route exact path="/" component={LandingPageComponenet} />
                 <Route path="/login" component={LoginComponent} />
-                <Route exact path="/deck" component={DecklistDisplayPageComponent} />
+                <Route exact path="/deck/:userId/:deckId" component={DecklistDisplayPageComponent} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
                 <Route path="/collection" component={collectionDisplay}/>
                 <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
+                <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
                 <Route component={NotFound} />
               </Switch>
             </Col>
