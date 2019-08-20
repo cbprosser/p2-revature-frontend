@@ -235,7 +235,6 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
             collectionList:collectionList1
         })
         console.log('cards state list'+this.state.collectionList);
-        
     }
 
     getCollection = async () => {
