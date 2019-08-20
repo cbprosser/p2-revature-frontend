@@ -3,6 +3,7 @@ import Collection from '../../models/collection';
 import User from '../../models/user.model';
 import CollectionlistDisplayCardComponent from './collection-display-card-component';
 import { RouteComponentProps } from 'react-router';
+import { tdClient } from '../../axios/td-client';
 
 interface ICollectionlistDisplayPageComponentState {
     collection: Collection,
@@ -237,31 +238,16 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
         
     }
 
-    // getCardObjects2 = async () => {
-    //     let cardObj: any[] = [];
-        
-    //     let cards = this.state.cards;
-    //     console.log(this.state.cards);
-      
-    //     let deckColors: string[] = [], cmcs: number[] = [];
-    //     let value: number[] = [];
-    //     let foilValue: number[] = [];
-    //     for (let i = 0; i < cards.length; i++) {
-    //         const cardNum = +cards[i].split('x')[0];
-    //         const cardName = cards[i].substring(cards[i].indexOf('x ') + 2);
-    //         const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
-    //         const card = await resp.json();
+    getCollection = async () => {
+        const { userId, collectionId }: any = this.props.match.params;
+        const resp = await tdClient.get(`/collection/card/${collectionId}`);
+        const collection: Collection = resp.data;
+        console.log(collection)
+        this.setState({
+            collection
+        })
+    }
 
-    //         cardObj.push({
-    //             number: +cardNum,
-    //             card
-    //         });
-    //     }
-
-    //     this.setState({
-    //         cards: cardObj
-    //     })
-    // }
 
     getFeaturedCard = async () => {
         const featuredCard = this.state.collection.featuredCard;

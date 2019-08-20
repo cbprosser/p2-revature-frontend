@@ -40,7 +40,7 @@ function App() {
             <Col className="col-2 d-none d-sm-none d-md-block"></Col>
           </Row>
         </BrowserRouter>
-      </Container >
+   
     </Provider >
 
   );
