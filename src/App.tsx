@@ -15,8 +15,6 @@ import collectionDisplay from './components/collectionlist-display/collection-di
 import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 
 function App() {
-
-
   return (
 
     <Provider store={store}>
