@@ -6,7 +6,8 @@ import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
 
 interface IDeckFillerProps {
-    deck: any,
+    deck: any
+    featuredCard: any
 
 }
 
@@ -33,7 +34,7 @@ export class DeckFillerComponenet extends React.Component<IDeckFillerProps, IDec
     }
 
     getCardArt = async (cardName: string) => {
-        const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`, {        });
+        const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`, {});
         const card = await resp.json();
         return card;
     }
@@ -49,7 +50,16 @@ export class DeckFillerComponenet extends React.Component<IDeckFillerProps, IDec
     render() {
         const deck = this.props.deck;
         return (
-            <></>
+            <tr key={`deckId-${deck.id}`}>
+                <td>{deck.deckName}</td>
+                <td>{deck.format.format}</td>
+                <td>{deck.featuredCard}</td>
+                {/* {console.log(this.state)} */}
+                {/* {this.state.featuredCards &&
+                <CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} />
+            } */}
+                <td>{deck.deckDescription}</td>
+            </tr>
         )
         // end return ()
     }

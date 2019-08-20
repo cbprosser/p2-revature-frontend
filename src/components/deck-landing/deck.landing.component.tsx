@@ -4,12 +4,14 @@ import { IState } from '../../reducers';
 import User from '../../models/user.model';
 import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
+import { Link } from 'react-router-dom';
 
 interface IDeckLandingProps {
     loggedInUser?: User
 }
 
 interface IDeckLandingState {
+    featuredCards: any[]
     decks: Deck[]
 }
 
@@ -18,6 +20,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
     constructor(props: any) {
         super(props);
         this.state = {
+            featuredCards: [],
             decks: [
                 new Deck(
                     0,
@@ -59,12 +62,12 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                     'Cloudfin Raptor'
                 ),
                 new Deck(
-                    0,
+                    1,
                     new User(0, 'mjarsenault'),
                     'Make Hurty Deck',
                     'Another awful deck for Standard',
-                    true,
                     false,
+                    true,
                     {
                         id: 1,
                         format: 'Standard'
@@ -101,33 +104,85 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
         }
     }
 
-    componentWillMount() {
+    componentWillMount = () => {
+        this.getDecks();
+        this.getCards(this.state.decks)
+    }
+
+    getDecks = async () => {
+        const user = this.props.loggedInUser;
+        if(user) {
+            const resp = await fetch(``, {});
+            const userDecks = await resp.json();
+            this.setState({
+                decks: userDecks
+            })
+        }
+
         
     }
-    
+
+    getCards = async (d: Deck[]) => {
+        let featuredCards: any[] = [];
+         for (let i = 0; i < d.length; i++) {
+            const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
+            const card = await resp.json();
+            featuredCards[i] = card
+        };
+        console.log(featuredCards);
+                this.setState({
+                    featuredCards
+                })
+    }
+
+    // toggleDropDown = (deck: Deck) => {
+    //     const private = !deck.isPrivate
+
+
+    //     this.setState({
+    //         decks:
+                
+            
+    //     });
+    // }
 
 
     render() {
         const userDecks = this.state.decks;
+        // console.log(this.state);
         return (
             <div>
-                <table className="table table-striped table-light">
+                <table className="table table-striped table-dark">
                     <thead>
                         <tr>
                             <th scope='col'>Deck Name</th>
-                            <th scope='col'>Deck Format</th>
-                            <th scope='col'>Deck Featured Card</th>
-                            <th scope='col'>Deck Description</th>
+                            <th scope='col'>Format</th>
+                            <th scope='col'>Featured Card</th>
+                            <th scope='col'>Description</th>
+                            <th scope='col'>Public/Private?</th>
+                            <th scope='col'>Prototype Deck?</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {
                             userDecks.map(deck =>
                                 <tr key={`deckId-${deck.id}`}>
-                                    <td>{deck.deckName}</td>
+                                    <td><Link to="/deck">{deck.deckName}</Link></td>
                                     <td>{deck.format.format}</td>
-                                    <td>{deck.featuredCard}</td>
+                                    
+                                    {this.state.featuredCards &&
+                                       <td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} /></td>
+                                    }
                                     <td>{deck.deckDescription}</td>
+                                    {deck.isPrivate === true
+                                        ?<td>Private</td>
+                                        :<td>Public</td>
+                                    }
+                                    {deck.isPrototype === true
+                                        ?<td>Prototype</td>
+                                        :<td></td>
+                                    }
                                 </tr>)
                         }
                     </tbody>

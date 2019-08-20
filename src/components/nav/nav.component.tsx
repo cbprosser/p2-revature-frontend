@@ -58,13 +58,13 @@ export class NavComponent extends Component<INavProps, INavState> {
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink><Link className="text-light" to="/Login">Login</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink><Link className="text-light" to="/deck/submit">Deck</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink><Link className="text-light" to="/collection">Collections</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection">Collections</Link></NavLink>
               </NavItem>
             </Nav>
           </Collapse>
