@@ -64,7 +64,7 @@ export class NavComponent extends Component<INavProps, INavState> {
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection">Collections</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection2">Collections</Link></NavLink>
               </NavItem>
             </Nav>
           </Collapse>

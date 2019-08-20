@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Col, Container, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { DecklistSubmitPageComponent } from './components/deck-submit/decklist.submit.component';
 import DecklistDisplayPageComponent from './components/decklist-display/decklist.display.page';
 import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
@@ -27,15 +27,15 @@ function App() {
               <Switch>
                 <Route exact path="/" component={LandingPageComponenet} />
                 <Route path="/login" component={LoginComponent} />
+
                 <Route exact path="/deck/:userId/:deckId" component={DecklistDisplayPageComponent} />
+                <Route path="/deck/landing" component={DeckLandingComponenet} />
                 <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+                <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
 
                 <Route path="/collection" component={collectionDisplay}/>
                 <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
-                <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
-
-                <Route path="/deck/landing" component={DeckLandingComponenet} />
 
                 <Route component={NotFound} />
               </Switch>
