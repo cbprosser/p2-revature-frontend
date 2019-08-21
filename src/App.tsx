@@ -14,6 +14,7 @@ import { DecklistUpdatePageComponent } from './components/deck-update/decklist.u
 import collectionDisplay from './components/collectionlist-display/collection-display';
 import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 import CollectionLandingPage from './components/collectionlist-display/collection-landing-component';
+import  CollectionlistSubmitPageComponent  from './components/collection-submit/collectionlist.submit.component';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
 
                 <Route path="/collection/landing" component={CollectionLandingPage}/>
                 <Route path="/collection/:userId/:collectionId" component={CollectionlistDisplayPageComponent}/>
+                <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
 
                 <Route component={NotFound} />
               </Switch>
