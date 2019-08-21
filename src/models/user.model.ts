@@ -4,7 +4,7 @@ export default class User {
     constructor(
         public id = 0,
         public username = '',
-        public password = '',
+        public password?: string,
         public firstName = '',
         public lastName = '',
         public email = '',
