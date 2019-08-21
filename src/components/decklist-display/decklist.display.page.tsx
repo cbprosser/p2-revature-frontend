@@ -109,7 +109,7 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
     }
 
     componentDidUpdate(prevProps: any, prevState: IDecklistDisplayPageComponentState) {
-        if (prevState.isLoading != this.state.isLoading) {
+        if (prevState.isLoading !== this.state.isLoading) {
             this.getCardObjects();
             this.getFeaturedCard();
         }

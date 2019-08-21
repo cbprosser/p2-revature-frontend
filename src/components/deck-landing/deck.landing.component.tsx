@@ -1,16 +1,16 @@
 import React from 'react';
+import Deck from '../../models/deck';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { IState } from '../../reducers';
 import User from '../../models/user.model';
-import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
-import { Link, RouteComponentProps } from 'react-router-dom';
 
-interface IDeckLandingProps extends RouteComponentProps {
-    loggedInUser?: User
+export interface IDeckLandingProps {
+    user?: User
 }
 
-interface IDeckLandingState {
+export interface IDeckLandingState {
     featuredCards: any[]
     decks: Deck[]
 }
@@ -21,118 +21,42 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
         super(props);
         this.state = {
             featuredCards: [],
-            decks: [
-                new Deck(
-                    0,
-                    new User(0, 'cbprosser'),
-                    'Modern Cloudfin Raptor',
-                    'Another awful deck for Modern',
-                    true,
-                    false,
-                    {
-                        id: 68,
-                        format: 'Modern'
-                    },
-                    [
-                        "4x Avatar of the Resolute",
-                        "4x Botanical Sanctum",
-                        "4x Breeding Pool",
-                        "4x Chart a Course",
-                        "4x Cloudfin Raptor",
-                        "4x Experiment One",
-                        "4x Forest",
-                        "2x Hinterland Harbor",
-                        "2x Island",
-                        "4x Pelt Collector",
-                        "2x Pongify",
-                        "4x Rapid Hybridization",
-                        "4x Simic Charm",
-                        "4x Strangleroot Geist",
-                        "2x Unsubstantiate",
-                        "4x Yavimaya Coast",
-                        "4x Young Wolf",
-                    ],
-                    [
-                        "3x Mizzium Skin",
-                        "3x Negate",
-                        "3x Tormod's Crypt",
-                        "2x Unsubstantiate",
-                        "4x Vapor Snag",
-                    ],
-                    'Cloudfin Raptor'
-                ),
-                new Deck(
-                    1,
-                    new User(0, 'mjarsenault'),
-                    'Make Hurty Deck',
-                    'Another awful deck for Standard',
-                    false,
-                    true,
-                    {
-                        id: 1,
-                        format: 'Standard'
-                    },
-                    [
-                        "4x Avatar of the Resolute",
-                        "4x Botanical Sanctum",
-                        "4x Breeding Pool",
-                        "4x Chart a Course",
-                        "4x Cloudfin Raptor",
-                        "4x Experiment One",
-                        "4x Forest",
-                        "2x Hinterland Harbor",
-                        "2x Island",
-                        "4x Pelt Collector",
-                        "2x Pongify",
-                        "4x Rapid Hybridization",
-                        "4x Simic Charm",
-                        "4x Strangleroot Geist",
-                        "2x Unsubstantiate",
-                        "4x Yavimaya Coast",
-                        "4x Young Wolf",
-                    ],
-                    [
-                        "3x Mizzium Skin",
-                        "3x Negate",
-                        "3x Tormod's Crypt",
-                        "2x Unsubstantiate",
-                        "4x Vapor Snag",
-                    ],
-                    'Young Wolf'
-                )
-            ]
+            decks: []
         }
     }
 
     componentWillMount = () => {
-        this.getDecks();
-        this.getCards(this.state.decks)
+        if (this.props.user) {
+            this.getDecks();
+            
+        }
     }
 
     getDecks = async () => {
-        const user = this.props.loggedInUser;
-        if(user) {
-            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
+        const user = this.props.user;
+        if (user && user.id) {
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck?users=${user.id}`, {});
             const userDecks = await resp.json();
             this.setState({
                 decks: userDecks
             })
+            this.getCards(userDecks);
         }
 
-        
+
     }
 
     getCards = async (d: Deck[]) => {
         let featuredCards: any[] = [];
-         for (let i = 0; i < d.length; i++) {
+        for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
             const card = await resp.json();
-            featuredCards[i] = card
+            featuredCards[d[i].id] = card
         };
-        console.log(featuredCards);
-                this.setState({
-                    featuredCards
-                })
+        // console.log(featuredCards);
+        this.setState({
+            featuredCards
+        })
     }
 
     // toggleDropDown = (deck: Deck) => {
@@ -141,15 +65,18 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
 
     //     this.setState({
     //         decks:
-                
-            
+
+
     //     });
     // }
 
 
     render() {
         const userDecks = this.state.decks;
-        // console.log(this.state);
+        const loggedUser = this.props.user;
+        console.log("this.state.featruedCards:");
+        console.log(this.state.featuredCards);
+
         return (
             <div>
                 <table className="table table-striped table-dark">
@@ -169,21 +96,21 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                             userDecks.map(deck =>
                                 <tr key={`deckId-${deck.id}`}>
 
-                                    <td><Link to={`/deck/${deck.author.id}/${deck}`} >{deck.deckName}</Link></td>
+                                    <td><Link to={`/deck/${loggedUser && loggedUser.id}/${deck}`} >{deck.deckName}</Link></td>
 
                                     <td>{deck.format.format}</td>
-                                    
+
                                     {this.state.featuredCards &&
-                                       <td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} /></td>
+                                        <td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} /></td>
                                     }
                                     <td>{deck.deckDescription}</td>
                                     {deck.isPrivate === true
-                                        ?<td>Private</td>
-                                        :<td>Public</td>
+                                        ? <td>Private</td>
+                                        : <td>Public</td>
                                     }
                                     {deck.isPrototype === true
-                                        ?<td>Prototype</td>
-                                        :<td></td>
+                                        ? <td>Prototype</td>
+                                        : <td></td>
                                     }
                                 </tr>)
                         }
@@ -196,7 +123,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {

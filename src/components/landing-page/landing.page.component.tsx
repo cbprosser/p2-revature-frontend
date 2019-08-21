@@ -4,9 +4,10 @@ import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import { IState } from '../../reducers';
 import LandingPageDeckDisplay from './landing.page.deck.display.component';
 import { Link } from 'react-router-dom';
+import User from '../../models/user.model';
 
 interface ILandingProps {
-
+    user?: User
 }
 
 interface ILandingState {
@@ -63,13 +64,11 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         const resp = await fetch("http://td-api.us-east-1.elasticbeanstalk.com/deck/card", {});
         const listOfCards = await resp.json();
         let dl: any[] = [];
-        console.log(listOfCards);
 
         for (let i = 0; i < listOfCards.length; i++) {
             if (!listOfCards[i].isPrivate) {
                 const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + listOfCards[i].featuredCard, {});
                 const imageHold = await resp.json();
-                console.log(listOfCards[i].id);
                 dl[i] = {
                     // will be replaced with deck objects, that contain all this information 
                     id: listOfCards[i].id,
@@ -83,8 +82,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 };
             }
         }
-        console.log("dl:");
-        console.log(dl);
         this.setState({
             decks: dl
 
@@ -116,12 +113,11 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
     generateDeck = () => {
         let elements: any[] = [];
         let decks = this.state.decks;
-        console.log("decks");
-        console.log(decks);
+        const user = this.props.user;
         for (let i = 0; i < decks.length; i++) {
             if (decks[i]) {
                 elements.push(
-                    <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} />
+                    <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} user={user} />
                 )
             }
         }
@@ -148,7 +144,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
