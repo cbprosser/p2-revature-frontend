@@ -8,6 +8,11 @@ const initialState: IAuthState = {
 export default (state = initialState, action: any) => {
     switch (action.type) {
 
+        case authTypes.LOCALSTORAGE_USER_FOUND:
+            return {
+                ...state,
+                currentUser: action.payload
+            }
         case authTypes.UPDATE_CURRENT_USER:
             return {
                 ...state,
