@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
-import Deck from '../../models/deck';
+import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText, CardSubtitle } from 'reactstrap';
+import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
+import { createHashHistory } from 'history';
 
-interface IDecklistDisplayCardComponentState {
-    isLoading: boolean
-    colors: string[]
-    costColors: string[]
-    cmcs: number[]
-    sideboardCards: any[]
-    mainboardCards: any[]
-    featuredCard: any[]
-    cardTypes: string[]
-    cardRarities: string[]
-    cardColorCombos: string[]
-    sortByDropdownIsOpen: boolean
+
+interface ICollectionlistDisplayCardComponentState {
+    isLoading: boolean,
+    colors: string[],
+    costColors: string[],
+    cmcs: number[],
+    collectionListCards: any[],
+    featuredCard: any[],
+    cardTypes: string[],
+    cardRarities: string[],
+    cardColorCombos: string[],
+    sortByDropdownIsOpen: boolean,
     sortBy: string
 }
 
-interface IDecklistDisplayCardComponentProps extends RouteComponentProps {
-    deck: Deck
-    mainboardCards: any[]
-    sideboardCards: any[]
-    featuredCard: any
+interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
+    collection: Collection
+    cards: any[],
+    featuredCard: any,
+    collectionList:any[]
 }
 
-export default class DecklistDisplayCardComponent extends Component<IDecklistDisplayCardComponentProps, IDecklistDisplayCardComponentState> {
+export default class CollectionlistDisplayCardComponent extends Component<ICollectionlistDisplayCardComponentProps, ICollectionlistDisplayCardComponentState> {
     constructor(props: any) {
         super(props);
 
@@ -35,8 +36,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             colors: [],
             costColors: [],
             cmcs: [],
-            mainboardCards: [],
-            sideboardCards: [],
+            collectionListCards: [],
             featuredCard: [],
             cardTypes: [
                 "Land",
@@ -94,15 +94,16 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
 
     setCardObjects = () => {
         let cardObj: any[] = [];
-        let sideboardObj: any[] = [];
-        let mainboard = this.props.mainboardCards;
-        let sideboard = this.props.sideboardCards;
+        let cardList = this.props.collectionList;
+       console.log('cdc'+cardList);
+       console.log('cdc'+this.props.collectionList);
+  
         let deckColors: string[] = [];
         let cmcs: number[] = [];
 
-        for (let i = 0; i < mainboard.length; i++) {
-            const cardNum = mainboard[i].number;
-            const card = mainboard[i].card;
+        for (let i = 0; i < cardList.length; i++) {
+            const cardNum = cardList[i].number;
+            const card = cardList[i].card;
             const typeColorObj = this.setTypesAndDeckColors(card);
             const { supertypes, subtypes } = typeColorObj;
             deckColors = deckColors.concat(typeColorObj.deckColors)
@@ -115,18 +116,6 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             });
         }
 
-        for (let i = 0; i < sideboard.length; i++) {
-            const cardNum = sideboard[i].number;
-            const card = sideboard[i].card;
-            const typeColorObj = this.setTypesAndDeckColors(card);
-            const { supertypes, subtypes } = typeColorObj;
-            sideboardObj.push({
-                number: +cardNum,
-                supertypes,
-                subtypes,
-                card
-            });
-        }
 
         let colors = this.setColors(deckColors);
 
@@ -135,8 +124,8 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             costColors: deckColors,
             cmcs,
             isLoading: false,
-            mainboardCards: cardObj,
-            sideboardCards: sideboardObj
+            collectionListCards: cardObj,
+
         })
     }
 
@@ -199,29 +188,18 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
         return colors;
     }
 
-    generateMainboardElements = () => {
+    generateCollectionElements = () => {
         let elements: any[] = [];
-        let cards = this.state.mainboardCards;
+        let cards = this.state.collectionListCards;
         let count = 0;
         for (let i = 0; i < cards.length; i++) {
             count += cards[i].number;
             elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`mb-${i}`} card={cards[i].card} /></ListGroupItem>)
         }
-        elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Mainboard (${count})`}</ListGroupItemHeading>);
+        elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Collection (${count})`}</ListGroupItemHeading>);
         return elements;
     }
 
-    generateSideboardElements = () => {
-        let elements: any[] = [];
-        let cards = this.state.sideboardCards;
-        let count = 0;
-        for (let i = 0; i < cards.length; i++) {
-            count += cards[i].number;
-            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`sb-${i}`} card={cards[i].card} /></ListGroupItem>)
-        }
-        elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Sideboard (${count})`}</ListGroupItemHeading>);
-        return elements;
-    }
 
     generateElementsFromList = (lists: any[]) => {
         let elements: any[] = [];
@@ -236,8 +214,9 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                 }
                 listElement.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`${(list.header === 7) ? `${list.header}+` : list.header} (${count})`}</ListGroupItemHeading>);
             }
-
+            console.log(listElement);
             elements = elements.concat(listElement);
+            console.log(elements);
         })
         return elements;
     }
@@ -245,7 +224,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     generateListsSortByColor = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.mainboardCards);
+        cards = cards.concat(this.state.collectionListCards);
         const cardColors = this.state.cardColorCombos;
         cardColors.forEach((combo: string) => {
             let cardList: any[] = [];
@@ -258,6 +237,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                     cardColorComboArr = this.setColors(cards[i].card.colors)
                 }
                 cardColorCombo = cardColorComboArr.join('');
+                console.log(`${cards[i].card.name}, ${cardColorComboArr}, ${cardColorCombo}`)
                 if (combo === cardColorCombo) {
                     cardList.push(cards.splice(i, 1)[0]);
                     i--;
@@ -274,7 +254,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     generateListsSortByType = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.mainboardCards);
+        cards = cards.concat(this.state.collectionListCards);
         const cardTypes = this.state.cardTypes;
         cardTypes.forEach((type: string) => {
             let cardList: any[] = [];
@@ -295,7 +275,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     generateListsSortByCMC = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.mainboardCards);
+        cards = cards.concat(this.state.collectionListCards);
         const cardCMCs = [0, 1, 2, 3, 4, 5, 6, 7];
         cardCMCs.forEach((cmc: number) => {
             let cardList: any[] = [];
@@ -319,7 +299,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     generateListsSortByRarity = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.mainboardCards);
+        cards = cards.concat(this.state.collectionListCards);
         const cardRarities = this.state.cardRarities;
         cardRarities.forEach((rarity: string) => {
             let cardList: any[] = [];
@@ -349,18 +329,15 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
     }
 
     getSpinner = () => {
-        let list, sideboardList;
+        let list;
         if (this.state.isLoading) {
             list = <Spinner />
-            sideboardList = <Spinner />
         } else {
-            list = this.getList();
-            sideboardList = this.generateSideboardElements();
+            list = this.generateCollectionElements();
         }
 
         return {
-            list,
-            sideboardList
+            list
         }
     }
 
@@ -378,48 +355,34 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
 
     getList = () => {
         let list: any[] = [];
-        if (!this.state.isLoading) {
-            switch (this.state.sortBy) {
-                case "Color":
-                    list = this.generateElementsFromList(this.generateListsSortByColor());
-                    break;
-                case "Rarity":
-                    list = this.generateElementsFromList(this.generateListsSortByRarity());
-                    break;
-                case "CMC":
-                    list = this.generateElementsFromList(this.generateListsSortByCMC());
-                    break;
-                case "Type":
-                    list = this.generateElementsFromList(this.generateListsSortByType());
-                    break;
-                default:
-                    list = this.generateMainboardElements();
-            }
+        switch (this.state.sortBy) {
+            case "Color":
+                list = this.generateElementsFromList(this.generateListsSortByColor());
+                break;
+            case "Rarity":
+                list = this.generateElementsFromList(this.generateListsSortByRarity());
+                break;
+            case "CMC":
+                list = this.generateElementsFromList(this.generateListsSortByCMC());
+                break;
+            case "Type":
+                list = this.generateElementsFromList(this.generateListsSortByType());
+                break;
+            default:
+                if (!this.state.isLoading) {
+                    list = this.generateCollectionElements();
+                }
         }
         return list;
     }
 
-    getImageURI = () => {
-        const card = this.props.featuredCard;
-        let cardImageUri: string = '';
-
-        if (card.layout === "transform") {
-            cardImageUri = card.card_faces[0].image_uris.art_crop;
-        } else {
-            cardImageUri = card.image_uris.art_crop;
-        }
-
-        return cardImageUri;
-    }
-
     mapFeaturedCard = () => {
         let featuredCard: any[] = []
-        const imgURI = this.getImageURI();
         if (this.props.featuredCard) {
             featuredCard.push(
                 <Col>
                     <Card>
-                        <CardImg width="100%" src={imgURI} alt="Card image cap" />
+                        <CardImg width="100%" src={this.props.featuredCard.image_uris.art_crop} alt="Card image cap" />
                         <CardFooter className="bg-dark p-0 d-flex justify-content-end">
                             <small className="text-muted">Artist: {this.props.featuredCard.artist}</small>
                         </CardFooter>
@@ -427,22 +390,19 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                 </Col>
             )
         }
-        this.setState({
-            featuredCard
-        })
+        return featuredCard;
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {
-        if (this.props.featuredCard !== prevProps.featuredCard) {
-            this.mapFeaturedCard();
-        }
-        if (this.props.mainboardCards !== prevProps.mainboardCards) {
-            this.setCardObjects();
+        if (this.props !== prevProps) {
+            this.setCardObjects()
         }
     }
 
     render() {
-        let { list, sideboardList } = this.getSpinner();
+        let { list} = this.getSpinner();
+
+        list = this.getList();
 
         const avgCmc = this.getAverageCMC();
 
@@ -450,14 +410,14 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             <Card className="bg-light">
                 <CardHeader>
                     <Row>
-                        {this.state.featuredCard}
+                        {this.mapFeaturedCard()}
                         <Col>
                             <Card className="bg-dark h-100">
                                 <CardBody className="d-flex flex-column justify-content-end">
-                                    <CardTitle>{this.props.deck.deckName}</CardTitle>
+                                    <CardTitle>{this.props.collection.collectionName}</CardTitle>
                                     <CardText>
-                                        <small>Format: {this.props.deck.format.format}</small>
-                                        <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                    <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                    <small>collection {this.props.cards.length}</small>
                                     </CardText>
                                 </CardBody>
                             </Card>
@@ -479,7 +439,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.author.id}/${this.props.deck.id}/update`, this.props.deck)}>
+                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push('collection/update', this.props.collection)}>
                             Update deck
                         </Button>
                     </ButtonToolbar>
@@ -492,7 +452,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                         </Col>
                         <Col xs="6">
                             <ListGroup className="bg-transparent">
-                                {sideboardList}
+                            
                             </ListGroup>
                         </Col>
                     </Row>

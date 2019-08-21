@@ -65,7 +65,7 @@ export default class CardHover extends Component<ICardHoverProps, ICardHoverStat
     }
 
     render() {
-        const cardFront = this.props.card.name.split(' // ')[0];
+        const cardFront = this.props.card && this.props.card.name.split(' // ')[0];
         return (
             <>
                 <a className="text-light" href="#" id={`Popover-${this.props.id}`} onClick={this.noClickPopover}>
@@ -76,7 +76,7 @@ export default class CardHover extends Component<ICardHoverProps, ICardHoverStat
                 </UncontrolledPopover>
                 <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
                     <ModalHeader className="bg-dark" toggle={this.toggleModal}>
-                        {this.props.card.name}
+                        {this.props.card && this.props.card.name}
                     </ModalHeader>
                     <ModalBody>
                         {this.getImage('normal')}
@@ -86,17 +86,17 @@ export default class CardHover extends Component<ICardHoverProps, ICardHoverStat
                             <Col className="col-4">
                                 <ListGroup flush className="bg-transparent text-left">
                                     <ListGroupItem className="bg-transparent border-0 p-0">
-                                        <a className="text-light" href={this.props.card.scryfall_uri}>See this card on Scryfall</a>
+                                        <a className="text-light" href={this.props.card && this.props.card.scryfall_uri}>See this card on Scryfall</a>
                                     </ListGroupItem>
                                 </ListGroup>
                             </Col>
                             <Col className="col-8">
                                 <ListGroup flush className="bg-transparent text-right">
                                     <ListGroupItem className="bg-transparent border-0 p-0">
-                                        {`${this.props.card.prices.tix} tix, $${this.props.card.prices.usd} ($${this.props.card.prices.usd_foil} foil)`}
+                                        {`${this.props.card && this.props.card.prices.tix} tix, $${this.props.card && this.props.card.prices.usd} ($${this.props.card && this.props.card.prices.usd_foil} foil)`}
                                     </ListGroupItem>
                                     <ListGroupItem className="bg-transparent border-0 p-0">
-                                        Buy from: <a className="text-light" href={this.props.card.purchase_uris.tcgplayer} target="_blank">TCGPlayer</a>, <a className="text-light" href={this.props.card.purchase_uris.cardhoarder} target="_blank">CardHoarder</a>, <a className="text-light" href={this.props.card.purchase_uris.cardmarket} target="_blank">CardMarket</a>
+                                        Buy from: <a className="text-light" href={this.props.card && this.props.card.purchase_uris.tcgplayer} target="_blank">TCGPlayer</a>, <a className="text-light" href={this.props.card && this.props.card.purchase_uris.cardhoarder} target="_blank">CardHoarder</a>, <a className="text-light" href={this.props.card && this.props.card.purchase_uris.cardmarket} target="_blank">CardMarket</a>
                                     </ListGroupItem>
                                 </ListGroup>
                             </Col>

@@ -1,33 +1,45 @@
-import { connect } from 'react-redux';
 import React, { Component } from 'react'
-import { login } from '../../actions/auth.actions';
+import { Form, Input, Button, Container, FormGroup, Label } from 'reactstrap';
+// import logo from '../../assets/logo-color.png';
 import { RouteComponentProps } from 'react-router';
 import { IAuthState, IState } from '../../reducers';
-import { Form, Input, Button, Container, FormGroup, Label } from 'reactstrap';
+import { login } from '../../actions/auth.actions';
+import { connect } from 'react-redux';
 
-import logo from '../../assets/td.png';
-
-interface ILoginProps extends RouteComponentProps {
+interface ISignupProps extends RouteComponentProps {
     auth: IAuthState,
     login: (credentials: any, history: any) => any
 }
 
-interface ILoginComponentState {
-
-    credentials: {
+interface ISignupComponentState {
+    newUser: {
         username: string
+        password: string
+        firstName: string
+        lastName: string
+        email: string
+    },
+    credentials: {
+        username: string,
         password: string
     },
     errorMessage?: string
 }
 
-export class LoginComponent extends Component<ILoginProps, ILoginComponentState> {
+export class SignupComponent extends Component<ISignupProps, ISignupComponentState> {
     constructor(props: any) {
         super(props);
         this.state = {
             credentials: {
                 username: '',
                 password: ''
+            },
+            newUser: {
+                username: '',
+                password: '',
+                firstName: '',
+                lastName: '',
+                email: ''
             }
         }
     }
@@ -36,7 +48,7 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
         const name = event.target.name;
         this.setState({
             credentials: {
-                ...this.state.credentials,
+                ...this.state.newUser,
                 [name]: event.target.value
             }
         });
@@ -54,14 +66,14 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
                 <Container className="mt-5 pt-5">
                     <Form className="form-signin" onSubmit={this.submit}>
                         <FormGroup className="mb-4">
-                            <img className="w-250" src={logo} />
+                            {/* <img src={logo} /> */}
                         </FormGroup>
                         <FormGroup className="form-label-group">
                             <Input id="inputUsername"
                                 name="username"
                                 type="text"
                                 placeholder="Username"
-                                value={this.state.credentials.username}
+                                value={this.state.newUser.username}
                                 onChange={this.handleChange}
                                 required
                                 autoFocus />
@@ -72,10 +84,40 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
                                 name="password"
                                 type="password"
                                 placeholder="Password"
-                                value={this.state.credentials.password}
+                                value={this.state.newUser.password}
                                 onChange={this.handleChange}
                                 required />
                             <Label for="inputPassword">Password</Label>
+                        </FormGroup>
+                        <FormGroup className="form-label-group">
+                            <Input id="inputFirstname"
+                                name="firstname"
+                                type="text"
+                                placeholder="First Name"
+                                value={this.state.newUser.firstName}
+                                onChange={this.handleChange}
+                                required />
+                            <Label for="inputFirstName">First Name</Label>
+                        </FormGroup>
+                        <FormGroup className="form-label-group">
+                            <Input id="inputLastname"
+                                name="lastname"
+                                type="text"
+                                placeholder="Last Name"
+                                value={this.state.newUser.lastName}
+                                onChange={this.handleChange}
+                                required />
+                            <Label for="inputLastname">Last Name</Label>
+                        </FormGroup>
+                        <FormGroup className="form-label-group">
+                            <Input id="inputEmail"
+                                name="email"
+                                type="text"
+                                placeholder="Email"
+                                value={this.state.newUser.email}
+                                onChange={this.handleChange}
+                                required />
+                            <Label for="inputEmail">Email</Label>
                         </FormGroup>
                         <FormGroup>
                             {errorMessage && <p className="text-danger" id="error-message">{errorMessage}</p>}
@@ -90,13 +132,6 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
     }
 }
 
-
-// public username = '',
-// public password = '',
-// public firstName = '',
-// public lastName = '',
-// public email = '',
-
 const mapStateToProps = (state: IState) => ({
     auth: state.auth
 })
@@ -105,4 +140,4 @@ const mapDispatchToProps = {
     login
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(SignupComponent)

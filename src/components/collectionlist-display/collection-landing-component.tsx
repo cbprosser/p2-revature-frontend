@@ -5,15 +5,15 @@ import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import DeckDisplay from '../deck-display/deck.display.component';
 import { Link } from 'react-router-dom';
 
-interface IDeckLandingProps {
+interface ICollectionLandingProps {
 
 }
 
-interface IDeckLandingState {
+interface ICollectionLandingState {
 
 }
 
-export class DeckLandingComponenet extends React.Component<IDeckLandingProps, IDeckLandingState> {
+export class CollectionLandingComponenet extends React.Component<ICollectionLandingProps, ICollectionLandingState> {
 
     constructor(props: any) {
         super(props);
@@ -39,4 +39,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeckLandingComponenet)
+export default connect(mapStateToProps, mapDispatchToProps)(CollectionLandingComponenet)
