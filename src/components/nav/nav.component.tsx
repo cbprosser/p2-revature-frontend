@@ -34,6 +34,7 @@ export class NavComponent extends Component<INavProps, INavState> {
       collapsed: !this.state.collapsed
     });
   }
+  // end of toggleNavbar
 
   toggleNavButton = () => {
     this.setState({
@@ -50,6 +51,8 @@ export class NavComponent extends Component<INavProps, INavState> {
   // end of toggleNaveDropdown
 
   render() {
+    console.log("This.Props.User:")
+    console.log(this.props.user);
     return (
       <div className="d-flex flex-column">
         <Navbar color="faded" dark>
@@ -58,8 +61,11 @@ export class NavComponent extends Component<INavProps, INavState> {
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink>
+                { this.props.user === undefined 
+                  ?<NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
+                  :<></> 
+                }
+                {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
               </NavItem>
               <NavItem>
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
