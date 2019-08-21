@@ -4,6 +4,8 @@ import Collection from '../../models/collection';
 import User from '../../models/user.model';
 import CollectionInputTogglable from './collection.input.box.toggleable';
 import CollectionInputGroup from './collection.input.group';
+import { RouteComponentProps } from 'react-router';
+import { tdClient } from '../../axios/td-client';
 
 interface ICollectionSubmitFormState {
     collection: Collection
@@ -15,7 +17,7 @@ interface ICollectionSubmitFormState {
     featuredCardErrorFlag: boolean
 }
 
-interface ICollectionSubmitFormProps {
+interface ICollectionSubmitFormProps extends RouteComponentProps{  
     collection: Collection
     cardsCount: number
     cardsErrorFlag: boolean
@@ -31,7 +33,7 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
         this.state = {
             collection: {
                 id: 0,
-                author: new User(0, 'cbprosser'),
+                author: new User(3, 'lescobosasainz'),
                 collectionName: '',
                 collectionDescription: '',
                 isPrivate: false,
@@ -45,6 +47,18 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
             submissionAlertVisible: false,
             submitErrors: [],
             featuredCardErrorFlag: false
+        }
+    }
+
+    submitCollection = async () => {
+        console.log(this.props.collection);
+        const resp = await tdClient.post(`/collection/card/`, this.props.collection);
+        const collection: Collection = resp.data;
+        if (collection) {
+            console.log(collection);
+            this.props.history.push(`/collection/${collection.author.id}/${collection.id}`)
+        } else {
+            console.log("error");
         }
     }
 
@@ -242,6 +256,7 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
             this.props.updateCollection(this.state.collection);
         }
     }
+
 
     render() {
         return (

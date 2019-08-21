@@ -6,6 +6,9 @@ import User from '../../models/user.model';
 import { IState } from '../../reducers';
 import CardHover from '../card-hover/card.hover.component';
 import CollectionSubmitFormComponent from './collection.submit.form';
+import { tdClient } from '../../axios/td-client';
+import { RouteComponentProps } from 'react-router';
+
 
 interface ICollectionlistSubmitPageState {
     collection: Collection
@@ -14,18 +17,21 @@ interface ICollectionlistSubmitPageState {
     cardsErrorCardElements: any[]
     renderFlag: boolean
     cardsErrorFlag: boolean
-
     featuredErrorFlag: boolean
 }
 
-export class CollectionlistSubmitPageComponent extends Component<{}, ICollectionlistSubmitPageState> {
+interface ICollectionlistSubmitPageProps extends RouteComponentProps {
+
+}
+
+export class CollectionlistSubmitPageComponent extends Component<ICollectionlistSubmitPageProps, ICollectionlistSubmitPageState> {
     constructor(props: any) {
         super(props);
 
         this.state = {
             collection: {
                 id: 0,
-                author: new User(2, 'lescobosa'),
+                author: new User(3, 'lescobosasainz'),
                 collectionName: '',
                 collectionDescription: '',
                 isPrivate: false,
@@ -112,7 +118,7 @@ export class CollectionlistSubmitPageComponent extends Component<{}, ICollection
 
     componentDidUpdate(prevProps: any, prevState: any) {
         if (this.state.renderFlag) {
-            if (this.state.collection.cards !== prevState.collection.cards ) {
+            if (this.state.collection.cards !== prevState.collection.cards) {
                 this.cardRender();
             }
             this.setState({
@@ -140,7 +146,10 @@ export class CollectionlistSubmitPageComponent extends Component<{}, ICollection
                         cardsErrorFlag={this.state.cardsErrorFlag}
                         featuredErrorFlag={this.state.featuredErrorFlag}
                         updateCollection={this.updateCollection}
-                        testFeaturedCard={this.testFeaturedCard} />
+                        testFeaturedCard={this.testFeaturedCard}
+                        history={this.props.history}
+                        location={this.props.location}
+                        match={this.props.match} />
                     <Row>
                         <Col>
                             <ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">cards Entered ({this.state.cardsCount}):</ListGroupItemHeading>

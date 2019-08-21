@@ -25,7 +25,7 @@ interface ICollectionlistDisplayCardComponentState {
 interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
     collection: Collection
     cards: any[]
-    featuredCard: any
+    featuredCard: any 
 }
 
 export default class CollectionlistDisplayCardComponent extends Component<ICollectionlistDisplayCardComponentProps, ICollectionlistDisplayCardComponentState> {

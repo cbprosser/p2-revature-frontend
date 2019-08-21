@@ -3,7 +3,6 @@ import Collection from '../../models/collection';
 import User from '../../models/user.model';
 import CollectionlistDisplayCardComponent from './collectionlist.display.card';
 import { RouteComponentProps } from 'react-router';
-
 import { tdClient } from '../../axios/td-client';
 
 interface ICollectionlistDisplayPageComponentState {
