@@ -2,6 +2,6 @@ import axios from 'axios';
 import { environment } from '../environment';
 
 export const tdClient = axios.create({
-    baseURL: environment.context,
+    baseURL: "http://td-api.us-east-1.elasticbeanstalk.com",
     withCredentials: true
 });

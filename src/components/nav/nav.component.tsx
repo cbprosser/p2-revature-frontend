@@ -59,6 +59,7 @@ export class NavComponent extends Component<INavProps, INavState> {
             <Nav navbar>
               <NavItem>
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink>
               </NavItem>
               <NavItem>
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>

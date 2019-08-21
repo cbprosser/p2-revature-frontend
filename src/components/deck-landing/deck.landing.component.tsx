@@ -112,7 +112,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
     getDecks = async () => {
         const user = this.props.loggedInUser;
         if(user) {
-            const resp = await fetch(``, {});
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
             const userDecks = await resp.json();
             this.setState({
                 decks: userDecks
