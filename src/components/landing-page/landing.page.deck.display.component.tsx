@@ -46,7 +46,7 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                         <Progress bar className="text-white bg-success" value="10">Green</Progress>
                     </Progress> */}
                     <Card body inverse color="dark" className="flex-container flex-space-around" >
-                        <CardTitle><Link to={`/deck/${deck.author.id}/${deck.id}`} >{deck.deckName}</Link></CardTitle>
+                        <CardTitle><Link to={`/deck/${deck.id}`} >{deck.deckName}</Link></CardTitle>
                         <CardSubtitle className="text-muted">Author: {deck.author.username}</CardSubtitle>
                         <CardSubtitle className="text-warning">{deck.format}</CardSubtitle>
                         <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard} />
