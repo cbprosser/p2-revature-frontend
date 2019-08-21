@@ -1,13 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
+import { tdClient } from '../../axios/td-client';
 import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DecklistDisplayCardComponent from './decklist.display.card';
-import { RouteComponentProps } from 'react-router';
+import { IState } from '../../reducers';
 
-import { tdClient } from '../../axios/td-client';
 
 interface IDecklistDisplayPageComponentState {
     deck: Deck
+    loggedInUser: User
     mainboardCards: any[]
     sideboardCards: any[]
     featuredCard: any
@@ -16,16 +19,16 @@ interface IDecklistDisplayPageComponentState {
 
 interface IDecklistDisplayPageComponentProps extends RouteComponentProps {
     deck?: Deck
+    user?: User
 }
 
-export default class DecklistDisplayPageComponent extends Component<IDecklistDisplayPageComponentProps, IDecklistDisplayPageComponentState> {
+export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPageComponentProps, IDecklistDisplayPageComponentState> {
     constructor(props: any) {
         super(props);
 
         this.state = {
             deck: new Deck(
                 0,
-
                 new User(0, ''),
                 '',
                 '',
@@ -39,6 +42,7 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
                 [],
                 ''
             ),
+            loggedInUser: new User(),
             mainboardCards: [],
             sideboardCards: [],
             featuredCard: null,
@@ -103,8 +107,18 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         })
     }
 
+    checkForUser = () => {
+        if(this.props.user) {
+            this.setState({
+                loggedInUser: this.props.user
+            })
+        }
+        
+    }
+
     componentWillMount() {
         this.getDeck();
+        this.checkForUser();
     }
 
     componentDidUpdate(prevProps: any, prevState: IDecklistDisplayPageComponentState) {
@@ -127,3 +141,14 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         )
     }
 }
+
+
+const mapStateToProps = (state:IState) => ({
+    user: state.auth.currentUser
+})
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DecklistDisplayPageComponent)
