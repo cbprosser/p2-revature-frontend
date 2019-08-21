@@ -4,11 +4,13 @@ import { IState } from '../../reducers';
 import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse,  Navbar, CardImg } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/td.png';
+import { checkLocalStorage } from '../../actions/auth.actions';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
 interface INavProps {
   user?: any
+  checkLocalStorage: () => any
 }
 
 interface INavState {
@@ -34,6 +36,7 @@ export class NavComponent extends Component<INavProps, INavState> {
       collapsed: !this.state.collapsed
     });
   }
+  // end of toggleNavbar
 
   toggleNavButton = () => {
     this.setState({
@@ -49,7 +52,17 @@ export class NavComponent extends Component<INavProps, INavState> {
   }
   // end of toggleNaveDropdown
 
+  checkForLocalstorageUser = () => {
+    this.props.checkLocalStorage();
+  }
+
+  componentWillMount = () => {
+    this.checkForLocalstorageUser();
+  }
+
   render() {
+    console.log("This.Props.User:")
+    console.log(this.props.user);
     return (
       <div className="d-flex flex-column">
         <Navbar color="faded" dark>
@@ -58,8 +71,11 @@ export class NavComponent extends Component<INavProps, INavState> {
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink>
+                { this.props.user === undefined 
+                  ?<NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
+                  :<></> 
+                }
+                {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
               </NavItem>
               <NavItem>
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
@@ -80,4 +96,9 @@ const mapStateToProps = (state: IState) => ({
   user: state.auth.currentUser
 })
 
-export default connect(mapStateToProps)(NavComponent);
+const mapDispatchToProps = {
+  checkLocalStorage
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavComponent);
