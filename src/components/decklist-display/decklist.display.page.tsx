@@ -113,7 +113,6 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
                 loggedInUser: this.props.user
             })
         }
-        
     }
 
     componentWillMount() {
@@ -135,6 +134,7 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
                 location={this.props.location}
                 match={this.props.match}
                 deck={this.state.deck}
+                loggedInUser={this.state.loggedInUser}
                 mainboardCards={this.state.mainboardCards}
                 sideboardCards={this.state.sideboardCards}
                 featuredCard={this.state.featuredCard} />
