@@ -74,8 +74,6 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
     render() {
         const userDecks = this.state.decks;
         const loggedUser = this.props.user;
-        console.log("this.state.featruedCards:");
-        console.log(this.state.featuredCards);
 
         return (
             <div>
@@ -96,7 +94,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                             userDecks.map(deck =>
                                 <tr key={`deckId-${deck.id}`}>
 
-                                    <td><Link to={`/deck/${loggedUser && loggedUser.id}/${deck}`} >{deck.deckName}</Link></td>
+                                    <td><Link to={`/deck/${loggedUser && loggedUser.id}/${deck.id}`} >{deck.deckName}</Link></td>
 
                                     <td>{deck.format.format}</td>
 
