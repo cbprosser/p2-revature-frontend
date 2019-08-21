@@ -13,6 +13,7 @@ interface IDeckUpdateFormState {
     submissionAlertVisible: boolean
     submitErrors: any[]
     featuredCardErrorFlag: boolean
+    isSubmitting: boolean
 }
 
 interface IDeckUpdateFormProps {
@@ -33,14 +34,14 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
         this.state = {
             deck: {
                 id: 0,
-                author: new User(0, 'cbprosser'),
+                author: new User(0, ''),
                 deckName: '',
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
                 format: {
-                    id: 1,
-                    format: 'Casual'
+                    id: 0,
+                    format: ''
                 },
                 mainboard: [],
                 sideboard: [],
@@ -51,7 +52,8 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
             showMainboard: true,
             submissionAlertVisible: false,
             submitErrors: [],
-            featuredCardErrorFlag: false
+            featuredCardErrorFlag: false,
+            isSubmitting: false
         }
     }
 
@@ -335,7 +337,7 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
                 <Row>
                     <Col>
                         <Alert color="danger" isOpen={this.state.submissionAlertVisible} toggle={this.toggleSubmissionAlert}>
-                            <ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">Submit failed!</ListGroupItemHeading>
+                            <ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">Update failed!</ListGroupItemHeading>
                             <ListGroup className="bg-transparent">
                                 {this.state.submitErrors}
                             </ListGroup>
@@ -348,11 +350,11 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
                             <Button
                                 type="submit"
                                 className="text-left border"
-                                color="dark">Submit</Button>
+                                color="dark">Update</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
-
+                
             </Form>
 
         )

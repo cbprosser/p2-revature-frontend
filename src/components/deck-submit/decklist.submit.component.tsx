@@ -6,6 +6,8 @@ import User from '../../models/user.model';
 import { IState } from '../../reducers';
 import CardHover from '../card-hover/card.hover.component';
 import DeckSubmitFormComponent from './deck.submit.form';
+import { tdClient } from '../../axios/td-client';
+import { RouteComponentProps } from 'react-router';
 
 interface IDecklistSubmitPageState {
     deck: Deck
@@ -21,20 +23,24 @@ interface IDecklistSubmitPageState {
     featuredErrorFlag: boolean
 }
 
-export class DecklistSubmitPageComponent extends Component<{}, IDecklistSubmitPageState> {
+interface IDecklistSubmitPageProps extends RouteComponentProps {
+    //
+}
+
+export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPageProps, IDecklistSubmitPageState> {
     constructor(props: any) {
         super(props);
 
         this.state = {
             deck: {
                 id: 0,
-                author: new User(0, 'cbprosser'),
+                author: new User(3, 'lescobosasainz'),
                 deckName: '',
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
                 format: {
-                    id: 1,
+                    id: 8,
                     format: 'Casual'
                 },
                 mainboard: [],
@@ -199,7 +205,10 @@ export class DecklistSubmitPageComponent extends Component<{}, IDecklistSubmitPa
                         sideboardCount={this.state.sideboardCount}
                         sideboardErrorFlag={this.state.sideboardErrorFlag}
                         featuredErrorFlag={this.state.featuredErrorFlag}
-                        testFeaturedCard={this.testFeaturedCard} />
+                        testFeaturedCard={this.testFeaturedCard}
+                        history={this.props.history}
+                        location={this.props.location}
+                        match={this.props.match} />
                     <Row>
                         <Col>
                             <ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">Mainboard Entered ({this.state.mainboardCount}):</ListGroupItemHeading>

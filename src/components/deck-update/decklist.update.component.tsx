@@ -7,6 +7,7 @@ import { IState } from '../../reducers';
 import CardHover from '../card-hover/card.hover.component';
 import DeckUpdateFormComponent from './deck.update.form';
 import { RouteComponentProps } from 'react-router';
+import { tdClient } from '../../axios/td-client';
 
 interface IDecklistUpdatePageState {
     deck: Deck
@@ -57,6 +58,11 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
             sideboardErrorFlag: false,
             featuredErrorFlag: false
         }
+    }
+
+    async sendDeckToAPI() {
+        // const resp = await tdClient.post(`/deck/card/${deckId}`);
+        // const deck: Deck = resp.data;
     }
 
     mainboardRender = async () => {
@@ -165,10 +171,7 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
         })
     }
 
-    // API call needed
     componentWillMount() {
-        // const resp = await fetch(`api call`);
-        // const deck = await resp.json();
         this.setState({
             deck: this.props.history.location.state,
             renderFlag: true
