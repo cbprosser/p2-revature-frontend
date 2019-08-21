@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
 import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
+import NumberFormat from 'react-number-format';
 
 interface ICollectionlistDisplayCardComponentState {
 
@@ -16,7 +17,9 @@ interface ICollectionlistDisplayCardComponentState {
     cardRarities: string[]
     cardColorCombos: string[]
     sortByDropdownIsOpen: boolean
-    sortBy: string
+    sortBy: string,
+    value: number[]
+   // foilValue: number[]
 }
 
 interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
@@ -86,7 +89,9 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                 ""
             ],
             sortByDropdownIsOpen: false,
-            sortBy: 'Name'
+            sortBy: 'Name',
+            value: []
+           // foilValue: []
         }
     }
 
@@ -95,6 +100,8 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         let cards = this.props.cards;
         let collectionColors: string[] = [];
         let cmcs: number[] = [];
+        let value: number[] = [];
+        // let foilValue: number[] = [];
 
         for (let i = 0; i < cards.length; i++) {
             const cardNum = cards[i].number;
@@ -103,6 +110,9 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
             const { supertypes, subtypes } = typeColorObj;
             collectionColors = collectionColors.concat(typeColorObj.collectionColors)
             cmcs = cmcs.concat(this.setCMCs(supertypes, cardNum, card));
+            value = value.concat(this.setUsdValue(cardNum, card));
+            // foilValue = foilValue.concat(this.setFoilValue(cardNum, card));
+
             cardObj.push({
                 number: +cardNum,
                 supertypes,
@@ -118,6 +128,8 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
             colors,
             costColors: collectionColors,
             cmcs,
+            value,
+            // foilValue,
             isLoading: false,
             cards: cardObj
         })
@@ -161,6 +173,34 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         }
         return cmcs;
     }
+
+    setUsdValue = (cardNum: number, card: any) => {
+        let val = [];
+
+            if(card.prices.usd !== null){
+                val.push(card.prices.usd * cardNum);
+            }
+            else{
+                val.push(0)
+            }
+            
+            
+        
+        return val;
+    }
+
+     // setFoilValue = (cardNum: number, card: any) => {
+    //     let val = [];
+       
+    //         if(card.prices.usd_foil !== null){
+    //             val.push(card.prices.usd_foil );
+    //         }
+    //         else{
+    //             val.push(0)
+    //         }
+            
+    //     return val;
+    // }
 
     setColors = (colorArr: string[]) => {
         let wubrg = ['W', 'U', 'B', 'R', 'G'];
@@ -399,6 +439,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
 
         const avgCmc = this.getAverageCMC();
 
+        let usdSum = 0;
+        if (!(this.state.value.length === 0)) {
+            for (let i = 0; i < this.state.value.length; i++) {
+                usdSum += +this.state.value[i];
+            }
+        }
         return (
             <Card className="bg-light">
                 <CardHeader>
@@ -410,6 +456,9 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                                     <CardTitle>{this.props.collection.collectionName}</CardTitle>
                                     <CardText>
                                     <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                    </CardText>
+                                    <CardText>
+                                    <small>Your Collections Value in USD <NumberFormat value={usdSum.toFixed(2)}  displayType={'text'}  prefix={'$'} /></small>
                                     </CardText>
                                 </CardBody>
                             </Card>

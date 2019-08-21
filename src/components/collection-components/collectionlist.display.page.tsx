@@ -14,7 +14,7 @@ interface ICollectionlistDisplayPageComponentState {
 }
 
 interface ICollectionlistDisplayPageComponentProps extends RouteComponentProps {
-    //collections?: Collection
+    collections?: Collection
     featuredCards?: any[]
     collectionID?: any
 }
@@ -37,7 +37,8 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
             ),
             cards: [],
             featuredCard: null,
-            isLoading: true
+            isLoading: true,
+
         }
     }
 
@@ -45,7 +46,7 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
         const cards1 = this.state.collection.cards;
 
         let cards: any[] = [];
-    
+
 
         for (let i = 0; i < cards1.length; i++) {
             const cardNum = +cards1[i].split('x')[0];
@@ -79,10 +80,17 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
 
     getCollection = async () => {
         const { userId, collectionId }: any = this.props.match.params;
-        console.log('collf1'+this.props.featuredCards);
-        console.log('collid1'+this.props.collectionID);
-        console.log('collid'+collectionId);
-        const resp = await tdClient.get(`/collection/card/${2}`);
+        const coll = 0;
+        if (collectionId == null) {
+            const resp = await tdClient.get(`/collection/card/${this.props.collectionID}`);
+            const collection: Collection = resp.data;
+            console.log(collection)
+            this.setState({
+                collection,
+                isLoading: false
+            })
+        }
+        const resp = await tdClient.get(`/collection/card/${collectionId}`);
         const collection: Collection = resp.data;
         console.log(collection)
         this.setState({

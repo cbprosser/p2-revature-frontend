@@ -4,10 +4,11 @@ import { IState } from '../../reducers';
 import User from '../../models/user.model';
 import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import CollectionlistDisplayPageComponent from './collectionlist.display.page';
+import { Collapse, Button } from 'reactstrap';
 
-interface ICollectionLandingProps {
+interface ICollectionLandingProps extends RouteComponentProps {
     loggedInUser?: User
 }
 
@@ -15,70 +16,41 @@ interface ICollectionLandingState {
     featuredCards: any[]
     collections: Collection[]
     collectionID: any
+    isOpen: boolean,
+    dropdownIsOpen: boolean,
+    collapsed: boolean
 }
 
 export class CollectionLandingComponenet extends React.Component<ICollectionLandingProps, ICollectionLandingState> {
 
     constructor(props: any) {
         super(props);
+        this.toggleCards = this.toggleCards.bind(this);
         this.state = {
             featuredCards: [],
             collectionID: 0,
+            isOpen: false,
+            dropdownIsOpen: false,
+            collapsed: true,
             collections: [
                 new Collection(
-                    0,
-                    new User(0, 'cbprosser'),
-                    'Modern Cloudfin Raptor',
-                    'Another awful Collection for Modern',
+                    1,
+                    new User(2, 'lesco'),
+                    'hola',
+                    'es muy bueno',
                     true,
                     false,
-                    [
-                        "4x Avatar of the Resolute",
-                        "4x Botanical Sanctum",
-                        "4x Breeding Pool",
-                        "4x Chart a Course",
-                        "4x Cloudfin Raptor",
-                        "4x Experiment One",
-                        "4x Forest",
-                        "2x Hinterland Harbor",
-                        "2x Island",
-                        "4x Pelt Collector",
-                        "2x Pongify",
-                        "4x Rapid Hybridization",
-                        "4x Simic Charm",
-                        "4x Strangleroot Geist",
-                        "2x Unsubstantiate",
-                        "4x Yavimaya Coast",
-                        "4x Young Wolf",
-                    ],
-                    'Cloudfin Raptor'
+                    [],
+                    'Young Wolf'
                 ),
                 new Collection(
-                    1,
-                    new User(0, 'mjarsenault'),
-                    'Make Hurty Collection',
-                    'Another awful Collection for Standard',
+                    2,
+                    new User(2, 'lesco'),
+                    'muy',
+                    'es muy malo',
                     false,
                     true,
-                    [
-                        "4x Avatar of the Resolute",
-                        "4x Botanical Sanctum",
-                        "4x Breeding Pool",
-                        "4x Chart a Course",
-                        "4x Cloudfin Raptor",
-                        "4x Experiment One",
-                        "4x Forest",
-                        "2x Hinterland Harbor",
-                        "2x Island",
-                        "4x Pelt Collector",
-                        "2x Pongify",
-                        "4x Rapid Hybridization",
-                        "4x Simic Charm",
-                        "4x Strangleroot Geist",
-                        "2x Unsubstantiate",
-                        "4x Yavimaya Coast",
-                        "4x Young Wolf",
-                    ],
+                    [],
                     'Young Wolf'
                 )
             ]
@@ -88,13 +60,14 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
     componentWillMount = () => {
         this.getCollections();
         this.getCards(this.state.collections)
-        console.log('landing' + this.state.collections);
+        // console.log('landing' + this.state.collections);
     }
 
     getCollections = async () => {
         const user = this.props.loggedInUser;
         if (user) {
             const resp = await fetch(``, {});
+            // const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
             const userCollections = await resp.json();
             this.setState({
                 collections: userCollections
@@ -105,7 +78,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
     }
 
     getCards = async (d: Collection[]) => {
-      
+
         let featuredCards: any[] = [];
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
@@ -118,21 +91,29 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
         })
     }
 
-    // toggleDropDown = (Collection: Collection) => {
-    //     const private = !Collection.isPrivate
+    toggleCards() {
+        this.setState({
+          collapsed: !this.state.collapsed
+        });
+      }
 
-
-    //     this.setState({
-    //         Collections:
-
-
-    //     });
-    // }
-
+      toggleNavButton = () => {
+        this.setState({
+          isOpen: !this.state.isOpen
+        });
+      }
+      // end of toggleNavButton
+    
+      toggleNavDropdown = () => {
+        this.setState({
+          dropdownIsOpen: !this.state.dropdownIsOpen
+        });
+      }
 
     render() {
         const userCollections = this.state.collections;
-        // console.log(this.state);
+
+        console.log('sup' + this.state.collectionID);
         return (
             <div>
                 <table className="table table-striped table-dark">
@@ -150,7 +131,12 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
                         {
                             userCollections.map(collection =>
                                 <tr key={`CollectionId-${collection.id}`}>
-                                    <td><Link to={`Collection/${collection.author.id}/${this.state.collectionID[collection.id]}`}>{collection.collectionName}</Link></td>
+                                    <td>
+                                        <Link to={`collection/${collection.author.id}/${collection.id}`}>{collection.collectionName}
+                                        </Link></td>
+
+                                    {/* 
+                                //    <td><Link to={`/collection/${collection.author.id}/${deck}`} >{collection.deckName}</Link></td> */}
 
 
                                     {this.state.featuredCards &&
@@ -165,10 +151,22 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
                                         ? <td>Prototype</td>
                                         : <td></td>
                                     }
-                                    {/* <CollectionlistDisplayPageComponent
-                                        featuredCards={this.state.featuredCards}
-                                        collectionID={this.state.collectionID}
-                                    /> */}
+                                    
+
+
+                                    <td onClick={this.toggleCards}>cards
+                                    <Collapse isOpen={!this.state.collapsed} >
+                                            <CollectionlistDisplayPageComponent
+                                                history={this.props.history}
+                                                location={this.props.location}
+                                                match={this.props.match}
+                                                collections={collection}
+                                                featuredCards={this.state.featuredCards}
+                                                collectionID={collection.id}
+                                            />
+                                        </Collapse>
+                                    </td>
+
                                 </tr>)
                         }
                     </tbody>

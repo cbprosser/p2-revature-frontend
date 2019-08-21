@@ -4,9 +4,9 @@ import { IState } from '../../reducers';
 import User from '../../models/user.model';
 import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
-interface IDeckLandingProps {
+interface IDeckLandingProps extends RouteComponentProps {
     loggedInUser?: User
 }
 
@@ -112,7 +112,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
     getDecks = async () => {
         const user = this.props.loggedInUser;
         if(user) {
-            const resp = await fetch(``, {});
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
             const userDecks = await resp.json();
             this.setState({
                 decks: userDecks
@@ -168,7 +168,9 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                         {
                             userDecks.map(deck =>
                                 <tr key={`deckId-${deck.id}`}>
-                                    <td><Link to={`deck/${deck.author.id}/${deck.id}`}>{deck.deckName}</Link></td>
+
+                                    <td><Link to={`/deck/${deck.author.id}/${deck}`} >{deck.deckName}</Link></td>
+
                                     <td>{deck.format.format}</td>
                                     
                                     {this.state.featuredCards &&

@@ -7,11 +7,12 @@ import DecklistDisplayPageComponent from './components/decklist-display/decklist
 import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
 import LoginComponent from './components/login/login.component';
+import SignupComponent from './components/sign-up/signup.component';
 import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
-import collectionDisplay from './components/collectionlist-display/collection-display';
+import collectionDisplay from './components/collection-components/collection-display';
 import CollectionlistDisplayPageComponent from './components/collection-components/collectionlist.display.page';
 import CollectionLandingPage from './components/collection-components/collection.landing.component';
 import  CollectionlistSubmitPageComponent  from './components/collection-submit/collectionlist.submit.component';
