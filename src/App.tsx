@@ -13,6 +13,7 @@ import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
 import collectionDisplay from './components/collectionlist-display/collection-display';
 import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
+import CollectionLandingPage from './components/collectionlist-display/collection-landing-component';
 
 function App() {
   return (
@@ -34,8 +35,8 @@ function App() {
                 <Route path="/deck/update" component={DecklistUpdatePageComponent} />
                 <Route path="/deck/:userId/:deckId/update" component={DecklistUpdatePageComponent} />
 
-                <Route path="/collection" component={collectionDisplay}/>
-                <Route path="/collection2" component={CollectionlistDisplayPageComponent}/>
+                <Route path="/collection/landing" component={CollectionLandingPage}/>
+                <Route path="/collection/:userId/:collectionId" component={CollectionlistDisplayPageComponent}/>
 
                 <Route component={NotFound} />
               </Switch>
