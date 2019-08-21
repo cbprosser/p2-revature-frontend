@@ -29,9 +29,8 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         }
     }
 
-    async componentDidMount() {
-        this.getRandomDecks(1);
-        this.getRandomDecks(2);
+    async componentWillMount() {
+        this.getRandomDecks();
         // this.state.decks.forEach(async (deck) => {
         //     const image = await this.getCardArt(deck.featuredCard);
         //     this.updateDeckImage(deck.featuredCard, image);
@@ -58,49 +57,73 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         this.setState(state => ({ collapse: !state.collapse }));
     }
 
-    getRandomDecks = async (i: number) => {
+    getRandomDecks = async () => {
 
         // will be replaced with API call to get decks from the td_deck table that are public
-        const resp = await fetch("https://api.scryfall.com/cards?page=" + i, {
-        });
+        const resp = await fetch("http://td-api.us-east-1.elasticbeanstalk.com/deck/card", {});
         const listOfCards = await resp.json();
-        // console.log(cardList)
-        let dl = this.state.decks;
-        for (let i = 0; i < 20; i++) {
-            dl.push({
-                // will be replaced with deck objects, that contain all this information 
-                format: listOfCards.data[i].set_type,
-                author: listOfCards.data[i].artist,
-                description: listOfCards.data[i].oracle_text,
-                featuredCard: listOfCards.data[i].name,
-                featuredCardImage: listOfCards.data[i].image_uris.art_crop
-            });
-        }
+        let dl: any[] = [];
+        console.log(listOfCards);
 
+        for (let i = 0; i < listOfCards.length; i++) {
+            if (!listOfCards[i].isPrivate) {
+                const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + listOfCards[i].featuredCard, {});
+                const imageHold = await resp.json();
+                console.log(listOfCards[i].id);
+                dl[i] = {
+                    // will be replaced with deck objects, that contain all this information 
+                    id: listOfCards[i].id,
+                    artist: imageHold.artist,
+                    format: listOfCards[i].format.format,
+                    author: listOfCards[i].author.username,
+                    deckName: listOfCards[i].deckName,
+                    description: listOfCards[i].deckDescription,
+                    featuredCard: imageHold,
+                    featuredCardImage: this.getImageURI(imageHold)
+                };
+            }
+        }
+        console.log("dl:");
+        console.log(dl);
         this.setState({
-            ...this.state,
             decks: dl
 
         });
+        // console.log("decks:");
+        // console.log(this.state.decks);
+    }
+
+    getImageURI = (card: any) => {
+        let cardImageUri: string = '';
+        if (card.layout === "transform") {
+            cardImageUri = card.card_faces[0].image_uris.art_crop;
+        } else {
+            cardImageUri = card.image_uris.art_crop;
+        }
+        return cardImageUri;
     }
 
     /**
      * Retrieves the link to the card image for the cover of the deck object to be displayed
      */
-    getCardArt = async (cardName: string) => {
-        const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
-        });
-        const card = await resp.json();
-        return card.image_uris.art_crop;
-    }
+    // getCardArt = async (cardName: string) => {
+    //     const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
+    //     });
+    //     const card = await resp.json();
+    //     return card.image_uris.art_crop;
+    // }
 
     generateDeck = () => {
         let elements: any[] = [];
         let decks = this.state.decks;
+        console.log("decks");
+        console.log(decks);
         for (let i = 0; i < decks.length; i++) {
-            elements.push(
-                <LandingPageDeckDisplay deck={decks[i]} />
-            )
+            if (decks[i]) {
+                elements.push(
+                    <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} />
+                )
+            }
         }
         return elements;
     }
@@ -118,6 +141,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 <CardColumns>
                     {deck}
                 </CardColumns>
+                <div className="h-500px"></div>
             </Container>
         )
     };
