@@ -236,9 +236,8 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                 }
                 listElement.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`${(list.header === 7) ? `${list.header}+` : list.header} (${count})`}</ListGroupItemHeading>);
             }
-            console.log(listElement);
+
             elements = elements.concat(listElement);
-            console.log(elements);
         })
         return elements;
     }
@@ -259,7 +258,6 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                     cardColorComboArr = this.setColors(cards[i].card.colors)
                 }
                 cardColorCombo = cardColorComboArr.join('');
-                console.log(`${cards[i].card.name}, ${cardColorComboArr}, ${cardColorCombo}`)
                 if (combo === cardColorCombo) {
                     cardList.push(cards.splice(i, 1)[0]);
                     i--;
@@ -380,34 +378,48 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
 
     getList = () => {
         let list: any[] = [];
-        switch (this.state.sortBy) {
-            case "Color":
-                list = this.generateElementsFromList(this.generateListsSortByColor());
-                break;
-            case "Rarity":
-                list = this.generateElementsFromList(this.generateListsSortByRarity());
-                break;
-            case "CMC":
-                list = this.generateElementsFromList(this.generateListsSortByCMC());
-                break;
-            case "Type":
-                list = this.generateElementsFromList(this.generateListsSortByType());
-                break;
-            default:
-                if (!this.state.isLoading) {
+        if (!this.state.isLoading) {
+            switch (this.state.sortBy) {
+                case "Color":
+                    list = this.generateElementsFromList(this.generateListsSortByColor());
+                    break;
+                case "Rarity":
+                    list = this.generateElementsFromList(this.generateListsSortByRarity());
+                    break;
+                case "CMC":
+                    list = this.generateElementsFromList(this.generateListsSortByCMC());
+                    break;
+                case "Type":
+                    list = this.generateElementsFromList(this.generateListsSortByType());
+                    break;
+                default:
                     list = this.generateMainboardElements();
-                }
+            }
         }
         return list;
     }
 
+    getImageURI = () => {
+        const card = this.props.featuredCard;
+        let cardImageUri: string = '';
+
+        if (card.layout === "transform") {
+            cardImageUri = card.card_faces[0].image_uris.art_crop;
+        } else {
+            cardImageUri = card.image_uris.art_crop;
+        }
+
+        return cardImageUri;
+    }
+
     mapFeaturedCard = () => {
         let featuredCard: any[] = []
+        const imgURI = this.getImageURI();
         if (this.props.featuredCard) {
             featuredCard.push(
                 <Col>
                     <Card>
-                        <CardImg width="100%" src={this.props.featuredCard.image_uris.art_crop} alt="Card image cap" />
+                        <CardImg width="100%" src={imgURI} alt="Card image cap" />
                         <CardFooter className="bg-dark p-0 d-flex justify-content-end">
                             <small className="text-muted">Artist: {this.props.featuredCard.artist}</small>
                         </CardFooter>
@@ -415,12 +427,17 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                 </Col>
             )
         }
-        return featuredCard;
+        this.setState({
+            featuredCard
+        })
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {
-        if (this.props !== prevProps) {
-            this.setCardObjects()
+        if (this.props.featuredCard !== prevProps.featuredCard) {
+            this.mapFeaturedCard();
+        }
+        if (this.props.mainboardCards !== prevProps.mainboardCards) {
+            this.setCardObjects();
         }
     }
 
@@ -433,13 +450,14 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             <Card className="bg-light">
                 <CardHeader>
                     <Row>
-                        {this.mapFeaturedCard()}
+                        {this.state.featuredCard}
                         <Col>
                             <Card className="bg-dark h-100">
                                 <CardBody className="d-flex flex-column justify-content-end">
                                     <CardTitle>{this.props.deck.deckName}</CardTitle>
                                     <CardText>
-                                    <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                        <small>Format: {this.props.deck.format.format}</small>
+                                        <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
                                     </CardText>
                                 </CardBody>
                             </Card>

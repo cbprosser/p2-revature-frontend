@@ -94,7 +94,6 @@ export default class DecklistDisplayPageComponent extends Component<IDecklistDis
         const { userId, deckId }: any = this.props.match.params;
         const resp = await tdClient.get(`/deck/card/${deckId}`);
         const deck: Deck = resp.data;
-        console.log(deck)
         this.setState({
             deck,
             isLoading: false

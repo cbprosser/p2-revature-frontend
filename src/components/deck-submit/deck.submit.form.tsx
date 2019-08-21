@@ -4,6 +4,9 @@ import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DeckInputTogglable from './deck.input.box.toggleable';
 import DeckInputGroup from './deck.input.group';
+import { RouteComponentProps } from 'react-router';
+import { tdClient } from '../../axios/td-client';
+import Role from '../../models/role.model';
 
 interface IDeckSubmitFormState {
     deck: Deck
@@ -15,7 +18,7 @@ interface IDeckSubmitFormState {
     featuredCardErrorFlag: boolean
 }
 
-interface IDeckSubmitFormProps {
+interface IDeckSubmitFormProps extends RouteComponentProps {
     deck: Deck
     mainboardCount: number
     mainboardErrorFlag: boolean
@@ -33,14 +36,14 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
         this.state = {
             deck: {
                 id: 0,
-                author: new User(0, 'cbprosser'),
+                author: new User(3, 'lescobosasainz'),
                 deckName: '',
                 deckDescription: '',
                 isPrivate: false,
                 isPrototype: true,
                 format: {
-                    id: 1,
-                    format: 'Casual'
+                    id: 0,
+                    format: ''
                 },
                 mainboard: [],
                 sideboard: [],
@@ -52,6 +55,18 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
             submissionAlertVisible: false,
             submitErrors: [],
             featuredCardErrorFlag: false
+        }
+    }
+    
+    submitDeck = async () => {
+        console.log(this.props.deck);
+        const resp = await tdClient.post(`/deck/card/`, this.props.deck);
+        const deck: Deck = resp.data;
+        if (deck) {
+            console.log(deck);
+            this.props.history.push(`/deck/${deck.author.id}/${deck.id}`)
+        } else {
+            console.log("error");
         }
     }
 
@@ -88,6 +103,17 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
 
     liveSelectFormat = (event: any) => {
         let prototypeToggler = this.props.deck.isPrototype
+        const formats = [
+            'Commander', 
+            'Standard', 
+            'Modern', 
+            'Pauper', 
+            'Brawl', 
+            'Legacy', 
+            'Vintage',
+            'Casual'
+        ];
+        const id = formats.indexOf(event.target.value) + 1;
         switch (event.target.value) {
             case "Casual":
                 break;
@@ -106,7 +132,10 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
             deck: {
                 ...this.state.deck,
                 isPrototype: prototypeToggler,
-                format: event.target.value
+                format: {
+                    id,
+                    format: event.target.value
+                }
             }
         })
     }
@@ -267,6 +296,7 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
             submitErrors.push(<ListGroupItem key="invalidCardsSideboard" className="bg-transparent border-0 p-0">Your entered featured card doesn't exist!</ListGroupItem>)
         }
         if (!errorEncountered) {
+            await this.submitDeck();
             console.log(this.props.deck);
             return;
         }
