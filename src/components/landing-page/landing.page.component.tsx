@@ -5,6 +5,7 @@ import { IState } from '../../reducers';
 import LandingPageDeckDisplay from './landing.page.deck.display.component';
 import { Link } from 'react-router-dom';
 import User from '../../models/user.model';
+import Deck from '../../models/deck';
 
 interface ILandingProps {
     user?: User
@@ -12,7 +13,7 @@ interface ILandingProps {
 
 interface ILandingState {
     isLoading: boolean,
-    decks: any[],
+    decks: Deck[],
     collapse: boolean
 }
 
@@ -74,7 +75,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                     id: listOfCards[i].id,
                     artist: imageHold.artist,
                     format: listOfCards[i].format.format,
-                    author: listOfCards[i].author.username,
+                    author: listOfCards[i].author,
                     deckName: listOfCards[i].deckName,
                     description: listOfCards[i].deckDescription,
                     featuredCard: imageHold,
@@ -113,11 +114,11 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
     generateDeck = () => {
         let elements: any[] = [];
         let decks = this.state.decks;
-        const user = this.props.user;
         for (let i = 0; i < decks.length; i++) {
             if (decks[i]) {
+                console.log(decks[i])
                 elements.push(
-                    <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} user={user} />
+                    <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} user={decks[i].author} />
                 )
             }
         }

@@ -8,7 +8,7 @@ import { Card, Collapse, Progress, CardTitle, CardSubtitle, CardText, CardImg } 
 
 export interface IDeckDisplayProps {
     deck: any
-    user: any
+    user: User
 }
 
 export interface IDeckDisplayState {
@@ -32,7 +32,6 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
 
     render() {
         const deck = this.props.deck;
-        const loggedUser = this.props.user;
         return (
             <Card key={`deck-` + deck.id} style={{ backgroundColor: '#333', borderColor: '#333' }}  >
                 <CardImg src={deck.featuredCardImage} onClick={this.toggleDropDown} style={{ marginBottom: '1rem' }} top width="100%" alt="Card image cap" />
@@ -48,7 +47,7 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                     </Progress> */}
                     <Card body inverse color="dark" className="flex-container flex-space-around" >
                         <CardTitle><Link to={`/deck/${deck.author.id}/${deck.id}`} >{deck.deckName}</Link></CardTitle>
-                        <CardSubtitle className="text-muted">Author: {deck.author}</CardSubtitle>
+                        <CardSubtitle className="text-muted">Author: {deck.author.username}</CardSubtitle>
                         <CardSubtitle className="text-warning">{deck.format}</CardSubtitle>
                         <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard} />
                         {deck.description && <CardText className="text-info">{deck.description}</CardText>}
