@@ -10,17 +10,12 @@ export const login = (credentials: any, history: any) => async (dispatch: any) =
     try {
         const resp = await tdClient.post('/login', credentials);
         // localStorage.setItem('tk', resp.data.token);
-        const token = resp.data.token;
-        const user = JSON.parse(atob(token.split('.')[1])).user;
-        const userToken = {
-            user,
-            token
-        }
-        
+        const user = resp.data;
         dispatch({
             type: authTypes.UPDATE_CURRENT_USER,
-            payload: userToken
+            payload: user
         })
+        
         history.push('/');
     } catch (err) {
         console.log(err);
