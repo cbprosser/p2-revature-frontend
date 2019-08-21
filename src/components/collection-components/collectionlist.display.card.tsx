@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText, CardSubtitle } from 'reactstrap';
+import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
 import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
-import { createHashHistory } from 'history';
-import NumberFormat from 'react-number-format';
-
 
 interface ICollectionlistDisplayCardComponentState {
-    isLoading: boolean,
-    colors: string[],
-    costColors: string[],
-    cmcs: number[],
-    collectionListCards: any[], 
-    featuredCard: any[],
-    cardTypes: string[],
-    cardRarities: string[],
-    cardColorCombos: string[],
-    sortByDropdownIsOpen: boolean,
-    sortBy: string,
-     value: number[]
-    // foilValue: number[]
+
+    isLoading: boolean
+    colors: string[]
+    costColors: string[]
+    cmcs: number[]
+    cards: any[]
+    featuredCard: any[]
+    cardTypes: string[]
+    cardRarities: string[]
+    cardColorCombos: string[]
+    sortByDropdownIsOpen: boolean
+    sortBy: string
 }
 
 interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
     collection: Collection
-    cards: any[],
-    featuredCard: any,
-    collectionList:any[]
+    cards: any[]
+    featuredCard: any
 }
 
 export default class CollectionlistDisplayCardComponent extends Component<ICollectionlistDisplayCardComponentProps, ICollectionlistDisplayCardComponentState> {
@@ -39,7 +34,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
             colors: [],
             costColors: [],
             cmcs: [],
-            collectionListCards: [],
+            cards: [],
             featuredCard: [],
             cardTypes: [
                 "Land",
@@ -91,34 +86,23 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                 ""
             ],
             sortByDropdownIsOpen: false,
-            sortBy: 'Name',
-             value: []
-            // foilValue: []
+            sortBy: 'Name'
         }
     }
 
     setCardObjects = () => {
         let cardObj: any[] = [];
-        let cardList = this.props.collectionList;
-       console.log('cdc'+cardList);
-       console.log('cdc'+this.props.collectionList);
-  
-        let deckColors: string[] = [];
+        let cards = this.props.cards;
+        let collectionColors: string[] = [];
         let cmcs: number[] = [];
-        let value: number[] = [];
-        // let foilValue: number[] = [];
 
-        for (let i = 0; i < cardList.length; i++) {
-            const cardNum = cardList[i].number;
-            const card = cardList[i].card;
-            const typeColorObj = this.setTypesAndDeckColors(card);
+        for (let i = 0; i < cards.length; i++) {
+            const cardNum = cards[i].number;
+            const card = cards[i].card;
+            const typeColorObj = this.setTypesAndCollectionColors(card);
             const { supertypes, subtypes } = typeColorObj;
-            deckColors = deckColors.concat(typeColorObj.deckColors)
+            collectionColors = collectionColors.concat(typeColorObj.collectionColors)
             cmcs = cmcs.concat(this.setCMCs(supertypes, cardNum, card));
-
-            value = value.concat(this.setUsdValue(cardNum, card));
-            // foilValue = foilValue.concat(this.setFoilValue(cardNum, card));
-
             cardObj.push({
                 number: +cardNum,
                 supertypes,
@@ -128,22 +112,19 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         }
 
 
-        let colors = this.setColors(deckColors);
+        let colors = this.setColors(collectionColors);
 
         this.setState({
             colors,
-            costColors: deckColors,
+            costColors: collectionColors,
             cmcs,
-            value,
-            // foilValue,
             isLoading: false,
-            collectionListCards: cardObj,
-
+            cards: cardObj
         })
     }
 
-    setTypesAndDeckColors = (card: any) => {
-        let types, supertypes, subtypes, deckColors: string[] = [];
+    setTypesAndCollectionColors = (card: any) => {
+        let types, supertypes, subtypes, collectionColors: string[] = [];
         if (card.layout === "transform") {
             types = card.card_faces[0].type_line.split('—');
             supertypes = types[0].split(' ');
@@ -151,7 +132,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                 subtypes = types[1].split(' ');
             }
             card.card_faces[0].colors.forEach((color: string) => {
-                deckColors.push(color);
+                collectionColors.push(color);
             });
         } else {
             types = card.type_line.split('—');
@@ -160,14 +141,14 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                 subtypes = types[1].split(' ');
             }
             card.colors.forEach((color: string) => {
-                deckColors.push(color);
+                collectionColors.push(color);
             });
         }
 
         return {
             supertypes,
             subtypes,
-            deckColors
+            collectionColors
         }
     }
 
@@ -180,34 +161,6 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         }
         return cmcs;
     }
-
-    setUsdValue = (cardNum: number, card: any) => {
-        let val = [];
-
-            if(card.prices.usd !== null){
-                val.push(card.prices.usd * cardNum);
-            }
-            else{
-                val.push(0)
-            }
-            
-            
-        
-        return val;
-    }
-
-    // setFoilValue = (cardNum: number, card: any) => {
-    //     let val = [];
-       
-    //         if(card.prices.usd_foil !== null){
-    //             val.push(card.prices.usd_foil );
-    //         }
-    //         else{
-    //             val.push(0)
-    //         }
-            
-    //     return val;
-    // }
 
     setColors = (colorArr: string[]) => {
         let wubrg = ['W', 'U', 'B', 'R', 'G'];
@@ -229,15 +182,15 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         return colors;
     }
 
-    generateCollectionElements = () => {
+    generatecardsElements = () => {
         let elements: any[] = [];
-        let cards = this.state.collectionListCards;
+        let cards = this.state.cards;
         let count = 0;
         for (let i = 0; i < cards.length; i++) {
             count += cards[i].number;
             elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`mb-${i}`} card={cards[i].card} /></ListGroupItem>)
         }
-        elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`Collection (${count})`}</ListGroupItemHeading>);
+        elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`cards (${count})`}</ListGroupItemHeading>);
         return elements;
     }
 
@@ -265,7 +218,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     generateListsSortByColor = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.collectionListCards);
+        cards = cards.concat(this.state.cards);
         const cardColors = this.state.cardColorCombos;
         cardColors.forEach((combo: string) => {
             let cardList: any[] = [];
@@ -295,7 +248,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     generateListsSortByType = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.collectionListCards);
+        cards = cards.concat(this.state.cards);
         const cardTypes = this.state.cardTypes;
         cardTypes.forEach((type: string) => {
             let cardList: any[] = [];
@@ -316,7 +269,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     generateListsSortByCMC = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.collectionListCards);
+        cards = cards.concat(this.state.cards);
         const cardCMCs = [0, 1, 2, 3, 4, 5, 6, 7];
         cardCMCs.forEach((cmc: number) => {
             let cardList: any[] = [];
@@ -340,7 +293,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     generateListsSortByRarity = () => {
         let cardLists: any[] = [];
         let cards: any = []
-        cards = cards.concat(this.state.collectionListCards);
+        cards = cards.concat(this.state.cards);
         const cardRarities = this.state.cardRarities;
         cardRarities.forEach((rarity: string) => {
             let cardList: any[] = [];
@@ -370,11 +323,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     }
 
     getSpinner = () => {
-        let list;
+        let list, sideboardList;
         if (this.state.isLoading) {
             list = <Spinner />
         } else {
-            list = this.generateCollectionElements();
+
+            list = this.getList();
         }
 
         return {
@@ -411,7 +365,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                 break;
             default:
                 if (!this.state.isLoading) {
-                    list = this.generateCollectionElements();
+                    list = this.generatecardsElements();
                 }
         }
         return list;
@@ -441,18 +395,9 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
     }
 
     render() {
-        let { list} = this.getSpinner();
-
-        list = this.getList();
+        let { list } = this.getSpinner();
 
         const avgCmc = this.getAverageCMC();
-
-        let usdSum = 0;
-        if (!(this.state.value.length === 0)) {
-            for (let i = 0; i < this.state.value.length; i++) {
-                usdSum += +this.state.value[i];
-            }
-        }
 
         return (
             <Card className="bg-light">
@@ -465,12 +410,7 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                                     <CardTitle>{this.props.collection.collectionName}</CardTitle>
                                     <CardText>
                                     <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
-                                    <small>collection <NumberFormat value={usdSum.toFixed(2)}  displayType={'text'}  prefix={'$'} /></small>
                                     </CardText>
-                                    <CardText>
-                                    <small>Your Collections Value in USD <NumberFormat value={usdSum.toFixed(2)}  displayType={'text'}  prefix={'$'} /></small>
-                                    </CardText>
-
                                 </CardBody>
                             </Card>
                         </Col>
@@ -491,8 +431,10 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                                 <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push('collection/update', this.props.collection)}>
-                            Update deck
+
+                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/Collection/${this.props.collection.author.id}/${this.props.collection.id}/update`, this.props.collection)}>
+
+                            Update Collection
                         </Button>
                     </ButtonToolbar>
 
@@ -500,11 +442,6 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                         <Col xs="12" sm="6">
                             <ListGroup className="bg-transparent">
                                 {list}
-                            </ListGroup>
-                        </Col>
-                        <Col xs="6">
-                            <ListGroup className="bg-transparent">
-                            
                             </ListGroup>
                         </Col>
                     </Row>

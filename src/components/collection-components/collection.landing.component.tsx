@@ -5,7 +5,7 @@ import User from '../../models/user.model';
 import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
 import { Link } from 'react-router-dom';
-
+import CollectionlistDisplayPageComponent from './collectionlist.display.page';
 
 interface ICollectionLandingProps {
     loggedInUser?: User
@@ -14,6 +14,7 @@ interface ICollectionLandingProps {
 interface ICollectionLandingState {
     featuredCards: any[]
     collections: Collection[]
+    collectionID: any
 }
 
 export class CollectionLandingComponenet extends React.Component<ICollectionLandingProps, ICollectionLandingState> {
@@ -22,12 +23,13 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
         super(props);
         this.state = {
             featuredCards: [],
+            collectionID: 0,
             collections: [
                 new Collection(
                     0,
-                    new User(2, 'lescobosa'),
-                    'Algo',
-                    'es muy bueno',
+                    new User(0, 'cbprosser'),
+                    'Modern Cloudfin Raptor',
+                    'Another awful Collection for Modern',
                     true,
                     false,
                     [
@@ -49,13 +51,13 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
                         "4x Yavimaya Coast",
                         "4x Young Wolf",
                     ],
-                    'Pongify'
+                    'Cloudfin Raptor'
                 ),
                 new Collection(
                     1,
-                    new User(2, 'lesco'),
-                    'es muy malo',
-                    'no me gusta',
+                    new User(0, 'mjarsenault'),
+                    'Make Hurty Collection',
+                    'Another awful Collection for Standard',
                     false,
                     true,
                     [
@@ -91,7 +93,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 
     getCollections = async () => {
         const user = this.props.loggedInUser;
-        if(user) {
+        if (user) {
             const resp = await fetch(``, {});
             const userCollections = await resp.json();
             this.setState({
@@ -99,20 +101,21 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             })
         }
 
-        
+
     }
 
     getCards = async (d: Collection[]) => {
+      
         let featuredCards: any[] = [];
-         for (let i = 0; i < d.length; i++) {
+        for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
             const card = await resp.json();
             featuredCards[i] = card
         };
         console.log(featuredCards);
-                this.setState({
-                    featuredCards
-                })
+        this.setState({
+            featuredCards
+        })
     }
 
     // toggleDropDown = (Collection: Collection) => {
@@ -121,8 +124,8 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 
     //     this.setState({
     //         Collections:
-                
-            
+
+
     //     });
     // }
 
@@ -147,21 +150,25 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
                         {
                             userCollections.map(collection =>
                                 <tr key={`CollectionId-${collection.id}`}>
-                                    <td><Link to={`Collection/${collection.author.id}/${collection.id}`}>{collection.collectionName}</Link></td>
+                                    <td><Link to={`Collection/${collection.author.id}/${this.state.collectionID[collection.id]}`}>{collection.collectionName}</Link></td>
 
-                                    
+
                                     {this.state.featuredCards &&
-                                       <td><CardHover id={`user-Collection-${collection.id}`} card={this.state.featuredCards[collection.id]} /></td>
+                                        <td><CardHover id={`user-Collection-${collection.id}`} card={this.state.featuredCards[collection.id]} /></td>
                                     }
                                     <td>{collection.collectionDescription}</td>
                                     {collection.isPrivate === true
-                                        ?<td>Private</td>
-                                        :<td>Public</td>
+                                        ? <td>Private</td>
+                                        : <td>Public</td>
                                     }
                                     {collection.isPrototype === true
-                                        ?<td>Prototype</td>
-                                        :<td></td>
+                                        ? <td>Prototype</td>
+                                        : <td></td>
                                     }
+                                    {/* <CollectionlistDisplayPageComponent
+                                        featuredCards={this.state.featuredCards}
+                                        collectionID={this.state.collectionID}
+                                    /> */}
                                 </tr>)
                         }
                     </tbody>

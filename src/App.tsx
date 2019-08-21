@@ -12,8 +12,8 @@ import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
 import collectionDisplay from './components/collectionlist-display/collection-display';
-import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
-import CollectionLandingPage from './components/collectionlist-display/collection-landing-component';
+import CollectionlistDisplayPageComponent from './components/collection-components/collectionlist.display.page';
+import CollectionLandingPage from './components/collection-components/collection.landing.component';
 import  CollectionlistSubmitPageComponent  from './components/collection-submit/collectionlist.submit.component';
 
 function App() {

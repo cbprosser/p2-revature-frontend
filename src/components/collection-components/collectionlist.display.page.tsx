@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
 import Collection from '../../models/collection';
 import User from '../../models/user.model';
-import CollectionlistDisplayCardComponent from './collection-display-card-component';
+import CollectionlistDisplayCardComponent from './collectionlist.display.card';
 import { RouteComponentProps } from 'react-router';
+
 import { tdClient } from '../../axios/td-client';
 
 interface ICollectionlistDisplayPageComponentState {
     collection: Collection
     cards: any[]
-    collectionList: any[],
     featuredCard: any
     isLoading: boolean
 }
 
 interface ICollectionlistDisplayPageComponentProps extends RouteComponentProps {
-    collection?: Collection
+    //collections?: Collection
+    featuredCards?: any[]
+    collectionID?: any
 }
 
 export default class CollectionlistDisplayPageComponent extends Component<ICollectionlistDisplayPageComponentProps, ICollectionlistDisplayPageComponentState> {
@@ -30,44 +32,56 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 '',
                 false,
                 true,
-             
                 [],
                 ''
             ),
             cards: [],
             featuredCard: null,
-            collectionList: [],
             isLoading: true
         }
-}
+    }
 
     getCardObjects = async () => {
-        const cardObj = this.state.collection.cards;
-        let collectionList1: any[] = [];
-        console.log('mm' + this.state.collection.cards)
+        const cards1 = this.state.collection.cards;
 
+        let cards: any[] = [];
+    
 
-        for (let i = 0; i < cardObj.length; i++) {
-            const cardNum = +cardObj[i].split('x')[0];
-            const cardName = cardObj[i].substring(cardObj[i].indexOf(' ') + 1);
-            console.log('cards state'+cardName);
+        for (let i = 0; i < cards1.length; i++) {
+            const cardNum = +cards1[i].split('x')[0];
+            const cardName = cards1[i].substring(cards1[i].indexOf(' ') + 1);
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
-            collectionList1.push({
-                number: +cardNum,
+            cards.push({
+                number: cardNum,
                 card
             })
         }
-        console.log('cards state 1' + collectionList1);
+
         this.setState({
-            collectionList: collectionList1
+            cards
         })
-        console.log('cards state list' + this.state.collectionList);
+    }
+
+    getFeaturedCard = async () => {
+        const featuredCard = this.state.collection.featuredCard;
+        if (featuredCard) {
+            const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
+            const card = await resp.json();
+
+            if (card.object !== "error") {
+                this.setState({
+                    featuredCard: card
+                })
+            }
+        }
     }
 
     getCollection = async () => {
         const { userId, collectionId }: any = this.props.match.params;
-        console.log('getCollection' + this.props.collection);
+        console.log('collf1'+this.props.featuredCards);
+        console.log('collid1'+this.props.collectionID);
+        console.log('collid'+collectionId);
         const resp = await tdClient.get(`/collection/card/${2}`);
         const collection: Collection = resp.data;
         console.log(collection)
@@ -77,31 +91,10 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
         })
     }
 
-
-    getFeaturedCard = async () => {
-        const featuredCard = this.state.collection.featuredCard;
-        if (featuredCard) {
-            const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
-            const card = await resp.json();
-            if (card.object !== "error") {
-                this.setState({
-                    featuredCard: card
-                })
-                console.log('cards' + this.state.collectionList);
-            }
-
-        }
-
-
-    }
-
     componentWillMount() {
-        this.getCardObjects();
-        console.log('cards state compmwm' + this.state.collectionList);
-        this.getFeaturedCard();
-        // console.log('cards'+this.state.featuredCard);
+        this.getCollection();
     }
-    
+
     componentDidUpdate(prevProps: any, prevState: ICollectionlistDisplayPageComponentState) {
         if (prevState.isLoading != this.state.isLoading) {
             this.getCardObjects();
@@ -112,12 +105,11 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
     render() {
         return (
             <CollectionlistDisplayCardComponent
-                history={this.props.history} 
+                history={this.props.history}
                 location={this.props.location}
                 match={this.props.match}
                 collection={this.state.collection}
-                cards={this.state.collection.cards}
-                collectionList={this.state.collectionList}
+                cards={this.state.cards}
                 featuredCard={this.state.featuredCard} />
         )
     }
