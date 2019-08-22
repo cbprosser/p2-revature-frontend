@@ -131,7 +131,6 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
 
     checkForUser = () => {
         const user = this.props.user;
-
         
         if (this.props.user) {
            // console.log('user'+ user.id);
