@@ -4,6 +4,7 @@ import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dro
 import Collection from '../../models/collection';
 import CardHover from '../card-hover/card.hover.component';
 import NumberFormat from 'react-number-format';
+import User from '../../models/user.model';
 
 interface ICollectionlistDisplayCardComponentState {
 
@@ -24,6 +25,7 @@ interface ICollectionlistDisplayCardComponentState {
 
 interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
     collection: Collection
+    loggedInUser?: User
     cards: any[]
     featuredCard: any 
 }
@@ -455,6 +457,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                                 <CardBody className="d-flex flex-column justify-content-end">
                                     <CardTitle>{this.props.collection.collectionName}</CardTitle>
                                     <CardText>
+                                        
+                                    {(this.props.collection.isPrivate) ? [<p><small>Private</small></p>] : ''}
+                                        {(this.props.collection.isPrototype) ? [<p><small>Prototype</small></p>] : ''}
+                                        
+                                        <p><small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small></p>
+                                   
                                     <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
                                     </CardText>
                                     <CardText>
@@ -481,10 +489,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                             </DropdownMenu>
                         </Dropdown>
 
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/Collection/${this.props.collection.author.id}/${this.props.collection.id}/update`, this.props.collection)}>
-
+                        {(this.props.loggedInUser && this.props.loggedInUser.username === this.props.collection.author.username) ? [
+                            <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/collection/${this.props.collection.id}/update`, this.props.collection)}>
+                       
                             Update Collection
                         </Button>
+                        ] : ''}
                     </ButtonToolbar>
 
                     <Row>

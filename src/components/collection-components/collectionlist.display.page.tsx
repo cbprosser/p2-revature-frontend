@@ -7,6 +7,7 @@ import { tdClient } from '../../axios/td-client';
 
 interface ICollectionlistDisplayPageComponentState {
     collection: Collection
+    loggedInUser: User
     cards: any[]
     featuredCard: any
     isLoading: boolean
@@ -34,6 +35,7 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 [],
                 ''
             ),
+            loggedInUser: new User(),
             cards: [],
             featuredCard: null,
             isLoading: true,
@@ -115,6 +117,7 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 history={this.props.history}
                 location={this.props.location}
                 match={this.props.match}
+                loggedInUser={this.state.loggedInUser}
                 collection={this.state.collection}
                 cards={this.state.cards}
                 featuredCard={this.state.featuredCard} />

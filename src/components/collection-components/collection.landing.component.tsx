@@ -34,28 +34,6 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             dropdownIsOpen: false,
             collapsed: true,
             collections: []
-            // [
-            //     new Collection(
-            //         1,
-            //         new User(2, 'lesco'),
-            //         'hola',
-            //         'es muy bueno',
-            //         true,
-            //         false,
-            //         [],
-            //         'Young Wolf'
-            //     ),
-            //     new Collection(
-            //         2,
-            //         new User(2, 'lesco'),
-            //         'muy',
-            //         'es muy malo',
-            //         false,
-            //         true,
-            //         [],
-            //         'Young Wolf'
-            //     )
-            // ]
         }
     }
 

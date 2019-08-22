@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
 import Deck from '../../models/deck';
 import CardHover from '../card-hover/card.hover.component';
+import User from '../../models/user.model';
 
 interface IDecklistDisplayCardComponentState {
 
@@ -22,7 +23,7 @@ interface IDecklistDisplayCardComponentState {
 
 interface IDecklistDisplayCardComponentProps extends RouteComponentProps {
     deck: Deck
-
+    loggedInUser?: User
     mainboardCards: any[]
     sideboardCards: any[]
     featuredCard: any
@@ -459,8 +460,10 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <CardBody className="d-flex flex-column justify-content-end">
                                     <CardTitle>{this.props.deck.deckName}</CardTitle>
                                     <CardText>
-                                        <small>Format: {this.props.deck.format.format}</small>
-                                        <small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small>
+                                        {(this.props.deck.isPrivate) ? [<p><small>Private</small></p>] : ''}
+                                        {(this.props.deck.isPrototype) ? [<p><small>Prototype</small></p>] : ''}
+                                        <p><small>{`Format: ${this.props.deck.format.format}`}</small></p>
+                                        <p><small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small></p>
                                     </CardText>
                                 </CardBody>
                             </Card>
@@ -482,11 +485,12 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <DropdownItem className="bg-dark text-light" onClick={this.setSortBy}>Color</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
+                        {(this.props.loggedInUser && this.props.loggedInUser.username === this.props.deck.author.username) ? [
+                            <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.id}/update`, this.props.deck)}>
+                                Update deck
+                            </Button>
+                        ] : ''}
 
-                        <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/deck/${this.props.deck.author.id}/${this.props.deck.id}/update`, this.props.deck)}>
-
-                            Update deck
-                        </Button>
                     </ButtonToolbar>
 
                     <Row>
