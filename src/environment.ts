@@ -7,6 +7,7 @@ const prod = {
 }
 
 export let environment = prod;
+//export let environment = dev;
 
 if (process.env.NODE_ENV === 'production' || process.env.REACT_APP_ENV === 'production') {
     environment = prod;

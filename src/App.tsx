@@ -2,8 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Col, Row } from 'reactstrap';
-import collectionDisplay from './components/collectionlist-display/collection-display';
-import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
+import CollectionLandingPage from './components/collection-components/collection.landing.component';
+import CollectionlistSubmitPageComponent from './components/collection-submit/collectionlist.submit.component';
+import CollectionlistUpdatePageComponent from './components/collection-update/collectionlist.update.component';
+// import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
 import DecklistSubmitPageComponent from './components/deck-submit/decklist.submit.component';
 import DecklistUpdatePageComponent from './components/deck-update/decklist.update.component';
@@ -13,6 +15,7 @@ import LoginComponent from './components/login/login.component';
 import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import SignupComponent from './components/sign-up/signup.component';
+import UserPageComponent from './components/user-page/user.page.component';
 import { store } from './store';
 
 function App() {
@@ -29,6 +32,7 @@ function App() {
               <Route exact path="/" component={LandingPageComponenet} />
               <Route exact path="/login" component={LoginComponent} />
               <Route exact path="/signup" component={SignupComponent} />
+              <Route exact path="/user" component={UserPageComponent} />
 
               <Route path="/deck/landing" component={DeckLandingComponenet} />
               <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
@@ -36,8 +40,12 @@ function App() {
               <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} />
               <Route path="/deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
-              <Route path="/collection" component={collectionDisplay} />
-              <Route path="/collection2" component={CollectionlistDisplayPageComponent} />
+              {/* <Route exact path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
+              <Route path="/collection/landing" component={CollectionLandingPage} />
+              {/* <Route path="/collection/:userId/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
+              <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
+              <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
+              <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />
 
               <Route component={NotFound} />
             </Switch>

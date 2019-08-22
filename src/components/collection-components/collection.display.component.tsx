@@ -28,7 +28,7 @@ export default class CollectionDisplay extends Component<ICollectionDisplayProps
         const collection = this.props.collection;
         return (
 
-            <Card key={`collection-` + collection.id} style={{ backgroundColor: '#333', borderColor: '#333' }}  >
+            <Card key={`Collection-` + collection.id} style={{ backgroundColor: '#333', borderColor: '#333' }}  >
                 <CardImg src={collection.featuredCardImage} onClick={this.toggleDropDown} style={{ marginBottom: '1rem' }} top width="100%" alt="Card image cap" />
                 <Collapse background-color="dark" isOpen={this.state.collapse}>
                     <CardSubtitle>Artist: {collection.author}</CardSubtitle>

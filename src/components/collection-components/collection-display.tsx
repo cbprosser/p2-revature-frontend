@@ -209,9 +209,7 @@ export class CollectionListDisplay extends Component<{}, ICollectionlistState> {
                 "2x Desperate Lunge",
                 "2x Destructive Digger"
             ],
-
             collectionlistCards: [],
-            
             cardTypes: [
                 "Land",
                 "Creature",
@@ -223,7 +221,6 @@ export class CollectionListDisplay extends Component<{}, ICollectionlistState> {
             ]
         }
     }
-
 
     getCardObjects = async () => {
         let cardObj: any[] = [];
@@ -296,7 +293,6 @@ export class CollectionListDisplay extends Component<{}, ICollectionlistState> {
             deckColors
         }
     }
-
 
     setCMCs = (supertypes: string[], cardNum: number, card: any) => {
         let cmcs = [];

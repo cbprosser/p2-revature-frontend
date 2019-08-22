@@ -73,7 +73,8 @@ export class NavComponent extends Component<INavProps, INavState> {
               <NavItem>
                 { this.props.user === undefined 
                   ?<NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
-                  :<></> 
+                  :<NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
+                   
                 }
                 {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
               </NavItem>
@@ -81,7 +82,7 @@ export class NavComponent extends Component<INavProps, INavState> {
                 <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
               </NavItem>
               <NavItem>
-                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection2">Collections</Link></NavLink>
+                <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
               </NavItem>
             </Nav>
           </Collapse>

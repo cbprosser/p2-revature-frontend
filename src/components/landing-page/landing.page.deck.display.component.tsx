@@ -13,6 +13,7 @@ export interface IDeckDisplayProps {
 
 export interface IDeckDisplayState {
     collapse: boolean
+    tLost: any
 }
 
 export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps, IDeckDisplayState> {
@@ -20,9 +21,21 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
         super(props);
 
         this.state = {
-            collapse: false
+            collapse: false,
+            tLost: {}
         }
     }
+
+    componentWillMount = async () => {
+        const resp = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
+        const tolalLost = await resp.json();
+
+        this.setState ({
+            tLost: tolalLost
+        });
+
+    }
+    // "Totally Lost"
 
     toggleDropDown = () => {
         this.setState({
@@ -46,10 +59,10 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                         <Progress bar className="text-white bg-success" value="10">Green</Progress>
                     </Progress> */}
                     <Card body inverse color="dark" className="flex-container flex-space-around" >
-                        <CardTitle><Link to={`/deck/${deck.id}`} >{deck.deckName}</Link></CardTitle>
+                        <CardTitle><Link className="text-light" to={`/deck/${deck.id}`} >{deck.deckName}</Link></CardTitle>
                         <CardSubtitle className="text-muted">Author: {deck.author.username}</CardSubtitle>
                         <CardSubtitle className="text-warning">{deck.format}</CardSubtitle>
-                        <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard} />
+                        <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard || this.state.tLost} />
                         {deck.description && <CardText className="text-info">{deck.description}</CardText>}
                     </Card>
                 </Collapse>
