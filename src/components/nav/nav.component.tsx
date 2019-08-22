@@ -67,7 +67,7 @@ export class NavComponent extends Component<INavProps, INavState> {
       <div className="d-flex flex-column">
         <Navbar color="faded" dark>
           <NavbarBrand style={{ background: "transparent" }} className="mr-auto text-danger" ><Link to="/"><CardImg src={logo} style={{ width: 100, height: 75 }} /></Link></NavbarBrand>
-          <h2 className="d-flex align-self-bottom">{this.props.user && this.props.user.username}</h2>
+          <h3 className="d-flex align-self">{this.props.user && this.props.user.username}</h3>
           <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
