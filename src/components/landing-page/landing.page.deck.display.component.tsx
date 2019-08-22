@@ -1,10 +1,8 @@
-import { connect } from 'http2';
-import { IState } from '../../reducers';
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import User from '../../models/user.model';
 import CardHover from '../card-hover/card.hover.component';
-import { Card, Collapse, Progress, CardTitle, CardSubtitle, CardText, CardImg } from 'reactstrap';
+import { Card, Collapse, CardTitle, CardText, CardImg } from 'reactstrap';
 
 export interface IDeckDisplayProps {
     deck: any
@@ -13,7 +11,6 @@ export interface IDeckDisplayProps {
 
 export interface IDeckDisplayState {
     collapse: boolean
-    tLost: any
 }
 
 export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps, IDeckDisplayState> {
@@ -21,18 +18,11 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
         super(props);
 
         this.state = {
-            collapse: false,
-            tLost: {}
-        }
+            collapse: false        }
     }
 
     componentWillMount = async () => {
-        const resp = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
-        const tolalLost = await resp.json();
-
-        this.setState ({
-            tLost: tolalLost
-        });
+       
 
     }
     // "Totally Lost"
@@ -43,7 +33,7 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
         });
     }
 
-    
+
 
     render() {
         const deck = this.props.deck;
@@ -52,7 +42,6 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                 <CardImg src={deck.featuredCardImage} onClick={this.toggleDropDown} style={{ marginBottom: '1rem' }} top width="100%" alt="Card image cap" />
                 <small className="text-muted">Artist: {deck.artist}</small>
                 <Collapse background-color="dark" isOpen={this.state.collapse}>
-                    {/* <CardSubtitle>Artist: {deck.author}</CardSubtitle> */}
                     {/* <Progress multi>
                         <Progress bar className="text-dark bg-white" color="light" value="25">White</Progress>
                         <Progress bar className="text-white bg-info" value="15">Blue</Progress>
@@ -64,8 +53,10 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                         <CardTitle><Link className="text-light" to={`/deck/${deck.id}`} >{deck.deckName}</Link></CardTitle>
                         <CardText className="text-muted">Author: {deck.author.username}</CardText>
                         <CardText className="text-warning">{deck.format}</CardText>
-                        <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard || this.state.tLost} />
-                        {/* {deck.description && <CardText className="text-info">{deck.description}</CardText>} */}
+                        {deck.featuredCard
+                            ?<CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard} />
+                            :<></>
+                        }
                     </Card>
                 </Collapse>
             </Card>

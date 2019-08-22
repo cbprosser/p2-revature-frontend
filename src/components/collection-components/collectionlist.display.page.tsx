@@ -72,6 +72,12 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 this.setState({
                     featuredCard: card
                 })
+            } else {
+                const resp2 = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
+                const totalLost = await resp2.json();
+                this.setState({
+                    featuredCard: totalLost
+                });
             }
         }
     }
