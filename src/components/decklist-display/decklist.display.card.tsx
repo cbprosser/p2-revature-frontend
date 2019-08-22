@@ -423,6 +423,9 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
             featuredCard.push(
                 <Col>
                     <Card>
+                        <CardHeader className="bg-dark p-0">
+                            <small className="text-muted">{this.props.featuredCard.name}</small>
+                        </CardHeader>
                         <CardImg width="100%" src={imgURI} alt="Card image cap" />
                         <CardFooter className="bg-dark p-0 d-flex justify-content-end">
                             <small className="text-muted">Artist: {this.props.featuredCard.artist}</small>
@@ -460,11 +463,11 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <CardBody className="d-flex flex-column justify-content-end">
                                     <CardTitle>{this.props.deck.deckName}</CardTitle>
                                     <CardText>
-                                        {[<p><small>Deck author: {this.props.deck.author.username}</small></p>]}
-                                        {(this.props.deck.isPrivate) ? [<p><small>Private</small></p>] : ''}
-                                        {(this.props.deck.isPrototype) ? [<p><small>Prototype</small></p>] : ''}
-                                        <p><small>{`Format: ${this.props.deck.format.format}`}</small></p>
-                                        <p><small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small></p>
+                                        {[<><small>Deck author: {this.props.deck.author.username}</small><br/></>]}
+                                        {(this.props.deck.isPrivate) ? [<><small>Private</small><br/></>] : ''}
+                                        {(this.props.deck.isPrototype) ? [<><small>Prototype</small><br/></>] : ''}
+                                        <><small>{`Format: ${this.props.deck.format.format}`}</small><br/></>
+                                        <><small>Color(s): {this.state.colors}, Avg CMC: {Math.round(100 * avgCmc) / 100}</small><br/></>
                                     </CardText>
                                 </CardBody>
                             </Card>
