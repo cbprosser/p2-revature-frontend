@@ -71,20 +71,25 @@ export class NavComponent extends Component<INavProps, INavState> {
           <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
-              <NavItem>
-                {this.props.user === undefined
-                  ? <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
-                  : <>
-                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
-                    <NavItem>
-                      <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
-                    </NavItem>
+              {this.props.user === undefined
+
+                ? <>
+                  <NavItem>
+                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
+                  </NavItem>
                   </>
-                }
-              </NavItem>
+                : <>
+                  <NavItem>
+                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
+                  </NavItem>
+                </>
+              }
               {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
             </Nav>
           </Collapse>
