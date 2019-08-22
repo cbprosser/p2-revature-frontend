@@ -116,7 +116,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
             if (decks[i]) {
-                console.log(decks[i])
                 elements.push(
                     <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} user={decks[i].author} />
                 )
@@ -150,7 +149,7 @@ const mapStateToProps = (state: IState) => ({
 })
 
 const mapDispatchToProps = {
-    // decks
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPageComponenet);
