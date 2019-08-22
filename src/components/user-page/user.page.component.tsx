@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import User from '../../models/user.model';
 import { IState } from '../../reducers';
 import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
-import CollectionlistDisplayCardComponent from '../collectionlist-display/collection-display-card-component';
+import CollectionlistDisplayCardComponent from '../collection-components/collectionlist.display.card';
 import Collection from '../../models/collection';
 import { tdClient } from '../../axios/td-client';
 import { Link } from 'react-router-dom';
@@ -19,7 +19,6 @@ interface UserPageComponentProps extends RouteComponentProps {
 interface UserPageComponentState {
     collection: Collection,
     cards: any[],
-    collectionList:any[],
     featuredCard: any,
     decks: any[],
     featuredCards: any
@@ -41,7 +40,6 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
                 ''
             ),
             cards: [],
-            collectionList: [],
             featuredCard: '',
             decks: [],
             featuredCards: {}
@@ -57,28 +55,24 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
     }
 
     getCardObjects = async () => {
-        const cardObj = this.state.collection.cards;
-        let collectionList1: any[] = [];
-        //console.log('mm' + this.state.collection.cards)
+        const cardsObj = this.state.collection.cards;
+        let cards: any[] = [];
 
-        
-        for (let i = 0; i < cardObj.length; i++) {
-            const cardNum = +cardObj[i].split('x')[0];
-            const cardName = cardObj[i].substring(cardObj[i].indexOf(' ') + 1);
-            //console.log('cards state'+cardName);
+        for (let i = 0; i < cardsObj.length; i++) {
+            const cardNum = +cardsObj[i].split('x')[0];
+            const cardName = cardsObj[i].substring(cardsObj[i].indexOf(' ') + 1);
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
-            collectionList1.push({
-                number: +cardNum,
+            cards.push({
+                number: cardNum,
                 card
             })
         }
-        console.log('cards state 1'+collectionList1);
         this.setState({
-            collectionList:collectionList1
+            cards
         })
-        console.log('cards state list'+this.state.collectionList);
     }
+
 
     getCollection = async () => {
         const { userId, collectionId }: any = this.props.match.params;
@@ -100,7 +94,7 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
                 this.setState({
                     featuredCard: card
                 })
-                console.log('cards'+this.state.collectionList);
+               // console.log('cards'+this.state.collectionList);
             }
         }
     }
@@ -194,7 +188,7 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
                                     match={this.props.match}
                                     collection={this.state.collection}
                                     cards={this.state.collection.cards}
-                                    collectionList={this.state.collectionList}
+                                    loggedInUser={this.props.user}
                                     featuredCard={this.state.featuredCard} />
                             </ListGroup>
                         </Col>
