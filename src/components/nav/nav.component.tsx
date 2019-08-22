@@ -95,15 +95,12 @@ export class NavComponent extends Component<INavProps, INavState> {
   }
 
   componentDidUpdate = (prevProps: INavProps) => {
-    console.log(this.props.user);
     if(this.props.user !== prevProps.user) {
       this.renderList();
     }
   }
 
   render() {
-    console.log("Navbar - User:")
-    console.log(this.props.user);
     return (
       <div className="d-flex flex-column">
         <Navbar color="faded" dark>
@@ -113,6 +110,7 @@ export class NavComponent extends Component<INavProps, INavState> {
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               {this.state.navList}
+              {/* Sign-up component render for when you implament the endpoint to allow new users to sign up */}
               {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
             </Nav>
           </Collapse>

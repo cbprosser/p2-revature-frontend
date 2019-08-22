@@ -19,7 +19,7 @@ interface ILandingState {
 }
 
 export class LandingPageComponenet extends React.Component<ILandingProps, ILandingState> {
-// this.props.history.location.
+    // this.props.history.location.
     constructor(props: any) {
         super(props);
 
@@ -34,10 +34,10 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
 
     async componentWillMount() {
         this.getRandomDecks();
-        
+
     }
 
-   
+
 
 
     toggle() {
@@ -46,7 +46,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
 
     getRandomDecks = async () => {
 
-        // will be replaced with API call to get decks from the td_deck table that are public
         const resp = await fetch("http://td-api.us-east-1.elasticbeanstalk.com/deck/card", {});
         const listOfCards = await resp.json();
         let dl: any[] = [];
@@ -55,25 +54,37 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
             if (!listOfCards[i].isPrivate) {
                 const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + listOfCards[i].featuredCard, {});
                 const imageHold = await resp.json();
-                dl[i] = {
-                    // will be replaced with deck objects, that contain all this information 
-                    id: listOfCards[i].id,
-                    artist: imageHold.artist,
-                    format: listOfCards[i].format.format,
-                    author: listOfCards[i].author,
-                    deckName: listOfCards[i].deckName,
-                    description: listOfCards[i].deckDescription,
-                    featuredCard: imageHold,
-                    featuredCardImage: this.getImageURI(imageHold)
-                };
+                if (imageHold.object !== "error") {
+                    dl[i] = {
+                        id: listOfCards[i].id,
+                        artist: imageHold.artist,
+                        format: listOfCards[i].format.format,
+                        author: listOfCards[i].author,
+                        deckName: listOfCards[i].deckName,
+                        description: listOfCards[i].deckDescription,
+                        featuredCard: imageHold,
+                        featuredCardImage: this.getImageURI(imageHold)
+                    };
+                } else {
+                    const resp2 = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
+                    const totalLost = await resp2.json();
+            
+                    dl[i] = {
+                        id: listOfCards[i].id,
+                        artist: imageHold.artist,
+                        format: listOfCards[i].format.format,
+                        author: listOfCards[i].author,
+                        deckName: listOfCards[i].deckName,
+                        description: listOfCards[i].deckDescription,
+                        featuredCardImage: this.getImageURI(totalLost)
+                    };
+                }
             }
         }
         this.setState({
             decks: dl
 
         });
-        // console.log("decks:");
-        // console.log(this.state.decks);
     }
 
     getImageURI = (card: any) => {
@@ -85,16 +96,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         }
         return cardImageUri;
     }
-
-    /**
-     * Retrieves the link to the card image for the cover of the deck object to be displayed
-     */
-    // getCardArt = async (cardName: string) => {
-    //     const resp = await fetch("https://api.scryfall.com/cards/named?exact=" + cardName, {
-    //     });
-    //     const card = await resp.json();
-    //     return card.image_uris.art_crop;
-    // }
 
     generateDeck = () => {
         let elements: any[] = [];

@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import User from '../../models/user.model';
 import { IState } from '../../reducers';
-import { Button, ButtonToolbar, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, ListGroup, ListGroupItem, ListGroupItemHeading, Row, Spinner, CardImg, CardImgOverlay, CardTitle, CardText } from 'reactstrap';
-import CollectionlistDisplayCardComponent from '../collection-components/collectionlist.display.card';
+import { Card, CardBody, CardHeader, Col, ListGroup, Row, CardTitle, CardText } from 'reactstrap';
 import Collection from '../../models/collection';
-import { tdClient } from '../../axios/td-client';
 import { Link } from 'react-router-dom';
 import CardHover from '../card-hover/card.hover.component';
 import Deck from '../../models/deck';
@@ -86,9 +84,15 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
             const card = await resp.json();
-            featuredCards[i] = card
+            if (card.object !== 'error') {
+                featuredCards[i] = card;
+            } else {
+                const resp2 = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
+                const totalLost = await resp2.json();
+                featuredCards[i] = totalLost;
+            }
         };
-        console.log(featuredCards);
+
         this.setState({
             featuredCards
         })
@@ -112,32 +116,32 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
         let row = [
             (
 
-                    <tr onClick={rowClickCallback} key={`parentRow${data![rid].id}`}>
-                        <td>
-                            <Link to={`collection/${data![rid].author.id}/${data![rid].id}`}>{data![rid].collectionName}
-                            </Link></td>
-                        {this.state.featuredCards &&
-                            <td><CardHover id={`user-Collection-${data![rid].id}`} card={this.state.featuredCards[data![rid].id]} /></td>
-                        }
-                        <td>{data![rid].collectionDescription}</td>
+                <tr onClick={rowClickCallback} key={`parentRow${data![rid].id}`}>
+                    <td>
+                        <Link to={`collection/${data![rid].author.id}/${data![rid].id}`}>{data![rid].collectionName}
+                        </Link></td>
+                    {this.state.featuredCards &&
+                        <td><CardHover id={`user-Collection-${data![rid].id}`} card={this.state.featuredCards[data![rid].id]} /></td>
+                    }
+                    <td>{data![rid].collectionDescription}</td>
 
-                    </tr>
+                </tr>
             )];
         if (this.state.expandedRows.includes(data![rid].id)) {
             row.push(
-                    <tr key={`childRow${data![rid].id}`}>
-                        <td>
-                            <CollectionlistDisplayPageComponent
-                                history={this.props.history}
-                                location={this.props.location}
-                                match={this.props.match}
-                                collections={data![rid]}
-                                featuredCards={this.state.featuredCards}
-                                collectionID={data![rid].id}
-                            />
-                        </td>
+                <tr key={`childRow${data![rid].id}`}>
+                    <td>
+                        <CollectionlistDisplayPageComponent
+                            history={this.props.history}
+                            location={this.props.location}
+                            match={this.props.match}
+                            collections={data![rid]}
+                            featuredCards={this.state.featuredCards}
+                            collectionID={data![rid].id}
+                        />
+                    </td>
 
-                    </tr>
+                </tr>
             )
         }
 
@@ -178,7 +182,9 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
             const card = await resp.json();
-            featuredCards[d[i].id] = card
+            if (card.object !== 'error') {
+                featuredCards[d[i].id] = card
+            } 
         };
         // console.log(featuredCards);
         this.setState({
@@ -239,8 +245,9 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
 
                                                     <td>{deck.format.format}</td>
 
-                                                    {this.state.featuredCard &&
-                                                        <td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCard[deck.id]} /></td>
+                                                    {this.state.featuredCard[deck.id] 
+                                                        ?<td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCard[deck.id]} /></td>
+                                                        :<td></td>
                                                     }
                                                     <td>{deck.deckDescription}</td>
 
@@ -252,19 +259,19 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
                             </ListGroup>
                         </Col>
                         <Col xs="6">
-                        <table className="table table-striped table-dark">
-                            <thead>
-                                <tr>
-                                    <th scope='col'>Collection Name</th>
-                                    <th scope='col'>Featured Card</th>
-                                    <th scope='col'>Description</th>
+                            <table className="table table-striped table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Collection Name</th>
+                                        <th scope='col'>Featured Card</th>
+                                        <th scope='col'>Description</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {allRows}
-                            </tbody>
-                        </table>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {allRows}
+                                </tbody>
+                            </table>
                         </Col>
                     </Row>
                 </CardBody>
