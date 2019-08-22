@@ -259,10 +259,7 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 })
                 console.log('cards'+this.state.collectionList);
             }
-     
         }
-
-
     }
 
     componentWillMount() {

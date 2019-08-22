@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { CardColumns, Container, Row, Button, Col } from 'reactstrap';
 import { IState } from '../../reducers';
 import LandingPageDeckDisplay from './landing.page.deck.display.component';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import User from '../../models/user.model';
 import Deck from '../../models/deck';
 
-interface ILandingProps {
+interface ILandingProps extends RouteComponentProps {
     user?: User
 }
 
@@ -18,7 +18,7 @@ interface ILandingState {
 }
 
 export class LandingPageComponenet extends React.Component<ILandingProps, ILandingState> {
-
+// this.props.history.location.
     constructor(props: any) {
         super(props);
 
@@ -129,6 +129,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         const deck = this.generateDeck();
         return (
             <Container>
+                {/* <AlertComponent message={this.props.history.location.state && this.props.history.location.state.errorMessage} /> */}
                 <Row>
                     <Col className="d-flex justify-content-around">
                         <Link className="text-light" to="/deck/submit"><Button color="secondary " size="lg" style={{ height: 200 }}>Create a New Deck</Button></Link>
