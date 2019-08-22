@@ -36,7 +36,7 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
         this.state = {
             deck: {
                 id: 0,
-                author: new User(3, 'lescobosasainz'),
+                author: new User(),
                 deckName: '',
                 deckDescription: '',
                 isPrivate: false,
@@ -64,7 +64,7 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
         const deck: Deck = resp.data;
         if (deck) {
             console.log(deck);
-            this.props.history.push(`/deck/${deck.author.id}/${deck.id}`)
+            this.props.history.push(`/deck/${deck.id}`);
         } else {
             console.log("error");
         }
@@ -310,6 +310,12 @@ export default class DeckSubmitFormComponent extends Component<IDeckSubmitFormPr
         if (this.state !== prevState) {
             this.props.updateDeck(this.state.deck);
         }
+    }
+
+    componentDidMount = () => {
+        this.setState({
+            deck: this.props.deck
+        })
     }
 
     render() {
