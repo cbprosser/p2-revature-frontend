@@ -6,8 +6,9 @@ import { DecklistSubmitPageComponent } from './components/deck-submit/decklist.s
 import DecklistDisplayPageComponent from './components/decklist-display/decklist.display.page';
 import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
 import LandingPageComponenet from './components/landing-page/landing.page.component';
-import LoginComponent from './components/login/login.component';
 import SignupComponent from './components/sign-up/signup.component';
+import LoginComponent from './components/login/login.component';
+import UserPageComponent from './components/user-page/user.page.component';
 import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
@@ -31,11 +32,12 @@ function App() {
               <Route exact path="/" component={LandingPageComponenet} />
               <Route exact path="/login" component={LoginComponent} />
               <Route exact path="/signup" component={SignupComponent} />
+              <Route exact path="/user" component={UserPageComponent} />
 
-              {/* <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} /> */}
               <Route path="/deck/landing" component={DeckLandingComponenet} />
               <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
               <Route path="/deck/update" component={DecklistUpdatePageComponent} />
+              <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} />
               <Route path="/deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
               {/* <Route exact path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} /> */}

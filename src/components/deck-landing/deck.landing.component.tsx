@@ -27,15 +27,14 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
 
     componentWillMount = () => {
         if (this.props.user) {
-            this.getDecks();
-            
+            this.getDecks(); 
         }
     }
 
     getDecks = async () => {
         const user = this.props.user;
         if (user && user.id) {
-            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck?users=${user.id}`, {});
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/author/${user.id}`, {});
             const userDecks = await resp.json();
             this.setState({
                 decks: userDecks
@@ -94,7 +93,7 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
                             userDecks.map(deck =>
                                 <tr key={`deckId-${deck.id}`}>
 
-                                    <td><Link to={`/deck/${loggedUser && loggedUser.id}/${deck.id}`} >{deck.deckName}</Link></td>
+                                    <td><Link className="text-light" to={`/deck/${deck.id}`} >{deck.deckName}</Link></td>
 
                                     <td>{deck.format.format}</td>
 

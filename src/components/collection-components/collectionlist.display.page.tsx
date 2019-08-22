@@ -44,14 +44,12 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
     }
 
     getCardObjects = async () => {
-        const cards1 = this.state.collection.cards;
-
+        const cardsObj = this.state.collection.cards;
         let cards: any[] = [];
 
-
-        for (let i = 0; i < cards1.length; i++) {
-            const cardNum = +cards1[i].split('x')[0];
-            const cardName = cards1[i].substring(cards1[i].indexOf(' ') + 1);
+        for (let i = 0; i < cardsObj.length; i++) {
+            const cardNum = +cardsObj[i].split('x')[0];
+            const cardName = cardsObj[i].substring(cardsObj[i].indexOf(' ') + 1);
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${cardName}`);
             const card = await resp.json();
             cards.push({
@@ -59,7 +57,6 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 card
             })
         }
-
         this.setState({
             cards
         })
