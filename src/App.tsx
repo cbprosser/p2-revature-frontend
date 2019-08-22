@@ -12,10 +12,10 @@ import NavComponent from './components/nav/nav.component';
 import NotFound from './components/not-found/not-found.component';
 import { store } from './store';
 import { DecklistUpdatePageComponent } from './components/deck-update/decklist.update.component';
-import collectionDisplay from './components/collection-components/collection-display';
 import CollectionlistDisplayPageComponent from './components/collection-components/collectionlist.display.page';
 import CollectionLandingPage from './components/collection-components/collection.landing.component';
 import CollectionlistSubmitPageComponent from './components/collection-submit/collectionlist.submit.component';
+import  CollectionlistUpdatePageComponent  from './components/collection-update/collectionlist.update.component';
 
 function App() {
   return (
@@ -32,15 +32,18 @@ function App() {
               <Route exact path="/login" component={LoginComponent} />
               <Route exact path="/signup" component={SignupComponent} />
 
-              <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} />
+              {/* <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} /> */}
               <Route path="/deck/landing" component={DeckLandingComponenet} />
               <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
               <Route path="/deck/update" component={DecklistUpdatePageComponent} />
               <Route path="/deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
+              {/* <Route exact path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
               <Route path="/collection/landing" component={CollectionLandingPage} />
               <Route path="/collection/:userId/:collectionId" component={CollectionlistDisplayPageComponent} />
               <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
+              <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
+              <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />
 
               <Route component={NotFound} />
             </Switch>

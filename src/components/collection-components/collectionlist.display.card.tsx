@@ -489,12 +489,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
                             </DropdownMenu>
                         </Dropdown>
 
-                        {(this.props.loggedInUser && this.props.loggedInUser.username === this.props.collection.author.username) ? [
+                        {/* {(this.props.loggedInUser && this.props.loggedInUser.username === this.props.collection.author.username) ? [ */}
                             <Button size="sm" className="bg-dark" onClick={() => this.props.history.push(`/collection/${this.props.collection.id}/update`, this.props.collection)}>
                        
                             Update Collection
                         </Button>
-                        ] : ''}
+                        {/* ] : ''} */}
                     </ButtonToolbar>
 
                     <Row>

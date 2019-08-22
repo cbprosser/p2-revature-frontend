@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Button, ButtonGroup, Col, Form, Input, InputGroup, ListGroup, ListGroupItem, ListGroupItemHeading, Row } from 'reactstrap';
 import Collection from '../../models/collection';
 import User from '../../models/user.model';
-import CollectionUpdateGroup from './Collection.update.group';
+import CollectionUpdateGroup from './collection.update.group';
 import CollectionUpdateTogglable from './collection.update.box.toggleable';
 
 interface ICollectionUpdateFormState {
