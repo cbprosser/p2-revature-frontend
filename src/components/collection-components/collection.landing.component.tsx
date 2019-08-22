@@ -17,52 +17,26 @@ interface ICollectionLandingState {
     featuredCards: any[]
     collections: Collection[]
     collectionID: any
-    isOpen: boolean,
-    dropdownIsOpen: boolean,
-    collapsed: boolean
+    expandedRows: any[]
 }
 
 export class CollectionLandingComponenet extends React.Component<ICollectionLandingProps, ICollectionLandingState> {
 
     constructor(props: any) {
         super(props);
-        this.toggleCards = this.toggleCards.bind(this);
         this.state = {
             featuredCards: [],
             collectionID: 0,
-            isOpen: false,
-            dropdownIsOpen: false,
-            collapsed: true,
+            expandedRows: [],
             collections: []
         }
     }
 
     componentWillMount = () => {
-        
+
         if (this.props.user) {
             this.getCollection();
         }
-
-      //  this.getCards(this.state.collections)
-
-
-
-        // console.log('landing' + this.state.collections);
-    }
-
-    getCollections = async () => {
-        const user = this.props.user;
-        if (user) {
-            const resp = await fetch(``, {});
-            // const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
-            const userCollections = await resp.json();
-            this.setState({
-                collections: userCollections
-            })
-
-        }
-
-
     }
 
     getCollection = async () => {
@@ -75,12 +49,9 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             })
             this.getCards(userCollections);
         }
-
-
     }
 
     getCards = async (d: Collection[]) => {
-
         let featuredCards: any[] = [];
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
@@ -93,27 +64,76 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
         })
     }
 
-    toggleCards() {
+    rowClick = (rid: number) => {
+        const currentExpandedRows = this.state.expandedRows;
+        const isRowExpanded = currentExpandedRows.includes(rid); // Is it already expanded?
+        const newExpandedRows = (isRowExpanded) ? currentExpandedRows.filter(id => id !== rid) : currentExpandedRows.concat(rid); // if it is, filter it out, if it isn't, add it in.
         this.setState({
-          collapsed: !this.state.collapsed
-        });
-      }
+            expandedRows: newExpandedRows
+        })
+    }
 
-      toggleNavButton = () => {
-        this.setState({
-          isOpen: !this.state.isOpen
-        });
-      }
-      // end of toggleNavButton
-    
-      toggleNavDropdown = () => {
-        this.setState({
-          dropdownIsOpen: !this.state.dropdownIsOpen
-        });
-      }
+    createRow = (rid: number) => {
+        const data = this.state.collections;
+        // if (!data || this.state.collections === 'Found no reimbursements' || data.length === 0 || (data && data[0].amount === null)) {
+        //     return;
+        // }
+        const rowClickCallback = () => { this.rowClick(data![rid].id) }; // Moved out of line due to needing to pass in event variables
+        let row = [
+            (
+
+                    <tr onClick={rowClickCallback} key={`parentRow${data![rid].id}`}>
+                        <td>
+                            <Link to={`collection/${data![rid].author.id}/${data![rid].id}`}>{data![rid].collectionName}
+                            </Link></td>
+                        {this.state.featuredCards &&
+                            <td><CardHover id={`user-Collection-${data![rid].id}`} card={this.state.featuredCards[data![rid].id]} /></td>
+                        }
+                        <td>{data![rid].collectionDescription}</td>
+                        {data![rid].isPrivate === true
+                            ? <td>Private</td>
+                            : <td>Public</td>
+                        }
+                        {data![rid].isPrototype === true
+                            ? <td>Prototype</td>
+                            : <td></td>
+                        }
+
+                    </tr>
+            )];
+        if (this.state.expandedRows.includes(data![rid].id)) {
+            row.push(
+                    <tr key={`childRow${data![rid].id}`}>
+                        <td>
+                            <CollectionlistDisplayPageComponent
+                                history={this.props.history}
+                                location={this.props.location}
+                                match={this.props.match}
+                                collections={data![rid]}
+                                featuredCards={this.state.featuredCards}
+                                collectionID={data![rid].id}
+                            />
+                        </td>
+
+                    </tr>
+            )
+        }
+
+        return row;
+    }
 
     render() {
         const userCollections = this.state.collections;
+
+        let allRows: any[] = [];
+
+        const length: number = (userCollections) ? userCollections.length : 0;
+
+        for (let i = 0; i < length; i++) {
+            allRows.push(this.createRow(i));
+        }
+
+        const allDataLength: number = (userCollections.length) ? userCollections.length : 0;
 
         console.log('sup' + this.state.collectionID);
         return (
@@ -130,47 +150,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            userCollections.map(collection =>
-                                <tr key={`CollectionId-${collection.id}`}>
-                                    <td>
-                                        <Link to={`collection/${collection.author.id}/${collection.id}`}>{collection.collectionName}
-                                        </Link></td>
-
-                                    {/* 
-                                //    <td><Link to={`/collection/${collection.author.id}/${deck}`} >{collection.deckName}</Link></td> */}
-
-
-                                    {this.state.featuredCards &&
-                                        <td><CardHover id={`user-Collection-${collection.id}`} card={this.state.featuredCards[collection.id]} /></td>
-                                    }
-                                    <td>{collection.collectionDescription}</td>
-                                    {collection.isPrivate === true
-                                        ? <td>Private</td>
-                                        : <td>Public</td>
-                                    }
-                                    {collection.isPrototype === true
-                                        ? <td>Prototype</td>
-                                        : <td></td>
-                                    }
-                                    
-
-
-                                    <td onClick={this.toggleCards}>cards
-                                    <Collapse isOpen={!this.state.collapsed} >
-                                            <CollectionlistDisplayPageComponent
-                                                history={this.props.history}
-                                                location={this.props.location}
-                                                match={this.props.match}
-                                                collections={collection}
-                                                featuredCards={this.state.featuredCards}
-                                                collectionID={collection.id}
-                                            />
-                                        </Collapse>
-                                    </td>
-
-                                </tr>)
-                        }
+                        {allRows}
                     </tbody>
                 </table>
             </div>
