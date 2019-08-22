@@ -72,20 +72,14 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 this.setState({
                     featuredCard: card
                 })
-            } else {
-                const resp2 = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
-                const totalLost = await resp2.json();
-                this.setState({
-                    featuredCard: totalLost
-                });
-            }
+            } 
         }
     }
 
     getCollection = async () => {
         const { userId, collectionId }: any = this.props.match.params;
         const coll = 0;
-        if (collectionId == null) {
+        if (collectionId === null) {
             const resp = await tdClient.get(`/collection/card/${this.props.collectionID}`);
             const collection: Collection = resp.data;
             console.log(collection)

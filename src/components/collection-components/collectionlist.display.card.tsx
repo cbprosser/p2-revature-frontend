@@ -229,7 +229,12 @@ export default class CollectionlistDisplayCardComponent extends Component<IColle
         let count = 0;
         for (let i = 0; i < cards.length; i++) {
             count += cards[i].number;
-            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x <CardHover id={`mb-${i}`} card={cards[i].card} /></ListGroupItem>)
+            elements.push(<ListGroupItem className="bg-transparent border-0 p-0">{cards[i].number}x
+            {cards[i].card
+            ?<CardHover id={`mb-${i}`} card={cards[i].card} />
+            :<></>
+            }
+            </ListGroupItem>)
         }
         elements.unshift(<ListGroupItemHeading className="bg-transparent border-0 p-0 pt-3">{`cards (${count})`}</ListGroupItemHeading>);
         return elements;
