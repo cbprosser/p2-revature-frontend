@@ -77,10 +77,10 @@ export class NavComponent extends Component<INavProps, INavState> {
           <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">New Deck</Link></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/submit">New Collection</Link></NavLink>
         </NavItem>
         <NavItem>
           <NavLink><Link className="text-light" onClick={this.logout} to="/">Log out</Link></NavLink>
