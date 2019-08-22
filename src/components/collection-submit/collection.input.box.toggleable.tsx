@@ -3,7 +3,6 @@ import { Button, ButtonGroup, Collapse, Input, InputGroup } from 'reactstrap';
 
 interface ICollectionInputTogglableProps {
     cardsCount: number
-    // liveUpdateCardInputEnterKey: (event: React.KeyboardEvent<HTMLInputElement>, sideboard?: boolean) => any
     liveUpdateCardInput: (event: any) => any
 }
 
@@ -36,15 +35,6 @@ export default class CollectionInputTogglable extends Component<ICollectionInput
         })
     }
 
-    liveTogglecardsSideboard = (event: React.MouseEvent<HTMLButtonElement>) => {
-        let showcards: boolean = true;
-        if (event.currentTarget.innerText.includes("Sideboard")) {
-            showcards = false;
-        }
-        this.setState({
-            showcards
-        })
-    }
 
     componentWillMount() {
         for (let i = 0; i < 2; i++) {
@@ -66,25 +56,16 @@ export default class CollectionInputTogglable extends Component<ICollectionInput
             CollectionlistPlaceholder = '';
         } else {
             CollectionlistPlaceholder = `Collectionlist format example:
-${this.state.randomCardNumber[0]}x ${this.state.randomCard[0]}
-${this.state.randomCardNumber[1]}x ${this.state.randomCard[1]}
-${this.state.randomCardNumber[2]}x ...`;
+                        ${this.state.randomCardNumber[0]}x ${this.state.randomCard[0]}
+                        ${this.state.randomCardNumber[1]}x ${this.state.randomCard[1]}
+                        ${this.state.randomCardNumber[2]}x ...`;
         }
 
-        let sideboardPlaceholder = 'Sideboard format is the same as cards.'
+
 
         return (
             <>
-                <ButtonGroup className="d-flex w-100" size="sm">
-                    <Button
-                        className="text-left border"
-                        color="dark"
-                        active={this.state.showcards}
-                        onClick={this.liveTogglecardsSideboard}>
-                        cards ({this.props.cardsCount})
-                    </Button>
 
-                </ButtonGroup>
                 <Collapse isOpen={this.state.showcards}>
                     <InputGroup size="sm">
                         <Input
