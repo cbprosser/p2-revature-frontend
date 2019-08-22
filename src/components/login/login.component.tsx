@@ -90,13 +90,6 @@ export class LoginComponent extends Component<ILoginProps, ILoginComponentState>
     }
 }
 
-
-// public username = '',
-// public password = '',
-// public firstName = '',
-// public lastName = '',
-// public email = '',
-
 const mapStateToProps = (state: IState) => ({
     auth: state.auth
 })

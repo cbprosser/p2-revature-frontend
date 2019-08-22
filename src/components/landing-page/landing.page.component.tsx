@@ -6,6 +6,7 @@ import LandingPageDeckDisplay from './landing.page.deck.display.component';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import User from '../../models/user.model';
 import Deck from '../../models/deck';
+import AlertComponent from '../alert-component/alert-component';
 
 interface ILandingProps extends RouteComponentProps {
     user?: User
@@ -116,7 +117,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         let decks = this.state.decks;
         for (let i = 0; i < decks.length; i++) {
             if (decks[i]) {
-                console.log(decks[i])
                 elements.push(
                     <LandingPageDeckDisplay key={`deckId-${decks[i].id}`} deck={decks[i]} user={decks[i].author} />
                 )
@@ -129,7 +129,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
         const deck = this.generateDeck();
         return (
             <Container>
-                {/* <AlertComponent message={this.props.history.location.state && this.props.history.location.state.errorMessage} /> */}
+                <AlertComponent message={this.props.history.location.state && this.props.history.location.state.errorMessage} />
                 <Row>
                     <Col className="d-flex justify-content-around">
                         <Link className="text-light" to="/deck/submit"><Button color="secondary " size="lg" style={{ height: 200 }}>Create a New Deck</Button></Link>
@@ -150,7 +150,7 @@ const mapStateToProps = (state: IState) => ({
 })
 
 const mapDispatchToProps = {
-    // decks
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPageComponenet);

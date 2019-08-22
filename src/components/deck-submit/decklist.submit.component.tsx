@@ -11,6 +11,7 @@ import { RouteComponentProps } from 'react-router';
 
 interface IDecklistSubmitPageState {
     deck: Deck
+    loggedInUser?: User
     mainboardCount: number
     sideboardCount: number
     mainboardElements: any[]
@@ -24,7 +25,7 @@ interface IDecklistSubmitPageState {
 }
 
 interface IDecklistSubmitPageProps extends RouteComponentProps {
-    //
+    user?: User
 }
 
 export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPageProps, IDecklistSubmitPageState> {
@@ -166,6 +167,27 @@ export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPagePr
         })
     }
 
+    checkForUser = () => {
+        if (this.props.user) {
+            this.setState({
+                deck: {
+                    ...this.state.deck,
+                    author: this.props.user
+                }
+            })
+        } else {
+            this.pushToFrontpageWithError('You must be logged in to submit decks!')
+        }
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
+    }
+
+    componentWillMount = () => {
+        this.checkForUser();
+    }
+
     componentDidUpdate(prevProps: any, prevState: any) {
         if (this.state.renderFlag) {
             if (this.state.deck.mainboard !== prevState.deck.mainboard || this.state.deck.sideboard !== prevState.deck.sideboard) {
@@ -225,7 +247,7 @@ export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPagePr
                     </Row>
                 </CardBody>
                 <CardFooter>
-                    {this.state.deck.author.username /* change to props when auth working */}
+                    {this.props.user && this.props.user.username}
                 </CardFooter>
             </Card>
         )
@@ -233,7 +255,7 @@ export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPagePr
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {

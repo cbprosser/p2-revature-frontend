@@ -24,7 +24,7 @@ interface IDecklistUpdatePageState {
 }
 
 interface IDecklistUpdatePageProps extends RouteComponentProps {
-    //
+    user?: User
 }
 
 export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePageProps, IDecklistUpdatePageState> {
@@ -214,6 +214,9 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
                 </CardHeader>
                 <CardBody>
                     <DeckUpdateFormComponent
+                        history={this.props.history}
+                        location={this.props.location}
+                        match={this.props.match}
                         deck={this.state.deck}
                         updateDeck={this.updateDeck}
                         mainboardCount={this.state.mainboardCount}
@@ -238,7 +241,7 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
                     </Row>
                 </CardBody>
                 <CardFooter>
-                    {this.state.deck.author.username /* change to props when auth working */}
+                    {this.state.deck.author.username}
                 </CardFooter>
             </Card>
         )
@@ -246,7 +249,7 @@ export class DecklistUpdatePageComponent extends Component<IDecklistUpdatePagePr
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
