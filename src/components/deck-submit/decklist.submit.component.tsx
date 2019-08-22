@@ -35,7 +35,7 @@ export class DecklistSubmitPageComponent extends Component<IDecklistSubmitPagePr
         this.state = {
             deck: {
                 id: 0,
-                author: new User(3, 'lescobosasainz'),
+                author: new User(),
                 deckName: '',
                 deckDescription: '',
                 isPrivate: false,

@@ -5,7 +5,6 @@ import { Col, Row } from 'reactstrap';
 import CollectionLandingPage from './components/collection-components/collection.landing.component';
 import CollectionlistSubmitPageComponent from './components/collection-submit/collectionlist.submit.component';
 import CollectionlistUpdatePageComponent from './components/collection-update/collectionlist.update.component';
-// import CollectionlistDisplayPageComponent from './components/collectionlist-display/collection-display-page-component';
 import DeckLandingComponenet from './components/deck-landing/deck.landing.component';
 import DecklistSubmitPageComponent from './components/deck-submit/decklist.submit.component';
 import DecklistUpdatePageComponent from './components/deck-update/decklist.update.component';
@@ -17,6 +16,7 @@ import NotFound from './components/not-found/not-found.component';
 import SignupComponent from './components/sign-up/signup.component';
 import UserPageComponent from './components/user-page/user.page.component';
 import { store } from './store';
+import CollectionlistDisplayPageComponent from './components/collection-components/collectionlist.display.page';
 
 function App() {
   return (
@@ -40,8 +40,8 @@ function App() {
               <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} />
               <Route path="/deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
-              {/* <Route exact path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
               <Route path="/collection/landing" component={CollectionLandingPage} />
+              <Route path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} />
               <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
               <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
               <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />

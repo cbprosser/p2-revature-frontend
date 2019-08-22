@@ -131,7 +131,8 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
 
     checkForUser = () => {
         const user = this.props.user;
-        
+
+         console.log(this.props.user);
         if (this.props.user) {
            // console.log('user'+ user.id);
             this.setState({
@@ -153,8 +154,9 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
 
     componentWillMount = () => {
         this.checkForUser();
+        console.log('author' + this.state.collection.author.id)
     }
-
+ 
     render() {
         return (
             <Card className="bg-light">

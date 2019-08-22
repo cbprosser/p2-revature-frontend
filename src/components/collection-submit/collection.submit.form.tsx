@@ -259,6 +259,11 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
         }
     }
 
+    componentDidMount = () => {
+        this.setState({
+            collection: this.props.collection
+        })
+    }
 
     render() {
         return (
