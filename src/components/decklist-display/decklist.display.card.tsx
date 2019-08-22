@@ -460,6 +460,7 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                                 <CardBody className="d-flex flex-column justify-content-end">
                                     <CardTitle>{this.props.deck.deckName}</CardTitle>
                                     <CardText>
+                                        {[<p><small>Deck author: {this.props.deck.author.username}</small></p>]}
                                         {(this.props.deck.isPrivate) ? [<p><small>Private</small></p>] : ''}
                                         {(this.props.deck.isPrototype) ? [<p><small>Prototype</small></p>] : ''}
                                         <p><small>{`Format: ${this.props.deck.format.format}`}</small></p>

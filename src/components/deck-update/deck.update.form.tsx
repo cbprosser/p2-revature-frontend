@@ -4,6 +4,8 @@ import Deck from '../../models/deck';
 import User from '../../models/user.model';
 import DeckUpdateGroup from './deck.update.group';
 import DeckUpdateTogglable from './deck.update.box.toggleable';
+import { tdClient } from '../../axios/td-client';
+import { RouteComponentProps } from 'react-router';
 
 interface IDeckUpdateFormState {
     deck: Deck
@@ -16,7 +18,7 @@ interface IDeckUpdateFormState {
     isSubmitting: boolean
 }
 
-interface IDeckUpdateFormProps {
+interface IDeckUpdateFormProps extends RouteComponentProps {
     deck: Deck
     mainboardCount: number
     mainboardErrorFlag: boolean
@@ -54,6 +56,18 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
             submitErrors: [],
             featuredCardErrorFlag: false,
             isSubmitting: false
+        }
+    }
+
+    submitDeck = async () => {
+        console.log(this.props.deck);
+        const resp = await tdClient.put(`/deck/card/`, this.props.deck);
+        const deck: Deck = resp.data;
+        if (deck) {
+            console.log(deck);
+            this.props.history.push(`/deck/${deck.id}`);
+        } else {
+            console.log("error");
         }
     }
 
@@ -269,7 +283,7 @@ export default class DeckUpdateFormComponent extends Component<IDeckUpdateFormPr
             submitErrors.push(<ListGroupItem key="invalidCardsSideboard" className="bg-transparent border-0 p-0">Your entered featured card doesn't exist!</ListGroupItem>)
         }
         if (!errorEncountered) {
-            console.log(this.props.deck);
+            await this.submitDeck();
             return;
         }
         this.setState({
