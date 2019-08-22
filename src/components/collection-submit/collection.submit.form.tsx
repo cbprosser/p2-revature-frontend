@@ -242,6 +242,7 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
             submitErrors.push(<ListGroupItem key="invalidCardsSideboard" className="bg-transparent border-0 p-0">Your entered featured card doesn't exist!</ListGroupItem>)
         }
         if (!errorEncountered) {
+            await this.submitCollection(); 
             console.log(this.props.collection);
             return;
         }

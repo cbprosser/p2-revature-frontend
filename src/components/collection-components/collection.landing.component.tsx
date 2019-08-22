@@ -7,9 +7,10 @@ import CardHover from '../card-hover/card.hover.component';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import CollectionlistDisplayPageComponent from './collectionlist.display.page';
 import { Collapse, Button } from 'reactstrap';
+import authReducer from '../../reducers/auth.reducer';
 
 interface ICollectionLandingProps extends RouteComponentProps {
-    loggedInUser?: User
+    user?: User
 }
 
 interface ICollectionLandingState {
@@ -32,39 +33,47 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             isOpen: false,
             dropdownIsOpen: false,
             collapsed: true,
-            collections: [
-                new Collection(
-                    1,
-                    new User(2, 'lesco'),
-                    'hola',
-                    'es muy bueno',
-                    true,
-                    false,
-                    [],
-                    'Young Wolf'
-                ),
-                new Collection(
-                    2,
-                    new User(2, 'lesco'),
-                    'muy',
-                    'es muy malo',
-                    false,
-                    true,
-                    [],
-                    'Young Wolf'
-                )
-            ]
+            collections: []
+            // [
+            //     new Collection(
+            //         1,
+            //         new User(2, 'lesco'),
+            //         'hola',
+            //         'es muy bueno',
+            //         true,
+            //         false,
+            //         [],
+            //         'Young Wolf'
+            //     ),
+            //     new Collection(
+            //         2,
+            //         new User(2, 'lesco'),
+            //         'muy',
+            //         'es muy malo',
+            //         false,
+            //         true,
+            //         [],
+            //         'Young Wolf'
+            //     )
+            // ]
         }
     }
 
     componentWillMount = () => {
-        this.getCollections();
-        this.getCards(this.state.collections)
+        
+        if (this.props.user) {
+            this.getCollection();
+        }
+
+      //  this.getCards(this.state.collections)
+
+
+
         // console.log('landing' + this.state.collections);
     }
 
     getCollections = async () => {
-        const user = this.props.loggedInUser;
+        const user = this.props.user;
         if (user) {
             const resp = await fetch(``, {});
             // const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/${user.id}`, {});
@@ -72,6 +81,21 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             this.setState({
                 collections: userCollections
             })
+
+        }
+
+
+    }
+
+    getCollection = async () => {
+        const user = this.props.user;
+        if (user && user.id) {
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection?users=${user}`, {});
+            const userCollections = await resp.json();
+            this.setState({
+                collections: userCollections
+            })
+            this.getCards(userCollections);
         }
 
 
@@ -178,7 +202,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
