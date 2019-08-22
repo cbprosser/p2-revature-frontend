@@ -5,6 +5,7 @@ import User from "../models/user.model";
 export const authTypes = {
     UPDATE_CURRENT_USER: '[AUTH] UPDATE CURRENT USER',
     LOCALSTORAGE_USER_FOUND: '[AUTH] LOCALSTORAGE USER FOUND',
+    LOGGED_OUT: '[AUTH] LOGGED_OUT',
     FAILED_LOGIN: '[AUTH] FAILED LOGIN'
 }
 
@@ -39,4 +40,13 @@ export const checkLocalStorage = () => (dispatch: any) => {
             payload: lsUser
         })
     }
+}
+
+export const logout = () => (dispatch: any) => {
+    localStorage.removeItem('td.user');
+
+    dispatch({
+        type: authTypes.LOGGED_OUT
+    })
+    
 }
