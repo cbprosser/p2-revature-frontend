@@ -4,6 +4,8 @@ import Collection from '../../models/collection';
 import User from '../../models/user.model';
 import CollectionUpdateGroup from './collection.update.group';
 import CollectionUpdateTogglable from './collection.update.box.toggleable';
+import { tdClient } from '../../axios/td-client';
+import { RouteComponentProps } from 'react-router';
 
 interface ICollectionUpdateFormState {
     collection: Collection
@@ -16,7 +18,7 @@ interface ICollectionUpdateFormState {
     isSubmitting: boolean
 }
 
-interface ICollectionUpdateFormProps {
+interface ICollectionUpdateFormProps extends RouteComponentProps {
     collection: Collection
     cardsCount: number
     cardsErrorFlag: boolean
@@ -48,6 +50,18 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
             submitErrors: [],
             featuredCardErrorFlag: false,
             isSubmitting: false
+        }
+    }
+
+    submitDeck = async () => {
+        console.log(this.props.collection);
+        const resp = await tdClient.put(`/collecttion/card/`, this.props.collection);
+        const collection: Collection = resp.data;
+        if (collection) {
+            console.log(collection);
+            this.props.history.push(`/collection/${collection.id}`);
+        } else {
+            console.log("error");
         }
     }
 
@@ -97,7 +111,8 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
     liveUpdateCollectionName = (event: any) => {
         this.setState({
             collection: {
-                ...this.state.collection
+                ...this.state.collection,
+                collectionName: event.target.value
             }
         })
     }
@@ -110,8 +125,6 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
 
     liveUpdateCardInput = (event: any) => {
         let togglePrototype = this.state.collection.isPrototype
-
-      
             togglePrototype = true;
         
         let textList = event.currentTarget.value;
@@ -274,7 +287,7 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
                     </Col>
                     <Col md="6">
                         <CollectionUpdateGroup
-                            Collection={this.props.collection}
+                            collection={this.props.collection}
                             liveTogglePrivate={this.liveTogglePrivate}
                             liveTogglePrototype={this.liveTogglePrototype}
                             liveSelectFormat={this.liveSelectFormat}
@@ -293,7 +306,7 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
                                 id="descriptionInput"
                                 rows={6}
                                 placeholder={`Collection Description`}
-                                defaultValue={this.props.collection.collectionDescription}
+                                // defaultValue={this.props.collection.collectionDescription}
                                 onChange={this.liveUpdateDescription} />
                         </InputGroup>
                     </Col>
@@ -316,7 +329,7 @@ export default class CollectionUpdateFormComponent extends Component<ICollection
                                 className="text-left border"
                                 color="dark">Update</Button>
                         </ButtonGroup>
-                    </Col>
+                    </Col> 
                 </Row>
                 
             </Form>

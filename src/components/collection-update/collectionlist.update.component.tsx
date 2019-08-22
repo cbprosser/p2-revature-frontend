@@ -11,7 +11,7 @@ import { tdClient } from '../../axios/td-client';
 
 interface ICollectionlistUpdatePageState {
     collection: Collection
-    cardsCount: number
+    cardsCount: number 
     cardsElements: any[]
     cardsErrorCardElements: any[]
     renderFlag: boolean
@@ -20,7 +20,7 @@ interface ICollectionlistUpdatePageState {
 }
 
 interface ICollectionlistUpdatePageProps extends RouteComponentProps {
-    //
+    user?: User
 }
 
 export class CollectionlistUpdatePageComponent extends Component<ICollectionlistUpdatePageProps, ICollectionlistUpdatePageState> {
@@ -132,9 +132,9 @@ export class CollectionlistUpdatePageComponent extends Component<ICollectionlist
 
     componentDidUpdate(prevProps: any, prevState: any) {
         if (this.state.renderFlag) {
-            if (this.state.collection.cards !== prevState.Collection.cards) {
+           // if (this.state.collection.cards !== prevState.collection.cards) {
                 this.cardRender();
-            }
+           // }
             this.setState({
                 renderFlag: false
             })
@@ -151,10 +151,13 @@ export class CollectionlistUpdatePageComponent extends Component<ICollectionlist
                     </ListGroup>
                 </Alert>
                 <CardHeader>
-                    {this.state.collection.collectionName}
+                    {/* {this.state.collection.collectionName} */}
                 </CardHeader>
                 <CardBody>
                     <CollectionUpdateFormComponent
+                        history={this.props.history}
+                        location={this.props.location}
+                        match={this.props.match}
                         collection={this.state.collection}
                         cardsCount={this.state.cardsCount}
                         cardsErrorFlag={this.state.cardsErrorFlag}
@@ -171,7 +174,7 @@ export class CollectionlistUpdatePageComponent extends Component<ICollectionlist
                     </Row>
                 </CardBody>
                 <CardFooter>
-                    {this.state.collection.author.username /* change to props when auth working */}
+                    {this.props.user /* change to props when auth working */}
                 </CardFooter>
             </Card>
         )

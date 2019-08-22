@@ -3,7 +3,7 @@ import { InputGroup, InputGroupAddon, InputGroupText, Input, ButtonGroup, Button
 import Collection from '../../models/collection';
 
 interface ICollectionUpdateGroupProps {
-    Collection: Collection
+    collection: Collection
     liveUpdateCollectionName: (event: any) => any
     liveTogglePrivate: () => any
     liveTogglePrototype: () => any
@@ -15,7 +15,6 @@ interface ICollectionUpdateGroupProps {
 interface ICollectionUpdateGroupState {
     isPrivate: boolean
     isPrototype: boolean
-    CollectionFormat: string
 }
 
 export default class CollectionUpdateGroup extends Component<ICollectionUpdateGroupProps, ICollectionUpdateGroupState> {
@@ -24,23 +23,22 @@ export default class CollectionUpdateGroup extends Component<ICollectionUpdateGr
 
         this.state = {
             isPrivate: false,
-            isPrototype: true,
-            CollectionFormat: 'Casual'
+            isPrototype: true
         }
     }
 
     componentDidMount() {
         this.setState({
-            isPrivate: this.props.Collection.isPrivate,
-            isPrototype: this.props.Collection.isPrototype
+             isPrivate: this.props.collection.isPrivate,
+             isPrototype: this.props.collection.isPrototype
         })
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props !== prevProps) {
             this.setState({
-                isPrivate: this.props.Collection.isPrivate,
-                isPrototype: this.props.Collection.isPrototype
+                 isPrivate: this.props.collection.isPrivate,
+                 isPrototype: this.props.collection.isPrototype
             })
         }
     }
@@ -56,7 +54,7 @@ export default class CollectionUpdateGroup extends Component<ICollectionUpdateGr
                         className="bg-dark text-light"
                         type="text"
                         id="CollectionNameInput"
-                        defaultValue={this.props.Collection.collectionName}
+                        // defaultValue={this.props.collection.collectionName}
                         onChange={this.props.liveUpdateCollectionName} />
                 </InputGroup>
                 <InputGroup className="mb-2">
@@ -64,16 +62,18 @@ export default class CollectionUpdateGroup extends Component<ICollectionUpdateGr
                         <Button
                             className="text-left border"
                             color="dark"
-                            active={this.props.Collection.isPrivate}
-                            onClick={this.props.liveTogglePrivate}>
+                            // active={this.props.collection.isPrivate}
+                            // onClick={this.props.liveTogglePrivate}
+                            >
                             Private
                         </Button>
                         <Button
                             className="text-right border"
                             color="dark"
                             id="tooltip-prototype"
-                            active={this.props.Collection.isPrototype}
-                            onClick={this.props.liveTogglePrototype}>
+                            // active={this.props.collection.isPrototype}
+                            // onClick={this.props.liveTogglePrototype}
+                            >
                             Prototype
                         </Button>
                     </ButtonGroup>
@@ -86,7 +86,7 @@ export default class CollectionUpdateGroup extends Component<ICollectionUpdateGr
                         className="bg-dark text-light"
                         type="text"
                         id="featuredCardInput"
-                        defaultValue={this.props.Collection.featuredCard}
+                        // defaultValue={this.props.collection.featuredCard}
                         onChange={this.props.liveUpdateFeaturedCard}
                         onBlur={this.props.testFeaturedCard} />
                 </InputGroup>
