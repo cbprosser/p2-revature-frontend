@@ -34,26 +34,10 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
 
     async componentWillMount() {
         this.getRandomDecks();
-        // this.state.decks.forEach(async (deck) => {
-        //     const image = await this.getCardArt(deck.featuredCard);
-        //     this.updateDeckImage(deck.featuredCard, image);
-        // })
+        
     }
 
-    // updateDeckImage = (featuredCard: string, deckImage: any) => {
-    //     this.setState({
-    //         decks: this.state.decks.map(deck => {
-    //             if (deck.featuredCard === featuredCard) {
-    //                 return {
-    //                     ...deck,
-    //                     featuredCardImage: deckImage
-    //                 }
-    //             } else {
-    //                 return deck;
-    //             }
-    //         })
-    //     })
-    // }
+   
 
 
     toggle() {
@@ -123,6 +107,10 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
             }
         }
         return elements;
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
     }
 
     render() {

@@ -1,12 +1,12 @@
 import React from 'react';
 import Deck from '../../models/deck';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { IState } from '../../reducers';
 import User from '../../models/user.model';
 import CardHover from '../card-hover/card.hover.component';
 
-export interface IDeckLandingProps {
+export interface IDeckLandingProps extends RouteComponentProps {
     user?: User
 }
 
@@ -28,7 +28,13 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
     componentWillMount = () => {
         if (this.props.user) {
             this.getDecks(); 
+        } else {
+            this.pushToFrontpageWithError("You must login to view your decks.")
         }
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
     }
 
     getDecks = async () => {
