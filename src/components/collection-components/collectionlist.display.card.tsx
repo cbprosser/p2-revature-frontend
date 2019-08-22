@@ -25,7 +25,6 @@ interface ICollectionlistDisplayCardComponentState {
 
 interface ICollectionlistDisplayCardComponentProps extends RouteComponentProps {
     collection: Collection
-    loggedInUser?: User
     cards: any[]
     featuredCard: any 
 }
