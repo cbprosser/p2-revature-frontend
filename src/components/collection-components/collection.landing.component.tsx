@@ -37,7 +37,13 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 
         if (this.props.user) {
             this.getCollection();
+        } else {
+            this.pushToFrontpageWithError("You must login to view your collections.");
         }
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
     }
 
     getCollection = async () => {
@@ -50,11 +56,11 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
             this.setState({
                 collections: userCollections
             })
-            this.getCards(userCollections);
+            this.getCollectionCards(userCollections);
         }
     }
 
-    getCards = async (d: Collection[]) => {
+    getCollectionCards = async (d: Collection[]) => {
         let featuredCards: any[] = [];
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});

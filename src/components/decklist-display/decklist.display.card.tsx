@@ -507,6 +507,11 @@ export default class DecklistDisplayCardComponent extends Component<IDecklistDis
                         </Col>
                     </Row>
                 </CardBody>
+                <CardFooter>
+                    Description:
+                    <br/>
+                    {this.props.deck.deckDescription}
+                </CardFooter>
             </Card>
         )
     }

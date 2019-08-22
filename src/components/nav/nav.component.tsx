@@ -4,19 +4,21 @@ import { IState } from '../../reducers';
 import { NavbarToggler, NavbarBrand, Nav, NavLink, NavItem, Collapse, Navbar, CardImg } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/td.png';
-import { checkLocalStorage } from '../../actions/auth.actions';
+import { checkLocalStorage, logout } from '../../actions/auth.actions';
 
 // FUTURE CHRIS: Change token to be stored in localStorage so you can keep user logged in.
 
 interface INavProps {
   user?: any
   checkLocalStorage: () => any
+  logout: () => any
 }
 
 interface INavState {
   isOpen: boolean,
   dropdownIsOpen: boolean,
-  collapsed: boolean
+  collapsed: boolean,
+  navList: any[]
 }
 
 export class NavComponent extends Component<INavProps, INavState> {
@@ -26,7 +28,8 @@ export class NavComponent extends Component<INavProps, INavState> {
     this.state = {
       isOpen: false,
       dropdownIsOpen: false,
-      collapsed: true
+      collapsed: true,
+      navList: []
     };
   }
 
@@ -56,8 +59,46 @@ export class NavComponent extends Component<INavProps, INavState> {
     this.props.checkLocalStorage();
   }
 
+  logout = () => {
+    this.props.logout();
+    this.toggleNavbar();
+  }
+
+  renderList = () => {
+    this.setState({
+      navList: (!this.props.user)
+      ? [<>
+        <NavItem>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
+        </NavItem>
+      </>]
+      : [<>
+        <NavItem>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink><Link className="text-light" onClick={this.logout} to="/">Log out</Link></NavLink>
+        </NavItem>
+      </>]
+      })
+  }
+
   componentWillMount = () => {
     this.checkForLocalstorageUser();
+    this.renderList();
+  }
+
+  componentDidUpdate = (prevProps: INavProps) => {
+    console.log(this.props.user);
+    if(this.props.user !== prevProps.user) {
+      this.renderList();
+    }
   }
 
   render() {
@@ -71,20 +112,7 @@ export class NavComponent extends Component<INavProps, INavState> {
           <NavbarToggler onClick={this.toggleNavbar} className="ml-auto" />
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
-              <NavItem>
-                {this.props.user === undefined
-                  ? <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Login">Login</Link></NavLink>
-                  : <>
-                    <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/User">User</Link></NavLink>
-                    <NavItem>
-                      <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/deck/submit">Deck</Link></NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/collection/landing">Collections</Link></NavLink>
-                    </NavItem>
-                  </>
-                }
-              </NavItem>
+              {this.state.navList}
               {/* <NavLink><Link className="text-light" onClick={this.toggleNavbar} to="/Signup">Signup</Link></NavLink> */}
             </Nav>
           </Collapse>
@@ -100,7 +128,8 @@ const mapStateToProps = (state: IState) => ({
 })
 
 const mapDispatchToProps = {
-  checkLocalStorage
+  checkLocalStorage,
+  logout
 }
 
 

@@ -43,6 +43,8 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
         });
     }
 
+    
+
     render() {
         const deck = this.props.deck;
         return (
@@ -58,12 +60,12 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
                         <Progress bar className="text-white bg-danger" value="10">Red</Progress>
                         <Progress bar className="text-white bg-success" value="10">Green</Progress>
                     </Progress> */}
-                    <Card body inverse color="dark" className="flex-container flex-space-around" >
+                    <Card body inverse color="dark" className="flex-container justify-content-start">
                         <CardTitle><Link className="text-light" to={`/deck/${deck.id}`} >{deck.deckName}</Link></CardTitle>
-                        <CardSubtitle className="text-muted">Author: {deck.author.username}</CardSubtitle>
-                        <CardSubtitle className="text-warning">{deck.format}</CardSubtitle>
+                        <CardText className="text-muted">Author: {deck.author.username}</CardText>
+                        <CardText className="text-warning">{deck.format}</CardText>
                         <CardHover id={`user-deck-${deck.id}`} card={deck.featuredCard || this.state.tLost} />
-                        {deck.description && <CardText className="text-info">{deck.description}</CardText>}
+                        {/* {deck.description && <CardText className="text-info">{deck.description}</CardText>} */}
                     </Card>
                 </Collapse>
             </Card>
