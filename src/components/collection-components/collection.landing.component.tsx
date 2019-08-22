@@ -9,6 +9,7 @@ import CollectionlistDisplayPageComponent from './collectionlist.display.page';
 import { Collapse, Button } from 'reactstrap';
 import authReducer from '../../reducers/auth.reducer';
 
+
 interface ICollectionLandingProps extends RouteComponentProps {
     user?: User
 }
@@ -41,8 +42,10 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 
     getCollection = async () => {
         const user = this.props.user;
+
         if (user && user.id) {
-            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection?users=${user.id}`, {});
+            console.log('user'+ user.id);
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection/author/${user.id}`, {});
             const userCollections = await resp.json();
             this.setState({
                 collections: userCollections
