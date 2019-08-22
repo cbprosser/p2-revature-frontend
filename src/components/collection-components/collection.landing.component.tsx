@@ -93,7 +93,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
 
                     <tr onClick={rowClickCallback} key={`parentRow${data![rid].id}`}>
                         <td>
-                            <Link to={`collection/${data![rid].author.id}/${data![rid].id}`}>{data![rid].collectionName}
+                            <Link to={`${data![rid].id}`}>{data![rid].collectionName}
                             </Link></td>
                         {this.state.featuredCards &&
                             <td><CardHover id={`user-Collection-${data![rid].id}`} card={this.state.featuredCards[data![rid].id]} /></td>

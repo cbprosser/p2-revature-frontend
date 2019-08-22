@@ -120,7 +120,6 @@ export default class CollectionlistDisplayPageComponent extends Component<IColle
                 history={this.props.history}
                 location={this.props.location}
                 match={this.props.match}
-                loggedInUser={this.state.loggedInUser}
                 collection={this.state.collection}
                 cards={this.state.cards}
                 featuredCard={this.state.featuredCard} />
