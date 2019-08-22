@@ -68,7 +68,7 @@ export class CollectionLandingComponenet extends React.Component<ICollectionLand
     getCollection = async () => {
         const user = this.props.user;
         if (user && user.id) {
-            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection?users=${user}`, {});
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection?users=${user.id}`, {});
             const userCollections = await resp.json();
             this.setState({
                 collections: userCollections
