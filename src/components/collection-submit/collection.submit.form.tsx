@@ -24,6 +24,7 @@ interface ICollectionSubmitFormProps extends RouteComponentProps{
     featuredErrorFlag: boolean
     updateCollection: (Collection: Collection) => any
     testFeaturedCard: () => any
+    user?: User
 }
 
 export default class CollectionSubmitFormComponent extends Component<ICollectionSubmitFormProps, ICollectionSubmitFormState> {

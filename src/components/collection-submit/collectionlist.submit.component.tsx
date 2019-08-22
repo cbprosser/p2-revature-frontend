@@ -21,7 +21,7 @@ interface ICollectionlistSubmitPageState {
 }
 
 interface ICollectionlistSubmitPageProps extends RouteComponentProps {
-
+    user?: User
 }
 
 export class CollectionlistSubmitPageComponent extends Component<ICollectionlistSubmitPageProps, ICollectionlistSubmitPageState> {
