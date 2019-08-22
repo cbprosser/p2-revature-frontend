@@ -9,7 +9,7 @@ import { IState } from '../../reducers';
 
 
 interface IDecklistDisplayPageComponentState {
-    deck: Deck
+    deck?: Deck
     loggedInUser: User
     mainboardCards: any[]
     sideboardCards: any[]
@@ -27,21 +27,6 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
         super(props);
 
         this.state = {
-            deck: new Deck(
-                0,
-                new User(0, ''),
-                '',
-                '',
-                false,
-                true,
-                {
-                    id: 0,
-                    format: ''
-                },
-                [],
-                [],
-                ''
-            ),
             loggedInUser: new User(),
             mainboardCards: [],
             sideboardCards: [],
@@ -51,6 +36,9 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
     }
 
     getCardObjects = async () => {
+        if (!this.state.deck) {
+            return;
+        }
         const cards = this.state.deck.mainboard;
         const sideboard = this.state.deck.sideboard;
         let mainboardCards: any[] = [];
@@ -84,6 +72,10 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
     }
 
     getFeaturedCard = async () => {
+        if (!this.state.deck) {
+            return;
+        }
+
         const featuredCard = this.state.deck.featuredCard;
         if (featuredCard) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${featuredCard}`);
@@ -98,21 +90,62 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
     }
 
     getDeck = async () => {
-        const { userId, deckId }: any = this.props.match.params;
-        const resp = await tdClient.get(`/deck/card/${deckId}`);
-        const deck: Deck = resp.data;
-        this.setState({
-            deck,
-            isLoading: false
-        })
+        const { deckId }: any = this.props.match.params;
+        try {
+            const resp = await tdClient.get(`/deck/card/${deckId}`);
+            const deck: Deck = resp.data;
+            this.checkDeckForPrivate(deck);
+            this.setState({
+                deck,
+                isLoading: false
+            })
+        } catch (err) {
+            this.pushToFrontpageWithError('That deck doesn\'t exist!');
+        }
     }
 
     checkForUser = () => {
-        if(this.props.user) {
+        if (this.props.user) {
             this.setState({
                 loggedInUser: this.props.user
             })
         }
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
+    }
+
+    checkDeckForPrivate = (deck: Deck) => {
+        if (deck.isPrivate) {
+            console.log('1')
+            if (this.props.user) {
+                console.log('2')
+                if (deck.author.id === this.props.user.id) {
+                    console.log('3')
+                    return;
+                }
+            }
+            this.pushToFrontpageWithError('That deck was private!');
+        }
+    }
+
+    component = () => {
+        let component: any[] = [];
+        if (this.state.deck) {
+            component.push(<DecklistDisplayCardComponent
+                history={this.props.history}
+                location={this.props.location}
+                match={this.props.match}
+                deck={this.state.deck}
+                loggedInUser={this.state.loggedInUser}
+                mainboardCards={this.state.mainboardCards}
+                sideboardCards={this.state.sideboardCards}
+                featuredCard={this.state.featuredCard} />);
+        } else {
+            //
+        }
+        return component;
     }
 
     componentWillMount() {
@@ -129,26 +162,18 @@ export class DecklistDisplayPageComponent extends Component<IDecklistDisplayPage
 
     render() {
         return (
-            <DecklistDisplayCardComponent
-                history={this.props.history}
-                location={this.props.location}
-                match={this.props.match}
-                deck={this.state.deck}
-                loggedInUser={this.state.loggedInUser}
-                mainboardCards={this.state.mainboardCards}
-                sideboardCards={this.state.sideboardCards}
-                featuredCard={this.state.featuredCard} />
+            this.component()
         )
     }
 }
 
 
-const mapStateToProps = (state:IState) => ({
+const mapStateToProps = (state: IState) => ({
     user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
-    
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecklistDisplayPageComponent)
