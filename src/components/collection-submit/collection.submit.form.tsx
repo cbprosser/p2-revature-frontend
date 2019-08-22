@@ -24,6 +24,7 @@ interface ICollectionSubmitFormProps extends RouteComponentProps{
     featuredErrorFlag: boolean
     updateCollection: (Collection: Collection) => any
     testFeaturedCard: () => any
+    // user?: User
 }
 
 export default class CollectionSubmitFormComponent extends Component<ICollectionSubmitFormProps, ICollectionSubmitFormState> {
@@ -33,7 +34,7 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
         this.state = {
             collection: {
                 id: 0,
-                author: new User(3, 'lescobosasainz'),
+                author: new User(),
                 collectionName: '',
                 collectionDescription: '',
                 isPrivate: false,

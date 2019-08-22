@@ -42,7 +42,6 @@ function App() {
 
               {/* <Route exact path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
               <Route path="/collection/landing" component={CollectionLandingPage} />
-              {/* <Route path="/collection/:userId/:collectionId" component={CollectionlistDisplayPageComponent} /> */}
               <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
               <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
               <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />

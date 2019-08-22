@@ -10,8 +10,10 @@ import { tdClient } from '../../axios/td-client';
 import { RouteComponentProps } from 'react-router';
 
 
+
 interface ICollectionlistSubmitPageState {
     collection: Collection
+    loggedInUser?: User
     cardsCount: number
     cardsElements: any[]
     cardsErrorCardElements: any[]
@@ -21,7 +23,7 @@ interface ICollectionlistSubmitPageState {
 }
 
 interface ICollectionlistSubmitPageProps extends RouteComponentProps {
-
+    user?: User
 }
 
 export class CollectionlistSubmitPageComponent extends Component<ICollectionlistSubmitPageProps, ICollectionlistSubmitPageState> {
@@ -31,7 +33,7 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
         this.state = {
             collection: {
                 id: 0,
-                author: new User(3, 'lescobosasainz'),
+                author: new User(),
                 collectionName: '',
                 collectionDescription: '',
                 isPrivate: false,
@@ -127,6 +129,32 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
         }
     }
 
+    checkForUser = () => {
+        const user = this.props.user;
+        
+        if (this.props.user) {
+           // console.log('user'+ user.id);
+            this.setState({
+                collection: {
+                    ...this.state.collection,
+                    author: this.props.user
+                }
+                
+            })
+        } else {
+            this.pushToFrontpageWithError('You must be logged in to submit decks!')
+        }
+        console.log('author' + this.state.collection.author.id)
+    }
+
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
+    }
+
+    componentWillMount = () => {
+        this.checkForUser();
+    }
+
     render() {
         return (
             <Card className="bg-light">
@@ -161,7 +189,7 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
                     </Row>
                 </CardBody>
                 <CardFooter>
-                    {this.state.collection.author.username /* change to props when auth working */}
+                    {this.props.user && this.props.user.username}
                 </CardFooter>
             </Card>
         )
@@ -169,7 +197,7 @@ export class CollectionlistSubmitPageComponent extends Component<ICollectionlist
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
