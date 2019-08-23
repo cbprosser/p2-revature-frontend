@@ -5,11 +5,11 @@ import Collection from '../../models/collection';
 interface ICollectionUpdateTogglableProps {
     collection: Collection
     cardsCount: number
-    liveUpdateCardInput: (event: any, sideboard?: boolean) => any
+    liveUpdateCardInput: (event: any) => any
 }
 
 interface ICollectionUpdateTogglablestate {
-    showcards: boolean
+    showCards: boolean
     randomCardNumber: number[]
     randomCard: string[]
 }
@@ -19,7 +19,7 @@ export default class CollectionUpdateTogglable extends Component<ICollectionUpda
         super(props);
 
         this.state = {
-            showcards: true,
+            showCards: true,
             randomCard: [],
             randomCardNumber: []
         }
@@ -68,7 +68,7 @@ ${this.state.randomCardNumber[2]}x ...`;
             <>
                 <ButtonGroup className="d-flex w-100" size="sm">
                 </ButtonGroup>
-                <Collapse isOpen={this.state.showcards}>
+                <Collapse isOpen={this.state.showCards}>
                     <InputGroup size="sm">
                         <Input
                             className="bg-dark text-light"
@@ -81,7 +81,7 @@ ${this.state.randomCardNumber[2]}x ...`;
                             onBlur={this.props.liveUpdateCardInput} />
                     </InputGroup>
                 </Collapse>
-                <Collapse isOpen={!this.state.showcards}>
+                <Collapse isOpen={!this.state.showCards}>
                     <InputGroup size="sm">
                         <Input
                             className="bg-dark text-light"
@@ -91,7 +91,7 @@ ${this.state.randomCardNumber[2]}x ...`;
                             // defaultValue={(() => this.setDefaultInputFormat(false))()}
                             placeholder={sideboardPlaceholder}
                             // onKeyPress={(event) => this.props.liveUpdateCardInputEnterKey(event, true)}
-                            onBlur={(event) => this.props.liveUpdateCardInput(event, true)} />
+                            onBlur={(event) => this.props.liveUpdateCardInput(event)} />
                     </InputGroup>
                 </Collapse>
             </>

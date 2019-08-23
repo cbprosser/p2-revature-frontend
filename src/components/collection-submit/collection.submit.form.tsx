@@ -57,7 +57,7 @@ export default class CollectionSubmitFormComponent extends Component<ICollection
         const collection: Collection = resp.data;
         if (collection) {
             console.log(collection);
-            this.props.history.push(`/collection/${collection.author.id}/${collection.id}`)
+            this.props.history.push(`/collection/${collection.id}`)
         } else {
             console.log("error");
         }
