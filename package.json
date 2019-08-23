@@ -1,6 +1,6 @@
 {
   "name": "td-app",
-  "homepage": "http://tempodeck.frontend.s3-website-us-east-1.amazonaws.com",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "scripts": {
