@@ -56,25 +56,15 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
         for (let i = 0; i < d.length; i++) {
             const resp = await fetch(`https://api.scryfall.com/cards/named?exact=${d[i].featuredCard}`, {});
             const card = await resp.json();
+            if(card.object !== 'error'){
             featuredCards[d[i].id] = card
+            }
         };
         // console.log(featuredCards);
         this.setState({
             featuredCards
         })
     }
-
-    // toggleDropDown = (deck: Deck) => {
-    //     const private = !deck.isPrivate
-
-
-    //     this.setState({
-    //         decks:
-
-
-    //     });
-    // }
-
 
     render() {
         const userDecks = this.state.decks;
@@ -103,8 +93,9 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
 
                                     <td>{deck.format.format}</td>
 
-                                    {this.state.featuredCards &&
-                                        <td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} /></td>
+                                    {this.state.featuredCards
+                                        ?<td><CardHover id={`user-deck-${deck.id}`} card={this.state.featuredCards[deck.id]} /></td>
+                                        :<td></td>
                                     }
                                     <td>{deck.deckDescription}</td>
                                     {deck.isPrivate === true

@@ -69,8 +69,10 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
 
     getCollection = async () => {
         const user = this.props.user;
+        console.log("Collection user");
+        console.log(user)
         if (user && user.id) {
-            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection/${user.id}`, {});
+            const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/collection/author/${user.id}`, {});
             const userCollections = await resp.json();
             this.setState({
                 collections: userCollections
@@ -165,6 +167,8 @@ export class UserPageComponent extends Component<UserPageComponentProps, UserPag
 
     getDecks = async () => {
         const user = this.props.user;
+        console.log("user page user");
+        console.log(user);
         if (user && user.id) {
             const resp = await fetch(`http://td-api.us-east-1.elasticbeanstalk.com/deck/author/${user.id}`, {});
             const userDecks = await resp.json();
