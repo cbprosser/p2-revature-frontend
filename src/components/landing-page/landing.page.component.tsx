@@ -37,9 +37,6 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
 
     }
 
-
-
-
     toggle() {
         this.setState(state => ({ collapse: !state.collapse }));
     }
@@ -68,7 +65,7 @@ export class LandingPageComponenet extends React.Component<ILandingProps, ILandi
                 } else {
                     const resp2 = await fetch("https://api.scryfall.com/cards/named?exact=Totally Lost", {});
                     const totalLost = await resp2.json();
-            
+
                     dl[i] = {
                         id: listOfCards[i].id,
                         artist: imageHold.artist,

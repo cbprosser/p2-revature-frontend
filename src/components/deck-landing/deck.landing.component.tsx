@@ -25,16 +25,16 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
         }
     }
 
+    pushToFrontpageWithError = (errorMessage: string) => {
+        this.props.history.push('/', { errorMessage });
+    }
+
     componentWillMount = () => {
         if (this.props.user) {
             this.getDecks(); 
         } else {
             this.pushToFrontpageWithError("You must login to view your decks.")
         }
-    }
-
-    pushToFrontpageWithError = (errorMessage: string) => {
-        this.props.history.push('/', { errorMessage });
     }
 
     getDecks = async () => {
@@ -60,7 +60,6 @@ export class DeckLandingComponenet extends React.Component<IDeckLandingProps, ID
             featuredCards[d[i].id] = card
             }
         };
-        // console.log(featuredCards);
         this.setState({
             featuredCards
         })
