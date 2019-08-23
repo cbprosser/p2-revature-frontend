@@ -29,23 +29,23 @@ function App() {
           <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
           <Col id="main-row" className="bg-light text-center">
             <Switch>
-              <Route exact path="./" component={LandingPageComponenet} />
-              <Route exact path="./login" component={LoginComponent} />
-              <Route exact path="./signup" component={SignupComponent} />
-              <Route exact path="./user" component={UserPageComponent} />
+              <Route exact path="./public/" component={LandingPageComponenet} />
+              <Route exact path="./public/login" component={LoginComponent} />
+              <Route exact path="./public/signup" component={SignupComponent} />
+              <Route exact path="./public/user" component={UserPageComponent} />
 
-              <Route path="./deck/landing" component={DeckLandingComponenet} />
-              <Route path="./deck/submit" component={DecklistSubmitPageComponent} />
-              <Route path="./deck/update" component={DecklistUpdatePageComponent} />
-              <Route exact path="./deck/:deckId" component={DecklistDisplayPageComponent} />
-              <Route path="./deck/:deckId/update" component={DecklistUpdatePageComponent} />
+              <Route path="./public/deck/landing" component={DeckLandingComponenet} />
+              <Route path="./public/deck/submit" component={DecklistSubmitPageComponent} />
+              <Route path="./public/deck/update" component={DecklistUpdatePageComponent} />
+              <Route exact path="./public/deck/:deckId" component={DecklistDisplayPageComponent} />
+              <Route path="./public/deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
-              <Route path="/collection/landing" component={CollectionLandingPage} />
-              <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
-              <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
+              <Route path="./public/collection/landing" component={CollectionLandingPage} />
+              <Route path="./public/collection/submit" component={CollectionlistSubmitPageComponent} />
+              <Route path="./public/collection/update" component={CollectionlistUpdatePageComponent} />
               
-              <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />
-              <Route path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} />
+              <Route path="./public/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />
+              <Route path="./public/collection/:collectionId" component={CollectionlistDisplayPageComponent} />
 
               <Route component={NotFound} />
             </Switch>
