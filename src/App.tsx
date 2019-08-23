@@ -43,8 +43,9 @@ function App() {
               <Route path="/collection/landing" component={CollectionLandingPage} />
               <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
               <Route path="/collection/update" component={CollectionlistUpdatePageComponent} />
-              <Route path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} />
+              
               <Route path="/collection/:collectionId/update" component={CollectionlistUpdatePageComponent} />
+              <Route path="/collection/:collectionId" component={CollectionlistDisplayPageComponent} />
 
               <Route component={NotFound} />
             </Switch>
