@@ -1,13 +1,13 @@
-import Role from './role.model';
+import Role from "./role.model";
 
 export default class User {
     constructor(
-        public userId = 0,
+        public id = 0,
         public username = '',
-        public password = '',
+        public password?: string,
         public firstName = '',
         public lastName = '',
         public email = '',
-        public role?: Role
+        public role = Role
     ) { }
 }
