@@ -21,19 +21,11 @@ export default class LandingPageDeckDisplay extends Component<IDeckDisplayProps,
             collapse: false        }
     }
 
-    componentWillMount = async () => {
-       
-
-    }
-    // "Totally Lost"
-
     toggleDropDown = () => {
         this.setState({
             collapse: !this.state.collapse
         });
     }
-
-
 
     render() {
         const deck = this.props.deck;
