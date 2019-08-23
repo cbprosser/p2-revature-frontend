@@ -29,16 +29,16 @@ export default class CollectionUpdateGroup extends Component<ICollectionUpdateGr
 
     componentDidMount() {
         this.setState({
-             isPrivate: this.props.collection.isPrivate,
-             isPrototype: this.props.collection.isPrototype
+            // isPrivate: this.props.collection.isPrivate,
+            // isPrototype: this.props.collection.isPrototype
         })
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props !== prevProps) {
             this.setState({
-                 isPrivate: this.props.collection.isPrivate,
-                 isPrototype: this.props.collection.isPrototype
+              //   isPrivate: this.props.collection.isPrivate,
+              //   isPrototype: this.props.collection.isPrototype
             })
         }
     }

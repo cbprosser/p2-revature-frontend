@@ -174,7 +174,7 @@ export class CollectionlistUpdatePageComponent extends Component<ICollectionlist
                     </Row>
                 </CardBody>
                 <CardFooter>
-                    {this.props.user /* change to props when auth working */}
+                    {/* {this.props.user /* change to props when auth working */} */}
                 </CardFooter>
             </Card>
         )
@@ -182,7 +182,7 @@ export class CollectionlistUpdatePageComponent extends Component<ICollectionlist
 }
 
 const mapStateToProps = (state: IState) => ({
-
+    user: state.auth.currentUser
 })
 
 const mapDispatchToProps = {
