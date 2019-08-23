@@ -29,16 +29,16 @@ function App() {
           <Col sm="3" md="2" className="d-none d-sm-none d-sm-block"></Col>
           <Col id="main-row" className="bg-light text-center">
             <Switch>
-              <Route exact path="/" component={LandingPageComponenet} />
-              <Route exact path="/login" component={LoginComponent} />
-              <Route exact path="/signup" component={SignupComponent} />
-              <Route exact path="/user" component={UserPageComponent} />
+              <Route exact path="./" component={LandingPageComponenet} />
+              <Route exact path="./login" component={LoginComponent} />
+              <Route exact path="./signup" component={SignupComponent} />
+              <Route exact path="./user" component={UserPageComponent} />
 
-              <Route path="/deck/landing" component={DeckLandingComponenet} />
-              <Route path="/deck/submit" component={DecklistSubmitPageComponent} />
-              <Route path="/deck/update" component={DecklistUpdatePageComponent} />
-              <Route exact path="/deck/:deckId" component={DecklistDisplayPageComponent} />
-              <Route path="/deck/:deckId/update" component={DecklistUpdatePageComponent} />
+              <Route path="./deck/landing" component={DeckLandingComponenet} />
+              <Route path="./deck/submit" component={DecklistSubmitPageComponent} />
+              <Route path="./deck/update" component={DecklistUpdatePageComponent} />
+              <Route exact path="./deck/:deckId" component={DecklistDisplayPageComponent} />
+              <Route path="./deck/:deckId/update" component={DecklistUpdatePageComponent} />
 
               <Route path="/collection/landing" component={CollectionLandingPage} />
               <Route path="/collection/submit" component={CollectionlistSubmitPageComponent} />
